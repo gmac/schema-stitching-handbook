@@ -1,10 +1,10 @@
 # Example 3 – Array-batched type merging
 
-Schema Stitching gets a lot more interesting once GraphQL types begin crossing service boundaries. Schema Stitching uses a merge strategy that allows _portions_ of a gateway schema type to originate from many underlying subschemas. This example demonstrates some core techniques for merging typed objects across stitched schemas.
+Schema Stitching gets a lot more interesting once GraphQL types begin crossing service boundaries. Schema Stitching uses a merge strategy that allows _portions_ of a gateway schema type to originate from many underlying subschemas. This example demonstrates the core techniques for merging typed objects across stitched schemas.
 
-This example achieves type merging using array queries&mdash;meaning that all records accessed during a round of delegation are batched together and loaded as an array. This technique greatly reduces the execution overhead of [single-record merges](../02-single-record-type-merging), and can be further optimized by enabling [query batching](#). This array-batched strategy is always prefereable to single-record merges and should be leveraged whenever possible.
+This example achieves type merging using array queries&mdash;meaning that all records accessed during a round of delegation are batched together and loaded as an array. This technique greatly reduces the execution overhead of [single-record merges](../02-single-record-type-merging), and can be further optimized by enabling [query batching](#). This array-batched strategy is always prefereable to single-record merges and should be used whenever possible.
 
-Note that this is the exact same demo as [example 2](../02-single-record-type-merging), simply updated to use array queries.
+Note that this is the same as the [second example](../02-single-record-type-merging), simply updated to use array queries.
 
 **This example demonstrates:**
 

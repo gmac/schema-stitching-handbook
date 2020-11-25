@@ -21,8 +21,8 @@ function makeGatewaySchema() {
           Manufacturer: {
             selectionSet: '{ id }',
             fieldName: 'manufacturers',
-            key: ({ id }) => id,
-            argsFromKeys: (ids) => ({ ids }),
+            key: ({ id }) => id, // pluck a key from each record in the array
+            argsFromKeys: (ids) => ({ ids }), // format all plucked keys into query args
           }
         }
       },

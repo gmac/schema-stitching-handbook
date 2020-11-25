@@ -2,7 +2,9 @@
 
 Schema Stitching gets a lot more interesting once GraphQL types begin crossing service boundaries. Schema Stitching uses a merge strategy that allows _portions_ of a gateway schema type to originate from many underlying subschemas. This example demonstrates some core techniques for merging typed objects across stitched schemas.
 
-This example achieves type merging using only single-record queries&mdash;meaning that every record accessed requires a dedicated subschema delegation. While we can enable [query batching](#) to soften the blow of sending many _queries_ to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batched technique discussed in [example three](#). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
+This example achieves type merging using only single-record queries&mdash;meaning that every record accessed requires a dedicated subschema delegation. While we can enable [query batching](#) to soften the blow of sending many operations to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batched technique discussed in the [third example](../03-array-batched-type-merge). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
+
+If you're managing all of your own subservices, then skip ahead to the [third example](../03-array-batched-type-merge) for an optimal implementation of this same example.
 
 **This example demonstrates:**
 
@@ -57,4 +59,4 @@ If you study the results of this query, the final composition traverses back and
       - `Manufacturer.name` (Manufacturers schema)
       - `Manufacturer.products` (Products schema)
 
-That means the gateway performed four rounds of delegations to resolve each generation of data (`Services -> Products -> Manufacturers -> Products`). HOWEVER – each round of delegations involved a single delegation _per record_ in the round, which is expensive to process. Using the array-batching technique in [example 3](#), we can reduce this down to a flat one delegation per round.
+That means the gateway performed four rounds of delegations to resolve each generation of data (`Services -> Products -> Manufacturers -> Products`). HOWEVER – each round of delegations involved a single delegation _per record_ in the round, which is expensive to process. Using the array-batching technique in [example three](../03-array-batched-type-merge), we can reduce this down to one flat delegation per round.
