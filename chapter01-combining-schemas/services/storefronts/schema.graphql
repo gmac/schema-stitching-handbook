@@ -1,0 +1,9 @@
+type Storefront {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  storefront(id: ID!): Storefront
+  sdl: String!
+}

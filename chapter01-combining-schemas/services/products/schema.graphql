@@ -1,0 +1,9 @@
+type Product {
+  msrp: Float!
+  name: String!
+  upc: ID!
+}
+
+type Query {
+  product(upc: ID!): Product
+}
