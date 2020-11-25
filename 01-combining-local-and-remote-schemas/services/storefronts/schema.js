@@ -4,17 +4,16 @@ const readFileSync = require('../../lib/read_file_sync');
 const typeDefs = readFileSync(__dirname, 'schema.graphql');
 
 // data fixtures
-const products = [
-  { upc: '1', name: 'Cookbook', msrp: 15.99 },
-  { upc: '2', name: 'Toothbrush', msrp: 3.99 },
+const storefronts = [
+  { id: '1', name: 'The Product Store' },
+  { id: '2', name: 'eShoppe' },
 ];
 
 // graphql resolvers
 const resolvers = {
   Query: {
-    product(root, { upc }) {
-      return products.find(p => p.upc === upc) || new NotFoundError();
-    }
+    storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+    sdl: () => typeDefs,
   }
 };
 
