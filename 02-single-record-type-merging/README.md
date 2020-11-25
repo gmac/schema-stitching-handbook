@@ -1,17 +1,19 @@
-# Example 2 – Unbatched Type Merging
+# Example 2 – Single-record Type Merging
 
-This example demonstrates the core techniques for merging typed objects across stitched schemas. This example does NOT enable batching, which makes it less desirable for production use than the batched implementation in [example three](#).
+Schema Stitching gets a lot more interesting once GraphQL types begin crossing service boundaries. Schema Stitching uses a merge strategy that allows _portions_ of a gateway schema type to originate from many underlying subschemas. This example demonstrates some core techniques for merging typed objects across stitched schemas.
+
+This example achieves type merging using only single-record queries&mdash;meaning that every record accessed requires a dedicated subservice delegation. While we can enable [query batching](#) to soften the blow of sending many queries to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batching technique discussed in [example three](#). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
 
 **This example demonstrates:**
 
-- Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges).
-- Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
-- Writing unbatched merge config.
+- Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using single-record queries.
+- Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
+- Writing single-record type merge config.
 
 ## Setup
 
 ```shell
-cd 02-unbatched-type-merging
+cd 02-single-record-type-merging
 
 yarn install
 yarn start-gateway

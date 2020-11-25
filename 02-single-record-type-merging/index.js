@@ -13,6 +13,7 @@ function makeGatewaySchema() {
     subschemas: [
       {
         schema: manufacturersSchema,
+        batch: true,
         merge: {
           // This schema provides one unique field of data for the `Manufacturer` type (`name`).
           // The gateway needs a query configured so it can fetch this data...
@@ -26,6 +27,7 @@ function makeGatewaySchema() {
       },
       {
         schema: productsSchema,
+        batch: true,
         merge: {
           Manufacturer: {
             // This schema also provides a unique field of data for the `Manufacturer` type (`products`).
@@ -48,6 +50,7 @@ function makeGatewaySchema() {
       },
       {
         schema: storefrontsSchema,
+        batch: true,
         // While the Storefronts service also defines a `Product` type,
         // it contains no unique data. The local `Product` type is really just
         // a foreign key (`Product.upc`) that maps to the Products schema.

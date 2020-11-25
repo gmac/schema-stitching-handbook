@@ -12,8 +12,8 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **Example 2 - Unbatched Type Merging**
+- **Example 2 - Single-record Type Merging**
 
-  - Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) (unbatched).
-  - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) (unbatched).
-  - Writing unbatched type merge config.
+  - Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using single-record queries.
+  - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
+  - Writing single-record type merge config.
