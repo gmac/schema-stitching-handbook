@@ -1,0 +1,8 @@
+type Manufacturer {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  manufacturers(ids: [ID!]!): [Manufacturer]!
+}

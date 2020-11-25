@@ -1,0 +1,13 @@
+type Storefront {
+  id: ID!
+  name: String!
+  products: [Product]!
+}
+
+type Product {
+  upc: ID!
+}
+
+type Query {
+  storefront(id: ID!): Storefront
+}
