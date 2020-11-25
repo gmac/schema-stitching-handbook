@@ -1,5 +1,5 @@
 {
-  "name": "chapter01-combining-schemas",
+  "name": "example01-combining-local-and-remote-schemas",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
