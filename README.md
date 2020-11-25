@@ -4,7 +4,8 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
 
 ## Table of Contents
 
-- **Example 1**
+- **Example 1 - Combining local and remote schemas**
+
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
   - Adding a remote schema, fetched from a custom SDL service.
