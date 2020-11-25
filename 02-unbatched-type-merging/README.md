@@ -50,9 +50,9 @@ query {
 If you study the results of this query, the final composition traverses back and forth across the service graph:
 
 - `Storefront` (Storefronts schema)
-  - `Storefront.products` (Products schema)
-    - `Product.manufacturer` (Manufacturers + Products schema)
+  - `Storefront.products -> Product` (Products schema)
+    - `Product.manufacturer -> Manufacturer` (Manufacturers + Products schema)
       - `Manufacturer.name` (Manufacturers schema)
       - `Manufacturer.products` (Products schema)
 
-That means the gateway performed four rounds of delegations to resolve each generation of data: Services schema, then Products schema, then Manufacturers schema, and finally back to Products schema.
+That means the gateway performed four rounds of delegations to resolve each generation of data (`Services -> Products -> Manufacturers -> Products`).

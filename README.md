@@ -11,3 +11,9 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Adding a remote schema, fetched from a custom SDL service.
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
+
+- **Example 2 - Unbatched Type Merging**
+
+  - Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) (unbatched).
+  - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) (unbatched).
+  - Writing unbatched type merge config.
