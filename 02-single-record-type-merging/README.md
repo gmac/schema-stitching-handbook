@@ -1,10 +1,10 @@
 # Example 2 – Single-record type merging
 
-Schema Stitching gets a lot more interesting once GraphQL types begin crossing service boundaries. Schema Stitching uses a [merge strategy](https://www.graphql-tools.com/docs/stitch-type-merging) that allows portions of a gateway schema type to originate from many underlying subschemas. This example demonstrates some core techniques for merging typed objects across stitched schemas.
+This example demonstrates the core techniques for merging typed objects using single-record queries, covering most of the topics discussed in the official [basic example documentation](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
 
-This example achieves type merging using only single-record queries&mdash;meaning that every record accessed requires a dedicated subschema delegation. While we can enable [query batching](#) to soften the blow of sending many operations to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batched technique discussed in the [third example](../03-array-batched-type-merge). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
+This example uses only single-record queries&mdash;meaning that every record accessed requires a dedicated subschema delegation (which is not ideal). While we can enable [query batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching) to soften the blow of sending many operations to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batched technique discussed in the [third example](../03-array-batched-type-merge). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
 
-If you're managing all of your own subservices, then skip ahead to the [third example](../03-array-batched-type-merge) for an optimal implementation of this same example.
+If you're managing all of your own subservices, then skip ahead to the [third example](../03-array-batched-type-merge) for a better optimized implementation of this same example.
 
 **This example demonstrates:**
 
