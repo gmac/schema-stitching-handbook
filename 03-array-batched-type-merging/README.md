@@ -75,7 +75,7 @@ manufacturers(root, { ids }) {
 
 It is extremely important that errors get _mapped_ into the result set, rather than being thrown (which corrupts the entire result set). Schema stitching will flow errors throughout the stitched document to their final output positions.
 
-### Mapped errors
+## Nullability + mapped errors
 
 Also query for the product with UPC `"6"`, and you'll see an interesting feature of error handling:
 
