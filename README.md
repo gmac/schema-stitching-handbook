@@ -24,3 +24,7 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
   - Writing array-batched type merge config.
   - Handling array errors.
+
+- **Example 4 - Cross-service interfaces**
+
+  - Distributing a GraphQL interface across services.

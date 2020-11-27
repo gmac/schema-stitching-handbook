@@ -4,7 +4,7 @@ This example demonstrates the core techniques for merging typed objects using si
 
 This example uses only single-record queries&mdash;meaning that every record accessed requires a dedicated subschema delegation (which is not ideal). While we can enable [query batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching) to soften the blow of sending many operations to a subservice, this 1:1 delegation strategy still has far greater execution overhead than the array-batched technique discussed in the [third example](../03-array-batched-type-merge). This single-record strategy is really only appropraite out of necessity when interfacing with schemas we don't control.
 
-If you're managing all of your own subservices, then skip ahead to the [third example](../03-array-batched-type-merge) for a better optimized implementation of this same example.
+If you're managing all of your own subservices, then skip ahead to the [third example](../03-array-batched-type-merge) for a better optimized version of this same example.
 
 **This example demonstrates:**
 
