@@ -73,11 +73,11 @@ manufacturers(root, { ids }) {
 }
 ```
 
-It is extremely important that errors get _mapped_ into the result set, rather than being thrown (which corrupts the entire result set). Schema stitching will flow errors throughout the stitched document to their final output positions.
+It is extremely important that errors get _mapped_ into the result set, rather than being thrown (which corrupts the entire result set).
 
 ## Nullability + mapped errors
 
-Also query for the product with UPC `"6"`, and you'll see an interesting feature of error handling:
+Also run a query for the Product with UPC `"6"`, and you'll see an interesting feature of error handling:
 
 ```graphql
 query {
@@ -91,6 +91,34 @@ query {
 }
 ```
 
-For the purposes of this demo, this product intentionally specifies an invalid manufacturer reference. You'll see that the original error from the underlying subservice has flowed through the stitching process and is mapped to its final document position in the stitched schema.
+For the purposes of this demo, this product intentionally specifies an invalid manufacturer reference. You'll see that the original error from the underlying subservice has flowed through the stitching process and is mapped to its final document position in the stitched schema:
 
-Note that for this process to work, the `Product.manufacturer` reference must be nullable, otherwise you'll get a GraphQL nullability-mismatch error when the manufacturer returns an error. For this reason, **it's generally best-practice to make all stitched associations nullable** on the assumption that the record association _could_ fail, at which time it's better to see the subschema failure than a top-level GraphQL error concerning nullability.
+```json
+{
+  "errors": [
+    {
+      "message": "Record not found",
+      "locations": [],
+      "path": [
+        "products",
+        0,
+        "manufacturer"
+      ],
+      "extensions": {
+        "code": "NOT_FOUND"
+      }
+    }
+  ],
+  "data": {
+    "products": [
+      {
+        "upc": "6",
+        "name": "Baseball Glove",
+        "manufacturer": null
+      }
+    ]
+  }
+}
+```
+
+Note that for this process to work, the `Product.manufacturer` reference must be [nullable](https://graphql.org/learn/schema/#lists-and-non-null), otherwise you'll get a GraphQL nullability-mismatch error when the manufacturer returns an error. For this reason, **it's generally best-practice to make all stitched associations nullable** on the assumption that the record association _could_ fail, at which time it's better to see the subschema failure than a top-level GraphQL nullability error.
