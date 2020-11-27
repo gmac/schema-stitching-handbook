@@ -14,8 +14,8 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
 
 - **Example 2 - Single-record type merging**
 
-  - Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using single-record queries.
-  - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
+  - Establishing a one-way type merge using single-record queries.
+  - Establishing a multi-directional type merge using single-record queries.
   - Writing single-record type merge config.
 
 - **Example 3 - Array-batched type merging**
@@ -24,6 +24,7 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
   - Writing array-batched type merge config.
   - Handling array errors.
+  - Nullability & error remapping.
 
 - **Example 4 - Cross-service interfaces**
 

@@ -12,6 +12,7 @@ Note that this code is the same as the [second example](../02-single-record-type
 - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
 - Writing array-batched type merge config.
 - Handling array errors.
+- Nullability & error remapping.
 
 ## Setup
 
@@ -73,3 +74,23 @@ manufacturers(root, { ids }) {
 ```
 
 It is extremely important that errors get _mapped_ into the result set, rather than being thrown (which corrupts the entire result set). Schema stitching will flow errors throughout the stitched document to their final output positions.
+
+### Mapped errors
+
+Also query for the product with UPC `"6"`, and you'll see an interesting feature of error handling:
+
+```graphql
+query {
+  products(upcs: ["6"]) {
+    upc
+    name
+    manufacturer {
+      name
+    }
+  }
+}
+```
+
+For the purposes of this demo, this product intentionally specifies an invalid manufacturer reference. You'll see that the original error from the underlying subservice has flowed through the stitching process and is mapped to its final document position in the stitched schema.
+
+Note that for this process to work, the `Product.manufacturer` reference must be nullable, otherwise you'll get a GraphQL nullability-mismatch error when the manufacturer returns an error. For this reason, it's generally best-practice to make all stitched associations nullable on the assumption that the record association _could_ fail, at which time it's better to see the subschema failure than a top-level GraphQL error concerning nullability.

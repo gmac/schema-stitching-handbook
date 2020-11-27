@@ -6,10 +6,11 @@ const typeDefs = readFileSync(__dirname, 'schema.graphql');
 // data fixtures
 const products = [
   { upc: '1', name: 'iPhone', msrp: 699.99, manufacturerId: '1' },
-  { upc: '2', name: 'Apple Watch', msrp: 399.99, manufacturerId: '1' },
+  { upc: '2', name: 'Apple Watch', msrp: 399.99, manufacturerId: '2' },
   { upc: '3', name: 'Super Baking Cookbook', msrp: 15.99, manufacturerId: '2' },
   { upc: '4', name: 'Best Selling Novel', msrp: 7.99, manufacturerId: '2' },
   { upc: '5', name: 'iOS Survival Guide', msrp: 24.99, manufacturerId: '1' },
+  { upc: '6', name: 'Baseball Glove', msrp: 17.99, manufacturerId: '99' }, // << invalid manufacturer!
 ];
 
 // graphql resolvers

@@ -1,5 +1,5 @@
 type Product {
-  manufacturer: Manufacturer!
+  manufacturer: Manufacturer
   msrp: Float!
   name: String!
   upc: ID!
