@@ -1,0 +1,24 @@
+interface ProductOffering {
+  id: ID!
+}
+
+type Product implements ProductOffering {
+  id: ID!
+}
+
+type ProductDeal implements ProductOffering {
+  id: ID!
+  name: String!
+  price: Float!
+  products: [Product]!
+}
+
+type Storefront {
+  id: ID!
+  name: String!
+  products: [ProductOffering]!
+}
+
+type Query {
+  storefront(id: ID!): Storefront
+}
