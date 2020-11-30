@@ -5,7 +5,6 @@ type Post {
 
 type Query {
   posts: [Post]!
-  sdl: String!
 }
 
 type Mutation {

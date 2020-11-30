@@ -1,32 +1,50 @@
 const ws = require('ws');
 const { createClient } = require('graphql-ws');
-const { observableToAsyncIterable } = require('@graphql-tools/utils');
+const { print } = require('graphql');
 
 module.exports = function makeRemoteSubscriber(url) {
   const client = createClient({ url, webSocketImpl: ws });
-  return ({ document, variables }) => {
-    console.log('Subscriber!');
+  return async ({ document, variables }) => {
+    const pending = [];
+    let deferred = null;
+    let error = null;
+    let done = false;
 
-    return observableToAsyncIterable({
-      subscribe: (observer) => ({
-        unsubscribe: client.subscribe({
-          query: document,
-          variables,
-        }, {
-          next: (data) => observer.next && observer.next(data),
-          error: (err) => {
-            if (!observer.error) return;
-            if (err instanceof Error) {
-              observer.error(err);
-            } else if (err.constructor.name === 'CloseEvent') {
-              observer.error(new Error(`Socket closed with event ${err.code}`));
-            } else {
-              observer.error(new Error(err.map(({ message }) => message).join(', ')));
-            }
-          },
-          complete: () => observer.complete && observer.complete(),
-        })
-      })
+    const query = print(document);
+    const dispose = client.subscribe({
+      query,
+      variables,
+    }, {
+      next: data => {
+        pending.push(data);
+        deferred && deferred.resolve(false);
+      },
+      error: err => {
+        error = err;
+        deferred && deferred.reject(error);
+      },
+      complete: () => {
+        done = true;
+        deferred && deferred.resolve(true);
+      },
     });
+
+    return {
+      [Symbol.asyncIterator]() {
+        return this;
+      },
+      async next() {
+        if (done) return { done: true, value: undefined };
+        if (error) throw error;
+        if (pending.length) return { value: pending.shift() };
+        return (await new Promise((resolve, reject) => (deferred = { resolve, reject })))
+          ? { done: true, value: undefined }
+          : { value: pending.shift() };
+      },
+      async return() {
+        dispose();
+        return { done: true, value: undefined };
+      },
+    };
   };
 };

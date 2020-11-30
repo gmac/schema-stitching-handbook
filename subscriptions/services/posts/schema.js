@@ -1,4 +1,4 @@
-const { PubSub } = require('graphql-subscriptions');
+const { PubSub } = require('apollo-server');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 const readFileSync = require('../../lib/read_file_sync');
 const typeDefs = readFileSync(__dirname, 'schema.graphql');
