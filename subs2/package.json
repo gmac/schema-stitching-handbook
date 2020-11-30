@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.1.0",
+    "@graphql-tools/stitch": "^7.1.2",
     "@graphql-tools/utils": "^7.1.0",
     "@graphql-tools/wrap": "^7.0.2",
     "concurrently": "^5.3.0",
