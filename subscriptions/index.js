@@ -31,7 +31,6 @@ makeGatewaySchema().then(schema => {
 
 
 
-
 // DEBUGGING CLIENT...
 // assure the subscriptions are actually working:
 (async () => {
