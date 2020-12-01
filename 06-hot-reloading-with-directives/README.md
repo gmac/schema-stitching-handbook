@@ -1,17 +1,21 @@
-# Example 6 – Using stitching directives
+# Example 6 – Hot reloading with stitching directives
 
-This example demonstrates the use of stitching directives to specify type merging configuration. The `@graphql-tools/stitching-directives` package provides importable directives that can be used to annotate types and fields within subschemas, a validator to ensure the directives are used appropriately, and a configuration transformer that can be used on the gateway to convert the subschema directives into explicit configuration setting.
+This example demonstrates the use of stitching directives to specify type merging configuration. Moving service-specific configuration out of the gateway facilitates service setup automation, facilitating hot-reloading.
 
-The service setup in this example is based on the [official demonstration repository](https://github.com/apollographql/federation-demo) for
+The `@graphql-tools/stitching-directives` package provides importable directives that can be used to annotate types and fields within subschemas, a validator to ensure the directives are used appropriately, and a configuration transformer that can be used on the gateway to convert the subschema directives into explicit configuration setting.
+
+The gateway server can refresh the schema in response to "push" input of service changes via mutations as well as "pull" input of service health via subschema SDL polling.
+
+Note: the service setup in this example is based on the [official demonstration repository](https://github.com/apollographql/federation-demo) for
 [Apollo Federation](https://www.apollographql.com/docs/federation/).
 
 **This example demonstrates:**
 
-- Adding remote schemas, with typedefs + custom directives exposed on each subschema via a custom root field.
-- Use of the @key, @computed and @merge directives from `@graphql-tools/stitching-directives` to specify subschema merge configuration.
+- Adding remote schemas, with typedefs and custom directives exposed via a custom root field.
+- Use of the @key, @computed and @merge directives to specify type merging configuration.
 - Use of a custom executor that times out a request after a pre-specified limit.
 - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
-- Hot reloading of the gateway schema based on the available services, responsive to "push" input of service changes via mutations with "pull" input of service health via polling the SDL.  
+- Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
 
 ## Setup
 
