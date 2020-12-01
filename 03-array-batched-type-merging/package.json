@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.0.0",
-    "@graphql-tools/stitch": "^7.0.4",
+    "@graphql-tools/stitch": "^7.1.4",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.4.0",
