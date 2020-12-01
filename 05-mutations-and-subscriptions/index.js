@@ -35,5 +35,5 @@ async function makeGatewaySchema() {
 
 makeGatewaySchema().then(schema => {
   const server = new ApolloServer({ schema, playground: true });
-  server.listen(4000).then(() => console.log('gateway running at http://localhost:4000'));
+  server.listen(4000).then(() => console.log(`gateway running at http://localhost:4000/graphql`));
 });
