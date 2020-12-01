@@ -1,10 +1,10 @@
 # Example 2 – Single-record type merging
 
-🛑 **If you control all of your own GraphQL services, then proceed to [example three](../03-array-batched-type-merge) for a better optimized version of this same example.**
+🛑 **If you control all of your own GraphQL services, then proceed to [example three](../03-array-batched-type-merging) for a better optimized version of this same example.**
 
 This example explores the core techniques for merging typed objects using single-record queries, covering most of the topics discussed in the [documented basic example](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
 
-Using single-record queries means that every record accessed requires a _dedicated_ subschema delegation, which is not ideal. This 1:1 execution pattern has far greater overhead than the array-batched technique discussed in [example three](../03-array-batched-type-merge), which means this strategy is really only appropriate for interacting with services outside of our control (third-parties, etc). When forced to use single-record queries, we can at least enable [query batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching) to soften the blow on the number of operations sent to a subservice.
+Using single-record queries means that every record accessed requires a _dedicated_ subschema delegation, which is not ideal. This 1:1 execution pattern has far greater overhead than the array-batched technique discussed in [example three](../03-array-batched-type-merging), which means this strategy is really only appropriate for interacting with services outside of our control (third-parties, etc). When forced to use single-record queries, we can at least enable [query batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching) to soften the blow on the number of operations sent to a subservice.
 
 **This example demonstrates:**
 
