@@ -1,6 +1,6 @@
-# Mutations & Subscriptions
+# Example 5 – Mutations & Subscriptions
 
-This example demonstrates stitching mutation and subscription services into the combined gateway schema, as discussed in [stitching remote schemas](https://www.graphql-tools.com/docs/stitch-combining-schemas#stitching-remote-schemas) documentation.
+This example explores stitching mutation and subscription services into a combined gateway schema, as discussed in [stitching remote schemas](https://www.graphql-tools.com/docs/stitch-combining-schemas#stitching-remote-schemas) documentation.
 
 **This example demonstrates:**
 

@@ -32,5 +32,4 @@ function makeGatewaySchema() {
 
 const app = express();
 app.use('/graphql', graphqlHTTP({ schema: makeGatewaySchema(), graphiql: true }));
-app.listen(4000);
-console.log('gateway running on port 4000');
+app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));

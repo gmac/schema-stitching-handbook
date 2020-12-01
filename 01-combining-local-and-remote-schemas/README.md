@@ -1,6 +1,6 @@
 # Example 1 – Combining local and remote schemas
 
-This example demonstrates basic techniques for combining local and remote schemas together into one API. This covers most topics discussed in the official [Combining Schemas](https://www.graphql-tools.com/docs/stitch-combining-schemas) documentation.
+This example explores basic techniques for combining local and remote schemas together into one API. This covers most topics discussed in the [combining schemas documentation](https://www.graphql-tools.com/docs/stitch-combining-schemas).
 
 **This example demonstrates:**
 

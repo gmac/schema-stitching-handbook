@@ -1,6 +1,6 @@
 # Example 3 – Array-batched type merging
 
-This example demonstrates the core techniques for merging typed objects using array queries, covering most of the topics discussed in the official [batched merging documentation](https://www.graphql-tools.com/docs/stitch-type-merging#batching).
+This example explores the core techniques for merging typed objects using array queries, covering most of the topics discussed in [batched merging documentation](https://www.graphql-tools.com/docs/stitch-type-merging#batching).
 
 This example focuses on [array batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)&mdash;meaning that all records accessed during a round of delegation are batched together and loaded as an array. This technique greatly reduces the execution overhead of [single-record merges](../02-single-record-type-merging), and can be further optimized by enabling [query batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching). This array-batched strategy is prefereable to single-record merges and should be used whenever possible.
 

@@ -1,6 +1,6 @@
 # Example 4 – Cross-service interfaces
 
-This example demonstrates setting up a GraphQL interface that spans across service boundaries, as described in the [merged interfaces](https://www.graphql-tools.com/docs/stitch-type-merging#merged-interfaces) documentation. This feature of schema stitching is easy to overlook, yet is incredibly useful when designing a user-friendly API.
+This example explores setting up a GraphQL interface that spans across service boundaries, as described in the [merged interfaces documentation](https://www.graphql-tools.com/docs/stitch-type-merging#merged-interfaces). This is an extremely powerful feature made possible by the flexibility of type merging, yet it's easy to overlook.
 
 **This example demonstrates:**
 

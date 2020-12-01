@@ -13,6 +13,10 @@ function makeGatewaySchema() {
     subschemas: [
       {
         schema: manufacturersSchema,
+        // Enable batch execution...
+        // While 1:1 delegations are still expensive to process in the gateway schema,
+        // execution batching will consolidate the generated GraphQL operations
+        // into one request sent to the underlying subschema, which is better!
         batch: true,
         merge: {
           // This schema provides one unique field of data for the `Manufacturer` type (`name`).
@@ -63,5 +67,4 @@ function makeGatewaySchema() {
 
 const app = express();
 app.use('/graphql', graphqlHTTP({ schema: makeGatewaySchema(), graphiql: true }));
-app.listen(4000);
-console.log('gateway running on port 4000');
+app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));

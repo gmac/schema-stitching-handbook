@@ -4,7 +4,7 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
 
 ## Table of Contents
 
-- **Example 1 - Combining local and remote schemas**
+- **Example 1 - [Combining local and remote schemas](./tree/master/01-combining-local-and-remote-schemas)**
 
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
@@ -12,13 +12,13 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **Example 2 - Single-record type merging**
+- **Example 2 - [Single-record type merging](./tree/master/02-single-record-type-merging)**
 
   - One-way type merge using single-record queries.
   - Multi-directional type merge using single-record queries.
   - Writing single-record type merge config.
 
-- **Example 3 - Array-batched type merging**
+- **Example 3 - [Array-batched type merging](./tree/master/03-array-batched-type-merging)**
 
   - One-way type merge using array queries.
   - Multi-directional type merge using array queries.
@@ -26,11 +26,11 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Handling array errors.
   - Nullability & error remapping.
 
-- **Example 4 - Cross-service interfaces**
+- **Example 4 - [Cross-service interfaces](./tree/master/04-cross-service-interfaces)**
 
   - Distributing a GraphQL interface across services.
 
-- **Example 5 - Mutations &amp; Subscriptions**
+- **Example 5 - [Mutations &amp; Subscriptions](./tree/master/05-mutations-and-subscriptions)**
 
   - Adding a remote mutation service.
   - Adding a remote subscription service.
