@@ -9,11 +9,11 @@ const manufacturers = [
   { id: '2', name: 'Macmillan' },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    manufacturer: (root, { id }) => manufacturers.find(m => m.id === id) || new NotFoundError()
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      manufacturer: (root, { id }) => manufacturers.find(m => m.id === id) || new NotFoundError()
+    }
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});

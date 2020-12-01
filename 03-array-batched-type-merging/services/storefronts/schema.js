@@ -9,14 +9,14 @@ const storefronts = [
   { id: '2', name: 'BestBooks Online', productUpcs: ['3', '4', '5'] },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
-  },
-  Storefront: {
-    products: (storefront) => storefront.productUpcs.map(upc => ({ upc })),
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+    },
+    Storefront: {
+      products: (storefront) => storefront.productUpcs.map(upc => ({ upc })),
+    }
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});
