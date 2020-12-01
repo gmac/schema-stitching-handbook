@@ -6,6 +6,8 @@ const makeRemoteExecutor = require('./lib/make_remote_executor');
 const makeRemoteSubscriber = require('./lib/make_remote_subscriber');
 
 async function makeGatewaySchema() {
+  // build executor and subscriber functions
+  // for communicating with remote services
   const postsExec = makeRemoteExecutor('http://localhost:4001/graphql');
   const postsSubscriber = makeRemoteSubscriber('ws://localhost:4001/graphql');
   const usersExec = makeRemoteExecutor('http://localhost:4002/graphql');
@@ -14,13 +16,16 @@ async function makeGatewaySchema() {
     subschemas: [
       {
         schema: await introspectSchema(postsExec),
+        // executor handles query and mutation requests over HTTP
         executor: postsExec,
+        // subscriber returns an AsyncIterator that proxies remote sockets
         subscriber: postsSubscriber,
       },
       {
         schema: await introspectSchema(usersExec),
         executor: usersExec,
         merge: {
+          // merge type configuration, see third example
           User: {
             selectionSet: '{ id }',
             fieldName: 'users',

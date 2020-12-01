@@ -2,6 +2,8 @@ const ws = require('ws');
 const { createClient } = require('graphql-ws');
 const { print } = require('graphql');
 
+// builds an AsyncIterator wrapper around a WS client
+// see https://github.com/enisdenjo/graphql-ws#async-iterator
 module.exports = function makeRemoteSubscriber(url) {
   const client = createClient({ url, webSocketImpl: ws });
   return async ({ document, variables }) => {
