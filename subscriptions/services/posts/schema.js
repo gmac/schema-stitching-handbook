@@ -10,15 +10,18 @@ const posts = [];
 module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
+    Post: {
+      user: (post) => ({ id: post.userId }),
+    },
     Query: {
       posts: () => posts,
     },
     Mutation: {
-      createPost: (root, { message, userId }) => {
+      createPost: (root, { message }) => {
         const newPost = {
           id: posts.length + 1,
+          userId: String(Math.round(Math.random() * 2) + 1),
           message,
-          userId
         };
 
         posts.push(newPost);

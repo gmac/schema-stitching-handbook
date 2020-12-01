@@ -14,5 +14,5 @@ const wsServer = new ws.Server({ server, path: '/graphql' });
 
 server.listen(4001, () => {
   useServer({ schema, execute, subscribe }, wsServer);
-  console.info('Listening on http://localhost:4001/graphql');
+  console.info('posts running at http://localhost:4001/graphql');
 });

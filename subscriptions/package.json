@@ -6,6 +6,7 @@
   "scripts": {
     "start-gateway": "nodemon index.js",
     "start-service-posts": "nodemon services/posts/index.js",
+    "start-service-users": "nodemon services/users/index.js",
     "start-services": "concurrently \"yarn:start-service-*\""
   },
   "dependencies": {
