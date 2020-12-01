@@ -1,6 +1,6 @@
 type Product {
-  msrp: Float!
   name: String!
+  price: Float!
   upc: ID!
 }
 

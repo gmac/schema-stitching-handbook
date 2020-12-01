@@ -5,15 +5,15 @@ const typeDefs = readFileSync(__dirname, 'schema.graphql');
 
 // data fixtures
 const products = [
-  { upc: '1', name: 'Cookbook', msrp: 15.99 },
-  { upc: '2', name: 'Toothbrush', msrp: 3.99 },
+  { upc: '1', name: 'Cookbook', price: 15.99 },
+  { upc: '2', name: 'Toothbrush', price: 3.99 },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    product: (root, { upc }) => products.find(p => p.upc === upc) || new NotFoundError()
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      product: (root, { upc }) => products.find(p => p.upc === upc) || new NotFoundError()
+    }
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});

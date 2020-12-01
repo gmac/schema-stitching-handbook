@@ -9,12 +9,12 @@ const storefronts = [
   { id: '2', name: 'eShoppe' },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
-    sdl: () => typeDefs,
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+      sdl: () => typeDefs,
+    }
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});
