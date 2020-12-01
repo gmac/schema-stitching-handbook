@@ -30,6 +30,12 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
 
   - Distributing a GraphQL interface across services.
 
+- **Example 5 - Mutations &amp; Subscriptions**
+
+  - Adding a remote mutation service.
+  - Adding a remote subscription service.
+  - Adding a subscriber proxy.
+
 - **Appendices**
 
   - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
