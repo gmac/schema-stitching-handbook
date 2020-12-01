@@ -1,0 +1,21 @@
+type Post {
+  id: ID!
+  message: String!
+  user: User
+}
+
+type User {
+  id: ID!
+}
+
+type Query {
+  posts: [Post]!
+}
+
+type Mutation {
+  createPost(message: String!): Post!
+}
+
+type Subscription {
+  newPost: Post!
+}
