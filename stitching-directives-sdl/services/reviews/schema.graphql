@@ -7,13 +7,12 @@ type Review {
 
 type User @key(selectionSet: "{ id }") {
   id: ID!
-  username: String
-  numberOfReviews: Int
+  totalReviews: Int!
   reviews: [Review]
 }
 
 type Product @key(selectionSet: "{ upc }") {
-  upc: String!
+  upc: ID!
   reviews: [Review]
 }
 
@@ -22,7 +21,7 @@ input UserKey {
 }
 
 input ProductKey {
-  upc: String!
+  upc: ID!
 }
 
 input ProductInput {
@@ -30,8 +29,8 @@ input ProductInput {
 }
 
 type Query {
-  _reviews(id: ID!): Review
-  _users(keys: [UserKey!]!): [User] @merge
+  review(id: ID!): Review
+  _users(keys: [UserKey!]!): [User]! @merge
   _products(input: ProductInput): [Product]! @merge(keyArg: "input.keys")
-  _sdl: String
+  _sdl: String!
 }

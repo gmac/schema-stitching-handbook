@@ -1,11 +1,10 @@
 type Product @key(selectionSet: "{ upc }") {
-  upc: String!
+  upc: ID!
   inStock: Boolean
-  shippingEstimate: Int @computed(selectionSet: "{ price weight }")
 }
 
 input ProductKey {
-  upc: String!
+  upc: ID!
   price: Int
   weight: Int
 }
@@ -13,5 +12,5 @@ input ProductKey {
 type Query {
   mostStockedProduct: Product
   _products(keys: [ProductKey!]!): [Product]! @merge
-  _sdl: String
+  _sdl: String!
 }
