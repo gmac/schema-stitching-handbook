@@ -26,11 +26,11 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Handling array errors.
   - Nullability & error remapping.
 
-- **Example 4 - [Cross-service interfaces](./04-cross-service-interfaces)**
+- **Example 4 - [Cross-service interfaces](./cross-service-interfaces)**
 
   - Distributing a GraphQL interface across services.
 
-- **Example 5 - [Mutations &amp; Subscriptions](./05-mutations-and-subscriptions)**
+- **Example 5 - [Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
 
   - Adding a remote mutation service.
   - Adding a remote subscription service.
