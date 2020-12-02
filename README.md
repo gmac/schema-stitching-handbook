@@ -36,6 +36,14 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Adding a remote subscription service.
   - Adding a subscriber proxy.
 
+- **Example 6 - [Hot reloading with stitching directives](./06-hot-reloading-with-stitching-directives)**
+
+  - Adding remote schemas, with typedefs and custom directives exposed via a custom root field.
+  - Use of the @key, @computed and @merge directives to specify type merging configuration.
+  - Use of a custom executor that times out a request after a pre-specified limit.
+  - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
+  - Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
+
 - **Appendices**
 
   - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
