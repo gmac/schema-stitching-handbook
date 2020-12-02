@@ -1,20 +1,15 @@
 const { fetch } = require('cross-fetch');
-const AbortController = require('abort-controller');
 const { print } = require('graphql');
+const AbortController = require('abort-controller');
 
 // Builds a remote schema executor function,
 // customize any way that you need (auth, headers, etc).
 // Expects to recieve an object with "document" and "variable" params,
 // and asynchronously returns a JSON response from the remote.
-module.exports = function makeRemoteExecutorWithTimeout(url, timeout = 500) {
+module.exports = function makeRemoteExecutorWithTimeout(url, timeout=500) {
   return async ({ document, variables }) => {
     const controller = new AbortController();
-
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, timeout);
-
-    let result;
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
       const query = typeof document === 'string' ? document : print(document);
@@ -24,17 +19,11 @@ module.exports = function makeRemoteExecutorWithTimeout(url, timeout = 500) {
         body: JSON.stringify({ query, variables }),
         signal: controller.signal,
       });
-      result = await fetchResult.json();
+      return await fetchResult.json();
     } catch (error) {
-      if (error.name === 'AbortError') {
-        result = new Error(`Response exceeds ${timeout}. Request aborted.`);
-      } else {
-        result = error;
-      }
+      return error.name === 'AbortError' ? new Error(`Request exceeded timeout of ${timeout}`) : error;
     } finally {
       clearTimeout(timeoutId);
     }
-
-    return result;
   };
 };

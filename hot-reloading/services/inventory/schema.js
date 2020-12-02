@@ -10,19 +10,24 @@ const typeDefs = `
   ${readFileSync(__dirname, 'schema.graphql')}
 `;
 
-const products = [
-  { upc: '1', name: 'Table', price: 899, weight: 100 },
-  { upc: '2', name: 'Couch', price: 1299, weight: 1000 },
-  { upc: '3', name: 'Chair', price: 54, weight: 50 },
+const inventory = [
+  { upc: '1', unitsInStock: 3 },
+  { upc: '2', unitsInStock: 0 },
+  { upc: '3', unitsInStock: 5 },
 ];
 
 module.exports = makeExecutableSchema({
   schemaTransforms: [stitchingDirectivesValidator],
   typeDefs,
   resolvers: {
+    Product: {
+      inStock: (product) => product.unitsInStock > 0
+    },
     Query: {
-      topProducts: (_root, args) => products.slice(0, args.first),
-      products: (_root, { upcs }) => upcs.map((upc) => products.find(product => product.upc === upc) || new NotFoundError()),
+      mostStockedProduct: () => inventory.reduce((acc, i) => acc.unitsInStock >= i.unitsInStock ? acc : i, inventory[0]),
+      _products: (_root, { keys }) => {
+        return keys.map(key => ({ ...key, ...inventory.find(i => i.upc === key.upc) || new NotFoundError() }));
+      },
       _sdl: () => typeDefs,
     },
   }

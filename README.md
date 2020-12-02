@@ -36,10 +36,20 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Adding a remote subscription service.
   - Adding a subscriber proxy.
 
-- **Example 6 - [Hot reloading with stitching directives](./06-hot-reloading-with-stitching-directives)**
+- **Example 6 - Computed fields**
 
-  - Adding remote schemas, with typedefs and custom directives exposed via a custom root field.
-  - Use of the @key, @computed and @merge directives to specify type merging configuration.
+  - tktk
+
+- **Example 7 - Federation services**
+
+  - tktk
+
+- **Example 8 - [Stitching directives SDL](./stitching-directives-sdl)**
+
+  - Use of the `@key`, `@merge`, and `@computed` directives to specify type merging configuration.
+
+- **Example 9 - [Hot reloading](./hot-reloading)**
+
   - Use of a custom executor that times out a request after a pre-specified limit.
   - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
   - Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
