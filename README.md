@@ -16,13 +16,12 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
 
   - One-way type merge using single-record queries.
   - Multi-directional type merge using single-record queries.
-  - Writing single-record type merge config.
+  - Query/execution batching.
 
 - **Example 3 - [Array-batched type merging](./03-array-batched-type-merging)**
 
   - One-way type merge using array queries.
   - Multi-directional type merge using array queries.
-  - Writing array-batched type merge config.
   - Handling array errors.
   - Nullability & error remapping.
 

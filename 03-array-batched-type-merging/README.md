@@ -8,7 +8,6 @@ This example focuses on [array batching](https://github.com/gmac/schema-stitchin
 
 - Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using array queries.
 - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
-- Writing array-batched type merge config.
 - Handling array errors.
 - Nullability & error remapping.
 
