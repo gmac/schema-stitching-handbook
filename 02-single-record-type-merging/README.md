@@ -2,7 +2,7 @@
 
 This example explores the core techniques for merging typed objects using single-record queries, covering most of the topics discussed in the [documented basic example](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
 
-Using single-record queries means that every record accessed requires a _dedicated_ subschema delegation, which is not ideal. This 1:1 execution pattern has far greater overhead than the array-batched technique discussed in [example three](../03-array-batched-type-merging). However, it's still useful when interacting with services beyond our control, and is an excellent way to study how [execution batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching) works.
+Using single-record queries means that every accessed record requires a _dedicated_ subschema delegation, versus a single delegation for an entire set of records. This 1:1 delegation pattern has far greater overhead than the array-batched technique discussed in [chapter three](../03-array-batched-type-merging). However&mdash;it's still useful when interacting with services beyond our control, and is an excellent way to study the value of [execution batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching).
 
 **This example demonstrates:**
 
@@ -68,7 +68,7 @@ That means the gateway performed four rounds of resolution for each generation o
 
 ### Batching
 
-While the gateway performed four _rounds_ of resolution, it actually had to perform a single subschema delegation (or, proxy) _per record_ in each round because we're only fetching one record at a time. This is both expensive for the gateway to process, and for the subservice to fulfill. Thankfully, schema stitching has a built-in solution for the later inefficiency. Clear your gateway terminal log and then run the following query:
+While the gateway performed four _rounds_ of resolution, it actually had to perform a single subschema delegation (or, proxy) _per record_ in each round because we're only fetching one record at a time. This is both expensive for the gateway to process, and for the subservice to fulfill. Thankfully, stitching has a built-in solution for the later inefficiency. Clear your gateway terminal log and run the following query in GraphiQL:
 
 ```graphql
 query {
@@ -81,7 +81,7 @@ query {
 }
 ```
 
-The Products service executor is configured to log all operations it sends to its subservice, so you can watch what's happening in the gateway terminal tab. Find these lines in the root `index.js` file and try adjusting the `batch` setting, then rerunning the above query:
+The Products executor is setup to log all of its operations, so you can watch what's being requested in the gateway terminal window. Find these lines in the root `index.js` file and try adjusting the `batch` setting:
 
 ```js
 schema: await introspectSchema(productsExec),
@@ -89,9 +89,9 @@ executor: makeRemoteExecutor('http://localhost:4002/graphql', { log: true }),
 batch: true, // << try turning this on and off
 ```
 
-When `batch: false` is set, you'll see the following console output:
+With `batch: false`, the above query logs the following:
 
-```
+```graphql
 OPERATION 2020-12-03T15:32:41.900Z:
 query ($_v0_upc: ID!) {
   product(upc: $_v0_upc) {
@@ -120,9 +120,9 @@ query ($_v0_upc: ID!) {
 }
 ```
 
-Notice that we're sending **three seperate requests** to the Products service to resolve each record in the product set. That's extremely inefficient. Switching to `batch: true` changes this operation to:
+Notice that we're sending **three seperate requests** to the Products service to resolve each record in the product set. That's extremely inefficient. Switching to `batch: true` changes the output to:
 
-```shell
+```graphql
 OPERATION 2020-12-03T15:36:22.889Z:
 query ($graphqlTools0__v0_upc: ID!, $graphqlTools1__v0_upc: ID!, $graphqlTools2__v0_upc: ID!) {
   graphqlTools0_product: product(upc: $graphqlTools0__v0_upc) {
@@ -143,6 +143,6 @@ query ($graphqlTools0__v0_upc: ID!, $graphqlTools1__v0_upc: ID!, $graphqlTools2_
 }
 ```
 
-Now we're sending a **single request** that resolves all three single-record queries at once thanks to the magic of [batched execution](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching). Generally speaking, there are very few reasons NOT to enable this free optimization (it will be the default in future releases).
+Now we're sending a **single request** that resolves all three single-record queries at once, courtesy of [batched execution](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching). There are very few reasons NOT to enable this free batching optimization (it will be enabled by default in the future).
 
-Batch execution greatly optimized our exchange with the subservice. However, we still have overhead costs associated with processing each record individually within the gateway, so execution batching alone is not the best solution. This can be further optimized by delegating arrays of records at a time, as discussed in [chapter three](../03-array-batched-type-merging).
+Batch execution is superb for optimizing the exchange with the subservices. However, there are still overhead processing costs on the gateway for delegating each record individually, so batch execution alone is not a perfect solution. The best optimization strategy is to pair batch execution with delegating arrays of records at a time, as discussed in [chapter three](../03-array-batched-type-merging).
