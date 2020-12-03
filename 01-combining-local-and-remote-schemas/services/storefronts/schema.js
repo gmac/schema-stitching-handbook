@@ -14,7 +14,7 @@ module.exports = makeExecutableSchema({
   resolvers: {
     Query: {
       storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
-      sdl: () => typeDefs,
+      _sdl: () => typeDefs,
     }
   }
 });

@@ -61,7 +61,9 @@ The results of this query are live-proxied from the underlying subschemas by the
 
 - `storefront` comes from the remote Storefronts server. This service is added to the stitched schema by querying its SDL through its own GraphQL API (very meta). While this is less conventional than introspection, it works with introspection disabled and may include custom directives.
 
-- `errorCodes` comes from a locally-executable schema running on the gateway server itself. This schema is built using `makeExecutableSchema` from the `@graphql-tools/schema` package, and then stitched directly into the combined schema.
+- `errorCodes` comes from a locally-executable schema running on the gateway server itself. This schema is built using `makeExecutableSchema` from the `@graphql-tools/schema` package, and then stitched directly into the combined schema. Note that this still operates as a standalone schema instance that is proxied by the top-level gateway schema.
+
+- `heartbeat` comes from type definitions and resolvers built directly into the gateway proxy layer. This is the only field in this example that returns _directly_ from the gateway schema itself; everything else delegates to an underlying subschema instance.
 
 ## Error handling
 

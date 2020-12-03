@@ -5,5 +5,5 @@ type Storefront {
 
 type Query {
   storefront(id: ID!): Storefront
-  sdl: String!
+  _sdl: String!
 }

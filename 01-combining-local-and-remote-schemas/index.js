@@ -45,11 +45,23 @@ async function makeGatewaySchema() {
         ]
       },
       {
-        // 4. Incorporate a locally-executable schema.
-        // no need for a remote executor!
+        // 4. Incorporate a locally-executable subschema.
+        // No need for a remote executor!
+        // Note that that the gateway still proxies through
+        // to this same underlying executable schema instance.
         schema: localSchema
       }
-    ]
+    ],
+    // 5. Add additional schema directly into the gateway proxy layer.
+    // Under the hood, `stitchSchemas` is a wrapper for `makeExecutableSchema`,
+    // and accepts all of its same options. This allows extra type definitions
+    // and resolvers to be added directly into the top-level gateway proxy schema.
+    typeDefs: 'type Query { heartbeat: String! }',
+    resolvers: {
+      Query: {
+        heartbeat: () => 'OK'
+      }
+    }
   });
 }
 
@@ -57,8 +69,8 @@ async function makeGatewaySchema() {
 // This is NOT a standard GraphQL convention – it's just a simple way
 // for a remote API to provide its own schema, complete with custom directives.
 async function fetchRemoteSDL(executor) {
-  const result = await executor({ document: '{ sdl }' });
-  return result.data.sdl;
+  const result = await executor({ document: '{ _sdl }' });
+  return result.data._sdl;
 }
 
 makeGatewaySchema().then(schema => {
