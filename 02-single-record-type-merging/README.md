@@ -92,7 +92,7 @@ batch: true, // << try turning this on and off
 With `batch: false`, the above query logs the following:
 
 ```graphql
-OPERATION 2020-12-03T15:32:41.900Z:
+# -- OPERATION 2020-12-03T15:32:41.900Z:
 query ($_v0_upc: ID!) {
   product(upc: $_v0_upc) {
     __typename
@@ -101,7 +101,7 @@ query ($_v0_upc: ID!) {
   }
 }
 
-OPERATION 2020-12-03T15:32:41.901Z:
+# -- OPERATION 2020-12-03T15:32:41.901Z:
 query ($_v0_upc: ID!) {
   product(upc: $_v0_upc) {
     __typename
@@ -110,7 +110,7 @@ query ($_v0_upc: ID!) {
   }
 }
 
-OPERATION 2020-12-03T15:32:41.903Z:
+# -- OPERATION 2020-12-03T15:32:41.903Z:
 query ($_v0_upc: ID!) {
   product(upc: $_v0_upc) {
     __typename
@@ -123,7 +123,7 @@ query ($_v0_upc: ID!) {
 Notice that we're sending **three seperate requests** to the Products service to resolve each record in the product set. That's extremely inefficient. Switching to `batch: true` changes the output to:
 
 ```graphql
-OPERATION 2020-12-03T15:36:22.889Z:
+# -- OPERATION 2020-12-03T15:36:22.889Z:
 query ($graphqlTools0__v0_upc: ID!, $graphqlTools1__v0_upc: ID!, $graphqlTools2__v0_upc: ID!) {
   graphqlTools0_product: product(upc: $graphqlTools0__v0_upc) {
     __typename
