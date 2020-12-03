@@ -1,10 +1,10 @@
-# Schema Stitching demos
+# Schema Stitching, The Book
 
-Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-combining-schemas) doing awesome things. Focuses on the new (GraphQL Tools v6+) stitching using [type merging](https://www.graphql-tools.com/docs/stitch-type-merging), not legacy [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/).
+Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-combining-schemas) doing awesome things. Focuses on the new (GraphQL Tools v6+) stitching using [type merging](https://www.graphql-tools.com/docs/stitch-type-merging), not legacy [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/).
 
 ## Table of Contents
 
-- **Example 1 - [Combining local and remote schemas](./01-combining-local-and-remote-schemas)**
+- **[Chapter 1](./01-combining-local-and-remote-schemas) - Combining local and remote schemas**
 
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
@@ -12,42 +12,46 @@ Self-guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/st
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **Example 2 - [Single-record type merging](./02-single-record-type-merging)**
+- **[Chapter 2](./mutations-and-subscriptions) - Mutations &amp; Subscriptions**
+
+  - Adding a remote mutation service.
+  - Adding a remote subscription service.
+  - Adding a subscriber proxy.
+
+- **[Chapter 3](./02-single-record-type-merging) - Single-record type merging**
 
   - One-way type merge using single-record queries.
   - Multi-directional type merge using single-record queries.
   - Query/execution batching.
 
-- **Example 3 - [Array-batched type merging](./03-array-batched-type-merging)**
+- **[Chapter 4](./03-array-batched-type-merging) - Array-batched type merging**
 
   - One-way type merge using array queries.
   - Multi-directional type merge using array queries.
   - Handling array errors.
   - Nullability & error remapping.
 
-- **Example 4 - [Cross-service interfaces](./cross-service-interfaces)**
+- **[Chapter 5](./cross-service-interfaces) - Cross-service interfaces**
 
   - Distributing a GraphQL interface across services.
 
-- **Example 5 - [Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
-
-  - Adding a remote mutation service.
-  - Adding a remote subscription service.
-  - Adding a subscriber proxy.
-
-- **Example 6 - Computed fields**
+- **Chapter 6 - Nullable merges**
 
   - tktk
 
-- **Example 7 - Federation services**
+- **Chapter 7 - Computed fields**
 
   - tktk
 
-- **Example 8 - [Stitching directives SDL](./stitching-directives-sdl)**
+- **Chapter 8 - Federation services**
+
+  - tktk
+
+- **[Chapter 9](./stitching-directives-sdl) - Stitching directives SDL**
 
   - Use of the `@key`, `@merge`, and `@computed` directives to specify type merging configuration.
 
-- **Example 9 - [Hot reloading](./hot-reloading)**
+- **[Chapter 10](./hot-reloading) - Hot reloading**
 
   - Use of a custom executor that times out a request after a pre-specified limit.
   - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.

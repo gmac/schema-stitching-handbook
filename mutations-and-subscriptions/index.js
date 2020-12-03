@@ -9,7 +9,6 @@ async function makeGatewaySchema() {
   // build executor and subscriber functions
   // for communicating with remote services
   const postsExec = makeRemoteExecutor('http://localhost:4001/graphql');
-  const postsSubscriber = makeRemoteSubscriber('ws://localhost:4001/graphql');
   const usersExec = makeRemoteExecutor('http://localhost:4002/graphql');
 
   return stitchSchemas({
@@ -19,18 +18,18 @@ async function makeGatewaySchema() {
         // executor handles query and mutation requests over HTTP
         executor: postsExec,
         // subscriber returns an AsyncIterator that proxies remote sockets
-        subscriber: postsSubscriber,
+        subscriber: makeRemoteSubscriber('ws://localhost:4001/graphql'),
       },
       {
         schema: await introspectSchema(usersExec),
         executor: usersExec,
         merge: {
-          // merge type configuration, see third example
+          // Combine the User type across services...
+          // discussed in chapters three and four.
           User: {
             selectionSet: '{ id }',
-            fieldName: 'users',
-            key: ({ id }) => id,
-            argsFromKeys: (ids) => ({ ids }),
+            fieldName: 'user',
+            args: ({ id }) => ({ id }),
           }
         }
       },
@@ -39,6 +38,6 @@ async function makeGatewaySchema() {
 }
 
 makeGatewaySchema().then(schema => {
-  const server = new ApolloServer({ schema, playground: true });
+  const server = new ApolloServer({ schema }); // uses Apollo Server for its subscription UI features
   server.listen(4000).then(() => console.log(`gateway running at http://localhost:4000/graphql`));
 });

@@ -5,5 +5,5 @@ type User {
 }
 
 type Query {
-  users(ids: [ID!]!): [User]!
+  user(id: ID!): User
 }

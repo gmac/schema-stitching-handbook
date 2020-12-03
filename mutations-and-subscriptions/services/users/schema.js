@@ -13,7 +13,7 @@ module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
-      users: (root, { ids }) => ids.map(id => users.find(user => user.id === id) || new NotFoundError()),
+      user: (root, { id }) => users.find(user => user.id === id) || new NotFoundError(),
     },
   }
 });
