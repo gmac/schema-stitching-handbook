@@ -50,6 +50,7 @@ query {
     name
   }
   errorCodes
+  heartbeat
 }
 ```
 
