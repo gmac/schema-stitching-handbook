@@ -4,7 +4,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 ## Table of Contents
 
-- **[Chapter 1](./01-combining-local-and-remote-schemas) - Combining local and remote schemas**
+- **[Chapter 1](./combining-local-and-remote-schemas) - Combining local and remote schemas**
 
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
@@ -18,20 +18,20 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Adding a remote subscription service.
   - Adding a subscriber proxy.
 
-- **[Chapter 3](./02-single-record-type-merging) - Single-record type merging**
+- **[Chapter 3](./type-merging-single-records) - Single-record type merging**
 
   - One-way type merge using single-record queries.
   - Multi-directional type merge using single-record queries.
   - Query/execution batching.
 
-- **[Chapter 4](./03-array-batched-type-merging) - Array-batched type merging**
+- **[Chapter 4](./type-merging-arrays) - Array-batched type merging**
 
   - One-way type merge using array queries.
   - Multi-directional type merge using array queries.
   - Handling array errors.
   - Nullability & error remapping.
 
-- **[Chapter 5](./cross-service-interfaces) - Cross-service interfaces**
+- **[Chapter 5](./type-merging-interfaces) - Cross-service interfaces**
 
   - Distributing a GraphQL interface across services.
 

@@ -15,7 +15,6 @@ Note: the service setup in this example is based on the [official demonstration 
 - Use of the @key, @computed and @merge directives to specify type merging configuration.
 - Use of a custom executor that times out a request after a pre-specified limit.
 - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
-- Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
 
 ## Setup
 
@@ -42,40 +41,4 @@ The following services are available for interactive queries:
 
 ## Summary
 
-Visit the [stitched gateway](http://localhost:4000/graphql) and try running the following query:
-
-```graphql
-query {
-  allEndpoints {
-    url
-  }
-}
-```
-
-Note that the available types and root fields reflect all four of the services returned.
-
-Then, try the following mutation:
-
-```graphql
-mutation {
-  removeEndpoint(url: "http://localhost:4004/graphql") {
-    success
-  }
-}
-```
-
-Reload the [stitched gateway](http://localhost:4000/graphql) and see how the available types and root fields automatically adjust after the Reviews service has been removed from the gateway.
-
-Then, try the following mutation:
-
-```graphql
-mutation {
-  addEndpoint(url: "http://localhost:4004/graphql") {
-    success
-  }
-}
-```
-
-Reload the [stitched gateway](http://localhost:4000/graphql) and see how the available types and root fields have been restored.
-
-Finally, try stopping the Review service by closing its terminal. Reload the [stitched gateway](http://localhost:4000/graphql) to once again see how the available types and root fields adjust automatically.
+tktk
