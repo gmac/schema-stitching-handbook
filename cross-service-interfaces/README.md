@@ -1,4 +1,4 @@
-# Example 4 – Cross-service interfaces
+# Chapter 5 – Cross-service interfaces
 
 This example explores setting up a GraphQL interface that spans across service boundaries, as described in the [merged interfaces documentation](https://www.graphql-tools.com/docs/stitch-type-merging#merged-interfaces). This is an extremely powerful feature made possible by the flexibility of type merging, yet it's easy to overlook.
 

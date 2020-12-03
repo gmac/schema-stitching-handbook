@@ -51,7 +51,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - Use of the `@key`, `@merge`, and `@computed` directives to specify type merging configuration.
 
-- **[Chapter 10](./hot-reloading) - Hot reloading**
+- **[Chapter 10](./hot-schema-reloading) - Hot schema reloading**
 
   - Use of a custom executor that times out a request after a pre-specified limit.
   - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.

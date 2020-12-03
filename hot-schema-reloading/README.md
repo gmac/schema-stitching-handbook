@@ -1,4 +1,4 @@
-# Example 6 – Hot reloading with stitching directives
+# Chapter 10 – Hot schema reloading
 
 This example demonstrates the use of stitching directives to specify type merging configuration. Moving service-specific configuration out of the gateway facilitates service setup automation, facilitating hot-reloading.
 
