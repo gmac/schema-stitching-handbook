@@ -45,7 +45,8 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 - **[Chapter 8 - Federation services](./federation-services)**
 
-  - tktk
+  - Integrating Apollo Federation services into a stitched schema.
+  - Fetching and parsing Federation SDLs.
 
 - **[Chapter 9 - Stitching directives SDL](./stitching-directives-sdl)**
 
