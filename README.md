@@ -1,10 +1,10 @@
-# Schema Stitching, The Book
+# Schema Stitching Handbook
 
 Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-combining-schemas) doing awesome things. Focuses on the new (GraphQL Tools v6+) stitching using [type merging](https://www.graphql-tools.com/docs/stitch-type-merging), not legacy [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/).
 
 ## Table of Contents
 
-- **[Chapter 1](./combining-local-and-remote-schemas) - Combining local and remote schemas**
+- **[Chapter 1 - Combining local and remote schemas](./combining-local-and-remote-schemas)**
 
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
@@ -12,26 +12,26 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **[Chapter 2](./mutations-and-subscriptions) - Mutations &amp; Subscriptions**
+- **[Chapter 2 - Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
 
   - Adding a remote mutation service.
   - Adding a remote subscription service.
   - Adding a subscriber proxy.
 
-- **[Chapter 3](./type-merging-single-records) - Single-record type merging**
+- **[Chapter 3 - Single-record type merging](./type-merging-single-records)**
 
   - One-way type merge using single-record queries.
   - Multi-directional type merge using single-record queries.
   - Query/execution batching.
 
-- **[Chapter 4](./type-merging-arrays) - Array-batched type merging**
+- **[Chapter 4 - Array-batched type merging](./type-merging-arrays)**
 
   - One-way type merge using array queries.
   - Multi-directional type merge using array queries.
   - Handling array errors.
   - Nullability & error remapping.
 
-- **[Chapter 5](./type-merging-interfaces) - Cross-service interfaces**
+- **[Chapter 5 - Cross-service interfaces](./type-merging-interfaces)**
 
   - Distributing a GraphQL interface across services.
 
@@ -47,15 +47,16 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - tktk
 
-- **[Chapter 9](./stitching-directives-sdl) - Stitching directives SDL**
+- **[Chapter 9 - Stitching directives SDL](./stitching-directives-sdl)**
 
   - Use of the `@key`, `@merge`, and `@computed` directives to specify type merging configuration.
 
-- **[Chapter 10](./hot-schema-reloading) - Hot schema reloading**
+- **[Chapter 10 - Hot schema reloading](./hot-schema-reloading)**
 
-  - Use of a custom executor that times out a request after a pre-specified limit.
-  - Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
-  - Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
+  - Hot reload of the combined gateway schema (no server restart).
+  - Polling for remote subschema changes.
+  - Mutations for adding/removing remote subservices.
+  - Handling subservice request timeouts.
 
 - **Appendices**
 

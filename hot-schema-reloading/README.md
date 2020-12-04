@@ -1,21 +1,13 @@
 # Chapter 10 – Hot schema reloading
 
-This example demonstrates the use of stitching directives to specify type merging configuration. Moving service-specific configuration out of the gateway facilitates service setup automation, facilitating hot-reloading.
-
-The `@graphql-tools/stitching-directives` package provides importable directives that can be used to annotate types and fields within subschemas, a validator to ensure the directives are used appropriately, and a configuration transformer that can be used on the gateway to convert the subschema directives into explicit configuration setting.
-
-The gateway server can refresh the schema in response to "push" input of service changes via mutations as well as "pull" input of service health via subschema SDL polling.
-
-Note: the service setup in this example is based on the [official demonstration repository](https://github.com/apollographql/federation-demo) for
-[Apollo Federation](https://www.apollographql.com/docs/federation/).
+This example demonstrates the gateway server refreshing the schema in response to "push" input of service changes via mutations as well as "pull" input of service health via subschema SDL polling.
 
 **This example demonstrates:**
 
-- Adding remote schemas, with typedefs and custom directives exposed via a custom root field.
-- Use of the @key, @computed and @merge directives to specify type merging configuration.
-- Use of a custom executor that times out a request after a pre-specified limit.
-- Addition of custom queries/mutations on the gateway for listing/modifying the configured services.
-- Hot reloading of the gateway schema based on "push" input of service changes and "pull" input of service health.
+- Hot reload of the combined gateway schema (no server restart).
+- Polling for remote subschema changes.
+- Mutations for adding/removing remote subservices.
+- Handling subservice request timeouts.
 
 ## Setup
 
