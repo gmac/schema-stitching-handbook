@@ -43,7 +43,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - tktk
 
-- **Chapter 8 - Federation services**
+- **[Chapter 8 - Federation services](./federation-services)**
 
   - tktk
 
