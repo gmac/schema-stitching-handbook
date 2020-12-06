@@ -2,12 +2,12 @@ type Product @key(fields: "upc") {
   upc: ID!
   name: String!
   price: Float!
-  unitsSold: Int
+  unitsInStock: Int!
 }
 
 extend type User @key(fields: "id") {
   id: ID! @external
-  recentPurchases: [Product]!
+  recentPurchases: [Product]
 }
 
 type Query {

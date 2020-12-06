@@ -1,10 +1,9 @@
 const { fetch } = require('cross-fetch');
 const { print } = require('graphql');
 
-module.exports = function makeRemoteExecutor(url, service) {
+module.exports = function makeRemoteExecutor(url) {
   return async ({ document, variables }) => {
     const query = typeof document === 'string' ? document : print(document);
-    console.log('--- ' + service + ' ' + url + '\n', query, variables)
     const fetchResult = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
