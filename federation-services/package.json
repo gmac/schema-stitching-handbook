@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start-gateway": "nodemon index.js",
-    "start-service-products": "nodemon services/products/index.js",
-    "start-service-reviews": "nodemon services/reviews/index.js",
-    "start-service-users": "nodemon services/users/index.js",
+    "start-service-products": "node services/products/index.js",
+    "start-service-reviews": "node services/reviews/index.js",
+    "start-service-users": "node services/users/index.js",
     "start-services": "concurrently \"yarn:start-service-*\""
   },
   "dependencies": {

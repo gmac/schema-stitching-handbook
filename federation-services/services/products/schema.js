@@ -23,12 +23,16 @@ module.exports = buildFederatedSchema({
   resolvers: {
     Product: {
       __resolveReference: ({ upc }) => products.find(product => product.upc === upc),
+      unitsSold: (product) =>  {
+        console.log('unitsSold', product)
+        return productPurchases.filter(pp => pp.productUpc === product.upc).length
+      },
     },
     User: {
       recentPurchases(user) {
         const upcs = productPurchases.filter(({ userId }) => userId === user.id).map(({ productUpc }) => productUpc);
         return upcs.map(upc => products.find(p => p.upc === upc) || new NotFoundError());
-      }
+      },
     },
     Query: {
       product: (_root, { upc }) => products.find(p => p.upc === upc) || new NotFoundError(),

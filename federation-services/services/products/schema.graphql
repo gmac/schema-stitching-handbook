@@ -2,6 +2,7 @@ type Product @key(fields: "upc") {
   upc: ID!
   name: String!
   price: Float!
+  unitsSold: Int
 }
 
 extend type User @key(fields: "id") {
