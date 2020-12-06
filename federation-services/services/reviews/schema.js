@@ -1,4 +1,4 @@
-const gql = require('graphql-tag');
+const { parse } = require('graphql');
 const { buildFederatedSchema } = require('@apollo/federation');
 const NotFoundError = require('../../lib/not_found_error');
 const readFileSync = require('../../lib/read_file_sync');
@@ -11,7 +11,7 @@ const reviews = [
 ];
 
 module.exports = buildFederatedSchema({
-  typeDefs: gql(readFileSync(__dirname, 'schema.graphql')),
+  typeDefs: parse(readFileSync(__dirname, 'schema.graphql')),
   resolvers: {
     Review: {
       __resolveReference: ({ id }) => reviews.find(review => review.id === id),
@@ -20,6 +20,7 @@ module.exports = buildFederatedSchema({
     },
     Product: {
       reviews: (product) => reviews.filter(review => review.productUpc === product.upc),
+      acceptsNewReviews: (product) => product.unitsInStock > 0,
     },
     User: {
       reviews: (user) => reviews.filter(review => review.userId === user.id),

@@ -11,6 +11,8 @@ extend type User @key(fields: "id") {
 }
 
 extend type Product @key(fields: "upc") {
-  upc: ID! @external
+  acceptsNewReviews: Boolean @requires(fields: "unitsInStock")
   reviews: [Review]
+  unitsInStock: Int @external
+  upc: ID! @external
 }

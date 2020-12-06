@@ -2,9 +2,9 @@
 
 This example demonstrates the integration of [Apollo Federation services](https://www.apollographql.com/docs/federation/implementing-services/) into a stitched schema, as described in [Federation services documentation](https://www.graphql-tools.com/docs/stitch-type-merging#federation-services).
 
-As you get the hang of Schema Stitching, you may realize just how complex Federation services are for what they do. The `buildFederatedSchema` method from the `@apollo/federation` package creates a fairly nuanced GraphQL resource that does not guarentee itself to be independently consistent or valid, but plugs seamlessly into a greater automation package. By comparison, Schema Stitching encourages services to be independently valid and self-contained GraphQL resources, which makes them quite primitive and durable. While Apollo Federation automates service bindings at the cost of tightly-coupled complexity, Schema Stitching sticks to bare-metal at the cost of manual configuration. The merits of each strategy is a likely delineator for most developers. In a very real sense, schema stitching is a library that could be used to build the Federation framework.
+As you get the hang of Schema Stitching, you may realize just how complex Federation services are for what they do. The `buildFederatedSchema` method from the `@apollo/federation` package creates a fairly nuanced GraphQL resource that does not guarentee itself to be independently consistent or valid, but plugs seamlessly into a greater automation package. By comparison, stitching encourages services to be independently valid and self-contained GraphQL resources, which makes them quite primitive and durable. While federation automates service bindings at the cost of tightly-coupled complexity, stitching sticks to loosely-coupled bindings at the cost of manual configuration. The merits of each strategy are likely a deciding factor when selecting a platform. In a very real sense, Stitching is a library that may be used to build a framework such as Federation.
 
-In general, stitching works better without the overhead complexity added by `buildFederatedSchema`. However, if you're integrating with preexisting servers or in the process of a migration, nothing says you can't incorporate your existing resources into a stitched gateway.
+In general, stitching works better without the overhead complexity added by `buildFederatedSchema`. However, when integrating with preexisting servers or in the process of a migration, nothing says you can't incorporate your existing federation resources into a stitched gateway.
 
 **This example demonstrates:**
 
@@ -37,7 +37,7 @@ This example is based on the [Federation intro example](https://www.apollographq
 
 ## Summary
 
-Ever wonder what Federation is doing under the hood? Visit the [products service](http://localhost:4001/graphql) and check out some User objects:
+Ever wonder what Federation is doing under the hood? Visit the [products service](http://localhost:4001/graphql) and check out some `User` objects:
 
 ```graphql
 query {
@@ -58,7 +58,7 @@ query {
 }
 ```
 
-Federation services automatically setup an `_entities` query that recieves typed keys (i.e.: objects with a `__typename`), and returns abstract `_Entity` objects that may assume the shape of any type in the service. Apollo Gateway then automates the construction of typed keys and the collection of typed results, all going through a dedicated protocol available in each service. Schema stitching can use this same `_entities` query simply by sending it properly formatted keys.
+A Federation service automatically builds an `_entities` query that recieves typed keys (i.e.: objects with a `__typename`), and returns abstract `_Entity` objects that may assume the shape of any type in the service. [Apollo Gateway](https://www.npmjs.com/package/@apollo/gateway) then automates the exchange of typed keys for typed results, all going through the dedicated protocol in each subservice. Schema Stitching can also integrate with this `_entities` query by sending it properly formatted keys.
 
 Now [go to the gateway](http://localhost:4001/graphql) and check out the stitched results:
 
@@ -79,8 +79,25 @@ query {
       product {
         upc
         name
+        acceptsNewReviews
       }
     }
   }
 }
 ```
+
+The stitched gateway has loaded all federation SDLs, adapted their directives into stitching-native configuration, and now integrates them just like any other GraphQL service with type merging run through their `_entities` query.
+
+### Adapting Federation services
+
+All told, Federation and Stitching use very similar patterns to combine underlying subservices (both tools have shared origins in [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/) of old). However, their specific implementations vary slightly, the key differentiators being that:
+
+- Apollo Federation uses a _centralized_ approach, where all types have a single "origin" service (this origin is where the unextended type definition is). Querying for a type always starts from its origin and builds out to its extensions.
+- Stitching uses a _decentralized_ approach, where any service may originate any type. Regardless of where a type originates, its original representation may be filled in with missing details from any service.
+
+The practical implication of how each tool handles origins informs how a federation service get translated into a stitched service:
+
+- All types with a `@key` directive become merged types; the key fields go into `selectionSet`.
+- All fields with a `@requires` directive are made into computed fields.
+- All fields with an `@external` directive are removed _unless they are part of the `@key`_. Stitching expects schemas to only publish fields that they actually provide data for.
+- With the indirection of `@external` fields eliminated, the `@provides` directive is no longer necessary. Stitching's query planner can automate the optimial selection of as many fields as possible from as few services as possible.

@@ -1,10 +1,9 @@
 type User @key(fields: "id") {
   id: ID!
-  username: String!
   email: String!
+  username: String!
 }
 
 type Query {
   user(id: ID!): User
-  users(ids: [ID!]!): [User]!
 }
