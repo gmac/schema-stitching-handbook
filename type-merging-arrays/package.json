@@ -1,5 +1,5 @@
 {
-  "name": "example02-basic-merged-types",
+  "name": "array-batched-type-merge",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

@@ -49,7 +49,7 @@ async function makeGatewaySchema() {
             // This config delegates to `product(upc: $upc)`.
             selectionSet: '{ upc }',
             fieldName: 'product',
-            args: ({ upc }) => ({ upc }),
+            args: ({ upc }) => ({ upc: upc }),
           }
         }
       },

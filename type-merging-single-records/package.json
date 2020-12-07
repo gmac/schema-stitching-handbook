@@ -1,13 +1,13 @@
 {
-  "name": "example02-basic-merged-types",
+  "name": "single-record-type-merge",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start-gateway": "nodemon index.js",
-    "start-service-manufacturers": "nodemon services/manufacturers/index.js",
-    "start-service-products": "nodemon services/products/index.js",
-    "start-service-storefronts": "nodemon services/storefronts/index.js",
+    "start-service-manufacturers": "node services/manufacturers/index.js",
+    "start-service-products": "node services/products/index.js",
+    "start-service-storefronts": "node services/storefronts/index.js",
     "start-services": "concurrently \"yarn:start-service-*\""
   },
   "dependencies": {

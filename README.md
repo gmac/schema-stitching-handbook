@@ -59,6 +59,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Mutations for adding/removing remote subservices.
   - Handling subservice request timeouts.
 
+- **Chapter 11 - Testing &amp; versioning**
+
+  - tktk
+
 - **Appendices**
 
   - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
