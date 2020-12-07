@@ -92,12 +92,12 @@ The stitched gateway has loaded all federation SDLs, adapted their directives in
 
 Federation and Stitching use fundamentally similar patterns to combine underlying subservices (in fact, both tools have shared origins in [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/)). However, their specific implementations have an important differentiator:
 
-- **Apollo Federation uses a _centralized_ approach**, where all types have a single "origin" service (this origin is where the unextended type definition is). Querying for a type always starts from its origin and builds out to its extensions.
-- **Stitching uses a _decentralized_ approach**, where any service may originate any type. Regardless of where a type originates, its original representation may be filled in with missing details from any service.
+- **Apollo Federation uses a _centralized_ approach**, where all types have a single "origin" service (where the unextended type definition is located). Querying for a type always starts from its origin and builds out to its remote extensions.
+- **Stitching uses a _decentralized_ approach**, where any service may originate any type. Regardless of where a typed object originates, its original representation may be filled in with missing details from other services.
 
-The practical implication of how each tool handles origins informs how a federation service gets translated into a stitched subschema:
+The practical implications of how each tool handles origins informs how a federation service gets translated into a stitched subschema:
 
 - All types with a `@key` directive become merged types; the key fields go into `selectionSet`.
 - All fields with a `@requires` directive are made into computed fields.
-- All fields with an `@external` directive are removed _unless they are part of the `@key`_. Stitching expects schemas to only publish fields that they actually have data for. This is considerably more intuitive than the Federation approach, where services may be responsible for data that they don't have.
+- All fields with an `@external` directive are removed _unless they are part of the `@key`_. Stitching expects schemas to only publish fields that they actually have data for. This is considerably simpler than the federation approach where services may be responsible for data they don't have on their own.
 - With the indirection of `@external` fields eliminated, the `@provides` directive is no longer necessary. Stitching's query planner can automate the optimial selection of as many fields as possible from as few services as possible.
