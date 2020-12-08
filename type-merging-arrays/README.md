@@ -14,17 +14,24 @@ This example focuses on [array batching](https://github.com/gmac/schema-stitchin
 ## Setup
 
 ```shell
-cd 03-array-batched-type-merging
+cd type-merging-arrays
 
 yarn install
+yarn start-services
+```
+
+Then in a new terminal tab:
+
+```shell
 yarn start-gateway
 ```
 
-The following service is available for interactive queries:
+The following services are available for interactive queries:
 
 - **Stitched gateway:** http://localhost:4000/graphql
-
-For simplicity, all subservices in this example are run locally by the gateway server. You could easily break out any subservice into a standalone remote server following the [combining local and remote schemas](../01-combining-local-and-remote-schemas) example.
+- _Manufacturers subservice_: http://localhost:4001/graphql
+- _Products subservice_: http://localhost:4002/graphql
+- _Storefronts subservice_: http://localhost:4003/graphql
 
 ## Summary
 
@@ -88,7 +95,7 @@ query {
 }
 ```
 
-For the purposes of this demo, this product intentionally specifies an invalid manufacturer reference. You'll see that the original error from the underlying subservice has flowed through the stitching process and is mapped to its final document position in the stitched schema:
+For the purposes of this example, this product intentionally specifies an invalid manufacturer reference. You'll see that the original error from the underlying subservice has flowed through the stitching process and is mapped to its final document position in the stitched schema:
 
 ```json
 {

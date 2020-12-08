@@ -15,7 +15,7 @@ Using single-record queries means that every record accessed requires a _dedicat
 ## Setup
 
 ```shell
-cd 02-single-record-type-merging
+cd type-merging-single-records
 
 yarn install
 yarn start-services

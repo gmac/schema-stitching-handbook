@@ -1,18 +1,18 @@
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
 const { stitchSchemas } = require('@graphql-tools/stitch');
+const { introspectSchema } = require('@graphql-tools/wrap');
+const makeServer = require('./lib/make_server');
+const makeRemoteExecutor = require('./lib/make_remote_executor');
 
-const manufacturersSchema = require('./services/manufacturers/schema');
-const productsSchema = require('./services/products/schema');
-const storefrontsSchema = require('./services/storefronts/schema');
+async function makeGatewaySchema() {
+  const manufacturersExec = makeRemoteExecutor('http://localhost:4001/graphql');
+  const productsExec = makeRemoteExecutor('http://localhost:4002/graphql');
+  const storefrontsExec = makeRemoteExecutor('http://localhost:4003/graphql');
 
-function makeGatewaySchema() {
-  // For simplicity, all services run locally in this example.
-  // Any of these services could easily be turned into a remote server (see Example 1).
   return stitchSchemas({
     subschemas: [
       {
-        schema: manufacturersSchema,
+        schema: await introspectSchema(manufacturersExec),
+        executor: manufacturersExec,
         batch: true,
         merge: {
           // This schema provides one unique field of data for the `Manufacturer` type (`name`).
@@ -27,7 +27,8 @@ function makeGatewaySchema() {
         }
       },
       {
-        schema: productsSchema,
+        schema: await introspectSchema(productsExec),
+        executor: makeRemoteExecutor('http://localhost:4002/graphql', { log: true }),
         batch: true,
         merge: {
           Manufacturer: {
@@ -48,11 +49,15 @@ function makeGatewaySchema() {
             fieldName: 'products',
             key: ({ upc }) => upc,
             argsFromKeys: (upcs) => ({ upcs }),
+            // Compare array-batched logging to the single-record equivalent:
+            // fieldName: 'product',
+            // args: ({ upc }) => ({ upc }),
           }
         }
       },
       {
-        schema: storefrontsSchema,
+        schema: await introspectSchema(storefrontsExec),
+        executor: storefrontsExec,
         batch: true,
         // While the Storefronts service also defines a `Product` type,
         // it contains no unique data. The local `Product` type is really just
@@ -64,6 +69,4 @@ function makeGatewaySchema() {
   });
 }
 
-const app = express();
-app.use('/graphql', graphqlHTTP({ schema: makeGatewaySchema(), graphiql: true }));
-app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));
+makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));

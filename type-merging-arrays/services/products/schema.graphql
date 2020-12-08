@@ -11,6 +11,7 @@ type Manufacturer {
 }
 
 type Query {
+  product(upc: ID!): Product
   products(upcs: [ID!]!): [Product]!
   _manufacturers(ids: [ID!]!): [Manufacturer]!
 }

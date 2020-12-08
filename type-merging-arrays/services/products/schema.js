@@ -17,6 +17,9 @@ module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
+      product(root, { upc }) {
+        return products.find(p => p.upc === upc) || new NotFoundError();
+      },
       products(root, { upcs }) {
         return upcs.map(upc => products.find(p => p.upc === upc) || new NotFoundError());
       },
