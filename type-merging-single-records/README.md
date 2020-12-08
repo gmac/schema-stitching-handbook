@@ -1,5 +1,7 @@
 # Chapter 3 – Single-record type merging
 
+**Watch the [Chapter 2 Video](https://www.youtube.com/watch?v=KBACiSA5sEQ)**
+
 [![Single-Record Type Merge video](../images/video-player.png)](https://www.youtube.com/watch?v=KBACiSA5sEQ)
 
 This example explores the core techniques for merging typed objects across subschemas using single-record queries, covering most of the topics discussed in the [documented basic example](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
