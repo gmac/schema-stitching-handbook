@@ -1,0 +1,12 @@
+type Product @key(selectionSet: "{ upc }") {
+  upc: ID!
+  name: String!
+  price: Int!
+  weight: Int!
+}
+
+type Query {
+  topProducts(first: Int = 2): [Product]!
+  products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
+  _sdl: String!
+}

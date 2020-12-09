@@ -1,0 +1,17 @@
+{
+  "registry": {
+    "owner": "gmac",
+    "repo": "test-registry",
+    "authToken": "keepItSecretKeepItSafe"
+  },
+  "services": [
+    {
+      "name": "inventory",
+      "url": "http://localhost:4001",
+    },
+    {
+      "name": "products",
+      "url": "http://localhost:4002",
+    }
+  ]
+}
