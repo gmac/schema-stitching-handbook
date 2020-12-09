@@ -3,12 +3,15 @@ const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
-const { SchemaRegistry } = require('./lib/schema_registry');
+const SchemaRegistry = require('./lib/schema_registry');
 const makeRemoteExecutor = require('./lib/make_remote_executor');
+const makeRegistrySchema = require('./services/registry/schema');
 const ENV = process.env.NODE_ENV || 'development';
 
+let github;
+
 try {
-  const github = require('./github.json');
+  github = require('./github.json');
 } catch (err) {
   throw 'Make a local "github.json" file based on "github.template.json"';
 }
@@ -16,7 +19,7 @@ try {
 const registry = new SchemaRegistry({
   env: ENV,
   github,
-  services: [
+  endpoints: [
     {
       name: 'inventory',
       url: {
@@ -32,16 +35,21 @@ const registry = new SchemaRegistry({
       }
     }
   ],
-  buildSchema: async (endpoints) => {
+  buildSchema: async (services) => {
     const { stitchingDirectivesTransformer } = stitchingDirectives();
+    const subschemas = services.map(({ url, sdl }) => ({
+      schema: buildSchema(sdl),
+      executor: makeRemoteExecutor(url, { timeout: 5000 }),
+      batch: true,
+    }));
+
+    if (ENV === 'development') {
+      subschemas.push({ schema: makeRegistrySchema(registry) });
+    }
 
     return stitchSchemas({
       subschemaConfigTransforms: [stitchingDirectivesTransformer],
-      subschemas: endpoints.map(({ url, sdl }) => ({
-        schema: buildSchema(sdl),
-        executor: makeRemoteExecutor(url, { timeout: 5000 }),
-        batch: true,
-      }))
+      subschemas,
     });
   }
 });

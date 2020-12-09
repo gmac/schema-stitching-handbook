@@ -1,0 +1,20 @@
+type RemoteService {
+  name: String!
+  url: String!
+  sdl: String!
+}
+
+type SchemaVersion {
+  name: String!
+  version: String!
+}
+
+type Query {
+  remoteServices: [RemoteService]!
+}
+
+type Mutation {
+  createSchemaVersion(name: String!, message: String): SchemaVersion!
+  updateSchemaVersion(name: String!, message: String): SchemaVersion!
+  createOrUpdateSchemaVersion(name: String!, message: String): SchemaVersion!
+}

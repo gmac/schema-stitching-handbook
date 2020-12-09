@@ -1,4 +1,4 @@
-const GitHubClient = require('./make_remote_executor');
+const GitHubClient = require('./github_client');
 const makeRemoteExecutor = require('./make_remote_executor');
 
 const FETCH_REGISTRY_VERSION = `query FetchRegistryVersion($owner:String!, $repo:String!, $path:String!) {
@@ -39,36 +39,49 @@ async function fetchLocalSDL(executor) {
   });
 }
 
+function sluggify(name) {
+  return name.split(/\s/).filter(Boolean).join('-');
+}
+
 module.exports = class SchemaRegistry {
   constructor(config) {
     this.env = config.env;
     this.client = new GitHubClient(config.github);
+    this.endpoints = config.endpoints;
+    this.buildSchema = config.buildSchema;
     this.registryPath = config.github.registryPath;
     this.registryVersion = null;
     this.schema = null;
-    this.endpoints = [];
-    this.services = config.services;
-    this.buildSchema = config.buildSchema;
+    this.services = [];
   }
 
   async createRelease(branchName, message='create release candidate') {
+    branchName = sluggify(branchName);
     const branch = await this.client.createHead(branchName);
     const tree = await this.client.createTree(branch.object.sha, this.currentFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = await this.client.updateHead(branchName, commit.sha);
     await this.client.createPullRequest(branchName);
-    return branchName;
+    return {
+      name: branchName,
+      version: commit.sha,
+    };
   }
 
   async updateRelease(branchName, message='update release candidate') {
+    branchName = sluggify(branchName);
     const head = await this.client.getHead(branchName);
     const tree = await this.client.createTree(head.object.sha, this.currentFiles());
     const commit = await this.client.createCommit(head.object.sha, tree.sha, message);
     await this.client.updateHead(branchName, commit.sha);
-    return branchName;
+    return {
+      name: branchName,
+      version: commit.sha,
+    };
   }
 
   async createOrUpdateRelease(branchName, message) {
+    branchName = sluggify(branchName);
     let branch, created = false;
     try {
       branch = await this.client.createHead(branchName);
@@ -84,11 +97,14 @@ module.exports = class SchemaRegistry {
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = this.client.updateHead(branchName, commit.sha);
     if (created) await this.client.createPullRequest(branchName);
-    return branchName;
+    return {
+      name: branchName,
+      version: commit.sha,
+    };
   }
 
   currentFiles() {
-    return this.endpoints.map(({ name, url, sdl }) => ({
+    return this.services.map(({ name, url, sdl }) => ({
       path: `${this.registryPath}/${name}.graphql`,
       contents: `# $url ${url.production || url.development}\n\n${sdl}`,
       mode: '100644',
@@ -109,7 +125,7 @@ module.exports = class SchemaRegistry {
     return data.repository.object.oid;
   }
 
-  async loadRegistryEndpoints() {
+  async loadRegistryServices() {
     const urlPattern = /# \$url ([^\n]+)\n/;
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_FILES,
@@ -129,8 +145,8 @@ module.exports = class SchemaRegistry {
     }));
   }
 
-  async loadLocalEndpoints() {
-    return Promise.all(this.services.map(async (service) => {
+  async loadLocalServices() {
+    return Promise.all(this.endpoints.map(async (service) => {
       const url = service.url[this.env];
       const sdl = await fetchLocalSDL(makeRemoteExecutor(url));
       return { name: service.name, url, sdl };
@@ -139,11 +155,12 @@ module.exports = class SchemaRegistry {
 
   async load() {
     if (this.env === 'production' && (!this.registryVersion || this.registryVersion !== await this.getRegistryVersion())) {
-      this.endpoints = await this.loadRegistryEndpoints();
+      this.services = await this.loadRegistryServices();
+      this.schema = await this.buildSchema(this.services);
     } else {
-      this.endpoints = await this.loadLocalEndpoints();
+      this.services = await this.loadLocalServices();
+      this.schema = await this.buildSchema(this.services);
     }
-    this.schema = await this.buildSchema(this.endpoints);
     return this.schema;
   }
 
