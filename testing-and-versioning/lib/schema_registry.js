@@ -32,15 +32,11 @@ async function fetchLocalSDL(executor) {
         resolve(data._sdl);
       } catch (err) {
         if (attempt >= 5) reject(err);
-        setTimeout(() => next(attempt+1), 150);
+        setTimeout(() => next(attempt+1), 500);
       }
     }
     next();
   });
-}
-
-function sluggify(name) {
-  return name.split(/\s/).filter(Boolean).join('-');
 }
 
 module.exports = class SchemaRegistry {
@@ -56,36 +52,34 @@ module.exports = class SchemaRegistry {
   }
 
   async createRelease(branchName, message='create release candidate') {
-    branchName = sluggify(branchName);
     const branch = await this.client.createHead(branchName);
-    const tree = await this.client.createTree(branch.object.sha, this.currentFiles());
+    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = await this.client.updateHead(branchName, commit.sha);
-    await this.client.createPullRequest(branchName);
+    const pr = await this.client.createPullRequest(branchName);
     return {
       name: branchName,
       version: commit.sha,
+      url: pr.html_url,
     };
   }
 
   async updateRelease(branchName, message='update release candidate') {
-    branchName = sluggify(branchName);
-    const head = await this.client.getHead(branchName);
-    const tree = await this.client.createTree(head.object.sha, this.currentFiles());
-    const commit = await this.client.createCommit(head.object.sha, tree.sha, message);
+    const branch = await this.client.getHead(branchName);
+    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
+    const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     await this.client.updateHead(branchName, commit.sha);
     return {
       name: branchName,
       version: commit.sha,
+      url: commit.html_url,
     };
   }
 
   async createOrUpdateRelease(branchName, message) {
-    branchName = sluggify(branchName);
     let branch, created = false;
     try {
       branch = await this.client.createHead(branchName);
-      await this.client.createPullRequest(branchName);
       message = message || 'create release candidate';
       created = true;
     } catch (err) {
@@ -93,20 +87,27 @@ module.exports = class SchemaRegistry {
       branch = await this.client.getHead(branchName);
       message = message || 'update release candidate';
     }
-    const tree = await this.client.createTree(branch.object.sha, this.currentFiles());
+    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = this.client.updateHead(branchName, commit.sha);
-    if (created) await this.client.createPullRequest(branchName);
+    let url = commit.html_url;
+
+    if (created) {
+      const pr = await this.client.createPullRequest(branchName);
+      url = pr.html_url;
+    }
+
     return {
       name: branchName,
       version: commit.sha,
+      url,
     };
   }
 
-  currentFiles() {
+  treeFiles() {
     return this.services.map(({ name, url, sdl }) => ({
       path: `${this.registryPath}/${name}.graphql`,
-      contents: `# $url ${url.production || url.development}\n\n${sdl}`,
+      content: `# $url ${url}\n\n${sdl}`,
       mode: '100644',
       type: 'blob',
     }));

@@ -2,6 +2,7 @@ const { fetch } = require('cross-fetch');
 const makeRemoteExecutor = require('./make_remote_executor');
 
 async function jsonOrError(res, status) {
+  console.log(res.status, res.url);
   if (res.status !== status) {
     const json = await res.json();
     const err = new Error(json.message || res.statusText);
@@ -67,7 +68,7 @@ module.exports = class GitHubClient {
       headers: this.headers,
       body: JSON.stringify({
         base_tree: headRef,
-        tree: files.map(({ path, content }) => ({ path, content, mode: '100644', type: 'blob' })),
+        tree: files,
       }),
     });
 
