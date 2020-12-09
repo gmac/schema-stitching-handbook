@@ -1,18 +1,21 @@
+const express = require('express');
+const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { SchemaRegistry } = require('./lib/schema_registry');
 const makeRemoteExecutor = require('./lib/make_remote_executor');
+const ENV = process.env.NODE_ENV || 'development';
 
-const { stitchingDirectivesTypeDefs, stitchingDirectivesTransformer } = stitchingDirectives();
+try {
+  const github = require('./github.json');
+} catch (err) {
+  throw 'Make a local "github.json" file based on "github.template.json"';
+}
 
 const registry = new SchemaRegistry({
-  env: 'development',
-  owner: 'gmac',
-  repo: 'test-schema-registry',
-  token: '636621ae59d12d475cba5e367868de1638aed225',
-  mainBranch: 'main',
-  registryPath: 'graphql/remote_schemas',
+  env: ENV,
+  github,
   services: [
     {
       name: 'inventory',
@@ -29,7 +32,9 @@ const registry = new SchemaRegistry({
       }
     }
   ],
-  buildSchema: (endpoints) => {
+  buildSchema: async (endpoints) => {
+    const { stitchingDirectivesTransformer } = stitchingDirectives();
+
     return stitchSchemas({
       subschemaConfigTransforms: [stitchingDirectivesTransformer],
       subschemas: endpoints.map(({ url, sdl }) => ({
@@ -41,13 +46,11 @@ const registry = new SchemaRegistry({
   }
 });
 
-async function go() {
-  return registry.loadLocalEndpoints();
-
-  // return registry.loadRegistry();
-  // return registry.createRelease(`my-test-release-${Date.now()}`, [
-  //   { path: 'test/file.md', content: '# Make this work!' }
-  // ]);
-}
-
-go().then(res => console.log(res));
+registry.load().then(() => {
+  const app = express();
+  app.use('/graphql', graphqlHTTP(() => ({ schema: registry.schema, graphiql: true })));
+  app.listen(4000, () => console.log('gateway running http://localhost:4000/graphql'));
+  if (ENV === 'production') {
+    registry.autoRefresh();
+  }
+});

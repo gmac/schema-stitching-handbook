@@ -1,107 +1,5 @@
-const { fetch } = require('cross-fetch');
+const GitHubClient = require('./make_remote_executor');
 const makeRemoteExecutor = require('./make_remote_executor');
-
-async function jsonOrError(res, status) {
-  if (res.status !== status) {
-    const json = await res.json();
-    const err = new Error(json.message || res.statusText);
-    err.status = res.status;
-    throw err;
-  }
-  return res.json();
-}
-
-class GitHubClient {
-  constructor({ owner, repo, token, mainBranch }) {
-    this.owner = owner;
-    this.repo = repo;
-    this.mainBranch = mainBranch;
-    this.headers = {
-      'Accept': 'application/vnd.github.v3+json',
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
-
-    this.graphql = makeRemoteExecutor('https://api.github.com/graphql', { headers: this.headers });
-  }
-
-  async getHead(branchName) {
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/ref/heads/${branchName}`, {
-      method: 'GET',
-      headers: this.headers,
-    });
-
-    return jsonOrError(res, 200);
-  }
-
-  async createHead(branchName) {
-    const main = await this.getHead(this.mainBranch);
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/refs`, {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-        ref: `refs/heads/${branchName}`,
-        sha: main.object.sha,
-      }),
-    });
-
-    return jsonOrError(res, 201);
-  }
-
-  async updateHead(branchName, sha, force=true) {
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/refs/heads/${branchName}`, {
-      method: 'PATCH',
-      headers: this.headers,
-      body: JSON.stringify({
-        sha,
-        force
-      }),
-    });
-
-    return jsonOrError(res, 200);
-  }
-
-  async createTree(headRef, files) {
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/trees`, {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-        base_tree: headRef,
-        tree: files.map(({ path, content }) => ({ path, content, mode: '100644', type: 'blob' })),
-      }),
-    });
-
-    return jsonOrError(res, 201);
-  }
-
-  async createCommit(headRef, tree, message) {
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/commits`, {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-        parents: [headRef],
-        tree,
-        message,
-      }),
-    });
-
-    return jsonOrError(res, 201);
-  }
-
-  async createPullRequest(branchName) {
-    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/pulls`, {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-        title: `Graph Schema: ${branchName}`,
-        head: branchName,
-        base: this.mainBranch,
-      }),
-    });
-
-    return jsonOrError(res, 201);
-  }
-};
 
 const FETCH_REGISTRY_VERSION = `query FetchRegistryVersion($owner:String!, $repo:String!, $path:String!) {
   repository(owner:$owner, name:$repo) {
@@ -126,42 +24,51 @@ const FETCH_REGISTRY_FILES = `query FetchRegistryFiles($owner:String!, $repo:Str
   }
 }`;
 
-class SchemaRegistry {
+async function fetchLocalSDL(executor) {
+  return new Promise((resolve, reject) => {
+    async function next(attempt=1) {
+      try {
+        const { data } = await executor({ document: '{ _sdl }' });
+        resolve(data._sdl);
+      } catch (err) {
+        if (attempt >= 5) reject(err);
+        setTimeout(() => next(attempt+1), 150);
+      }
+    }
+    next();
+  });
+}
+
+module.exports = class SchemaRegistry {
   constructor(config) {
-    this.client = new GitHubClient(config);
-    this.registryPath = config.registryPath;
+    this.env = config.env;
+    this.client = new GitHubClient(config.github);
+    this.registryPath = config.github.registryPath;
     this.registryVersion = null;
+    this.schema = null;
+    this.endpoints = [];
     this.services = config.services;
     this.buildSchema = config.buildSchema;
   }
 
-  filesFromEndpoints(endpoints) {
-    return endpoints.map(({ name, url, sdl }) => ({
-      path: `${this.registryPath}/${name}.graphql`,
-      contents: `# $url ${url.production || url.development}\n\n${sdl}`,
-      mode: '100644',
-      type: 'blob',
-    }));
-  }
-
-  async createRelease(branchName, endpoints, message='create release candidate') {
+  async createRelease(branchName, message='create release candidate') {
     const branch = await this.client.createHead(branchName);
-    const tree = await this.client.createTree(branch.object.sha, this.filesFromEndpoints(endpoints));
+    const tree = await this.client.createTree(branch.object.sha, this.currentFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = await this.client.updateHead(branchName, commit.sha);
     await this.client.createPullRequest(branchName);
     return branchName;
   }
 
-  async updateRelease(branchName, endpoints, message='update release candidate') {
+  async updateRelease(branchName, message='update release candidate') {
     const head = await this.client.getHead(branchName);
-    const tree = await this.client.createTree(head.object.sha, this.filesFromEndpoints(endpoints));
+    const tree = await this.client.createTree(head.object.sha, this.currentFiles());
     const commit = await this.client.createCommit(head.object.sha, tree.sha, message);
     await this.client.updateHead(branchName, commit.sha);
     return branchName;
   }
 
-  async createOrUpdateRelease(branchName, endpoints, message) {
+  async createOrUpdateRelease(branchName, message) {
     let branch, created = false;
     try {
       branch = await this.client.createHead(branchName);
@@ -173,11 +80,20 @@ class SchemaRegistry {
       branch = await this.client.getHead(branchName);
       message = message || 'update release candidate';
     }
-    const tree = await this.client.createTree(branch.object.sha, this.filesFromEndpoints(endpoints));
+    const tree = await this.client.createTree(branch.object.sha, this.currentFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = this.client.updateHead(branchName, commit.sha);
     if (created) await this.client.createPullRequest(branchName);
     return branchName;
+  }
+
+  currentFiles() {
+    return this.endpoints.map(({ name, url, sdl }) => ({
+      path: `${this.registryPath}/${name}.graphql`,
+      contents: `# $url ${url.production || url.development}\n\n${sdl}`,
+      mode: '100644',
+      type: 'blob',
+    }));
   }
 
   async getRegistryVersion() {
@@ -215,17 +131,20 @@ class SchemaRegistry {
 
   async loadLocalEndpoints() {
     return Promise.all(this.services.map(async (service) => {
-      const sdl = await fetchLocalSDL(makeRemoteExecutor(service.url.development));
-      return {
-        name: service.name,
-        url: service.url.development,
-        sdl,
-      };
+      const url = service.url[this.env];
+      const sdl = await fetchLocalSDL(makeRemoteExecutor(url));
+      return { name: service.name, url, sdl };
     }));
   }
 
-  loadSchema() {
-
+  async load() {
+    if (this.env === 'production' && (!this.registryVersion || this.registryVersion !== await this.getRegistryVersion())) {
+      this.endpoints = await this.loadRegistryEndpoints();
+    } else {
+      this.endpoints = await this.loadLocalEndpoints();
+    }
+    this.schema = await this.buildSchema(this.endpoints);
+    return this.schema;
   }
 
   autoRefresh(interval=5000) {
@@ -243,24 +162,4 @@ class SchemaRegistry {
       this.intervalId = null;
     }
   }
-};
-
-async function fetchLocalSDL(executor) {
-  return new Promise((resolve, reject) => {
-    async function next(attempt=1) {
-      try {
-        const { data } = await executor({ document: '{ _sdl }' });
-        resolve(data._sdl);
-      } catch (err) {
-        if (attempt >= 5) reject(err);
-        setTimeout(() => next(attempt+1), 150);
-      }
-    }
-    next();
-  });
-}
-
-module.exports = {
-  GitHubClient,
-  SchemaRegistry,
 };

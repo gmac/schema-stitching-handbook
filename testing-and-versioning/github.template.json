@@ -1,0 +1,7 @@
+{
+  "owner": "your-github-name",
+  "repo": "your-github-repo-name",
+  "token": "keepItSecretKeepItSafe",
+  "mainBranch": "main",
+  "registryPath": "graphql/remote_schemas"
+}
