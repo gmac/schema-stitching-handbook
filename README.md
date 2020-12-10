@@ -59,7 +59,13 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Mutations for adding/removing remote subservices.
   - Handling subservice request timeouts.
 
-- **Chapter 11 - Testing &amp; versioning**
+- **Chapter 11 - Versioned schema releases**
+
+  - Using GitHub API to manage a simple schema registry.
+  - Hot reloading from a remote Git registry.
+  - Running development and production environments.
+
+- **Chapter 12 - Continuous Integration (CI) testing**
 
   - tktk
 

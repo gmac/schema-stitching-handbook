@@ -1,0 +1,21 @@
+type RemoteService {
+  name: String!
+  url: String!
+}
+
+type SchemaReleaseBranch {
+  name: String!
+  commitSHA: String!
+  commitUrl: String!
+  pullRequestUrl: String
+}
+
+type Query {
+  remoteServices: [RemoteService]!
+}
+
+type Mutation {
+  createSchemaReleaseBranch(name: String!, message: String): SchemaReleaseBranch!
+  updateSchemaReleaseBranch(name: String!, message: String): SchemaReleaseBranch!
+  createOrUpdateSchemaReleaseBranch(name: String!, message: String): SchemaReleaseBranch!
+}
