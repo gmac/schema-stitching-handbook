@@ -1,4 +1,4 @@
-# Chapter 11 – Versioned schema releases
+# Chapter 11 – Versioning schema releases
 
 This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). In fact, using a Git repo offers several distinct advantages:
 
@@ -15,7 +15,7 @@ This example demonstrates using a GitHub repo as a central registry that coordin
 ## Setup
 
 ```shell
-cd versioned-schema-releases
+cd versioning-schema-releases
 yarn install
 ```
 
