@@ -24,14 +24,14 @@ const registry = new SchemaRegistry({
       name: 'inventory',
       url: {
         development: 'http://localhost:4001/graphql',
-        production: 'http://localhost:4001/graphql',
+        production: 'http://localhost:4001/graphql?env=production',
       }
     },
     {
       name: 'products',
       url: {
         development: 'http://localhost:4002/graphql',
-        production: 'http://localhost:4002/graphql',
+        production: 'http://localhost:4002/graphql?env=production',
       }
     }
   ],
@@ -54,7 +54,7 @@ const registry = new SchemaRegistry({
   }
 });
 
-registry.load().then(() => {
+registry.reload().then(() => {
   const port = ENV === 'development' ? 4000 : 4444;
   const app = express();
   app.use('/graphql', graphqlHTTP(() => ({ schema: registry.schema, graphiql: true })));

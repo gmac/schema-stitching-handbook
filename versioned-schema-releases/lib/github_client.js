@@ -11,6 +11,8 @@ async function jsonOrError(res, status) {
   return res.json();
 }
 
+// Simple client for talking to the GitHub API v3 (REST)
+// (the v4 GraphQL API does not provide the gitdata interface)
 module.exports = class GitHubClient {
   constructor({ owner, repo, token, mainBranch }) {
     this.owner = owner;
@@ -22,10 +24,13 @@ module.exports = class GitHubClient {
       'Content-Type': 'application/json',
     };
 
-    this.graphql = makeRemoteExecutor('https://api.github.com/graphql', { headers: this.headers });
+    this.graphql = makeRemoteExecutor('https://api.github.com/graphql', {
+      headers: this.headers,
+      timeout: 3500,
+    });
   }
 
-  async getHead(branchName) {
+  async getBranch(branchName) {
     const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/ref/heads/${branchName}`, {
       method: 'GET',
       headers: this.headers,
@@ -34,8 +39,8 @@ module.exports = class GitHubClient {
     return jsonOrError(res, 200);
   }
 
-  async createHead(branchName) {
-    const main = await this.getHead(this.mainBranch);
+  async createBranch(branchName) {
+    const main = await this.getBranch(this.mainBranch);
     const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/refs`, {
       method: 'POST',
       headers: this.headers,
@@ -48,7 +53,7 @@ module.exports = class GitHubClient {
     return jsonOrError(res, 201);
   }
 
-  async updateHead(branchName, sha, force=false) {
+  async updateBranchHead(branchName, sha, force=false) {
     const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/refs/heads/${branchName}`, {
       method: 'PATCH',
       headers: this.headers,

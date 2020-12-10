@@ -2,7 +2,7 @@ const { fetch } = require('cross-fetch');
 const { print } = require('graphql');
 const AbortController = require('abort-controller');
 
-module.exports = function makeRemoteExecutor(url, { timeout=500, headers={} }={}) {
+module.exports = function makeRemoteExecutor(url, { timeout=1000, headers={} }={}) {
   return async ({ document, variables }) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);

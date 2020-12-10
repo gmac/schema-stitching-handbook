@@ -26,8 +26,9 @@ const FETCH_REGISTRY_FILES = `query FetchRegistryFiles($owner:String!, $repo:Str
 }`;
 
 // fetches local SDLs using a retry loop
-// coordinates gateway reload while restarting services
-async function fetchLocalSDL(executor) {
+// (coordinates gateway reload while restarting all services)
+async function fetchLocalSDL(url) {
+  const executor = makeRemoteExecutor(url);
   return new Promise((resolve, reject) => {
     async function next(attempt=1) {
       try {
@@ -42,6 +43,11 @@ async function fetchLocalSDL(executor) {
   });
 }
 
+// Simple registry for loading schemas locally or from the versioning repo
+// Includes:
+// - Loaders for fetching local service schemas and registry repo schemas
+// - Mutations for sending local schemas to a Git release branch
+// - Polling for detecting registry version changes (used in production)
 module.exports = class SchemaRegistry {
   constructor(config) {
     this.env = config.env;
@@ -54,63 +60,60 @@ module.exports = class SchemaRegistry {
     this.services = [];
   }
 
-  async createRelease(branchName, message='create release candidate') {
-    const branch = await this.client.createHead(branchName);
-    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
+  async createReleaseBranch(branchName, message='create release candidate') {
+    const branch = await this.client.createBranch(branchName);
+    const tree = await this.client.createTree(branch.object.sha, await this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
-    const head = await this.client.updateHead(branchName, commit.sha);
+    const head = await this.client.updateBranchHead(branchName, commit.sha);
     const pr = await this.client.createPullRequest(branchName);
     return {
       name: branchName,
-      version: commit.sha,
-      url: pr.html_url,
+      commitSHA: commit.sha,
+      commitUrl: commit.html_url,
+      pullRequestUrl: pr.html_url,
     };
   }
 
-  async updateRelease(branchName, message='update release candidate') {
-    const branch = await this.client.getHead(branchName);
-    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
+  async updateReleaseBranch(branchName, message='update release candidate') {
+    const branch = await this.client.getBranch(branchName);
+    const tree = await this.client.createTree(branch.object.sha, await this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
-    await this.client.updateHead(branchName, commit.sha);
+    await this.client.updateBranchHead(branchName, commit.sha);
     return {
       name: branchName,
-      version: commit.sha,
-      url: commit.html_url,
+      commitSHA: commit.sha,
+      commitUrl: commit.html_url,
     };
   }
 
-  async createOrUpdateRelease(branchName, message) {
+  async createOrUpdateReleaseBranch(branchName, message) {
     let branch, created = false;
     try {
-      branch = await this.client.getHead(branchName);
+      branch = await this.client.getBranch(branchName);
       message = message || 'update release candidate';
     } catch (err) {
       if (err.status !== 404) throw err;
-      branch = await this.client.createHead(branchName);
+      branch = await this.client.createBranch(branchName);
       message = message || 'create release candidate';
       created = true;
     }
-    const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
+    const tree = await this.client.createTree(branch.object.sha, await this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
-    const head = await this.client.updateHead(branchName, commit.sha);
-    let url = commit.html_url;
-
-    if (created) {
-      const pr = await this.client.createPullRequest(branchName);
-      url = pr.html_url;
-    }
-
+    const head = await this.client.updateBranchHead(branchName, commit.sha);
+    const pr = created ? await this.client.createPullRequest(branchName) : {};
     return {
       name: branchName,
-      version: commit.sha,
-      url,
+      commitSHA: commit.sha,
+      commitUrl: commit.html_url,
+      pullRequestUrl: pr.html_url,
     };
   }
 
-  treeFiles() {
-    return this.services.map(({ name, url, sdl }) => ({
+  async treeFiles() {
+    await this.reload();
+    return this.services.map(({ name, sdl }) => ({
       path: `${this.registryPath}/${name}.graphql`,
-      content: `# url: ${url}\n${sdl}`,
+      content: `# url: ${this.endpoints.find(e => e.name === name).url.production}\n${sdl}`,
       mode: '100644',
       type: 'blob',
     }));
@@ -126,12 +129,17 @@ module.exports = class SchemaRegistry {
       }
     });
 
-    const version = data.repository.object.oid;
-    console.log(`version ${Date.now()}: ${version}`);
-    return version;
+    if (data.repository && data.repository.object) {
+      const version = data.repository.object.oid;
+      console.log(`version ${Date.now()}: ${version}`);
+      return version;
+    }
+
+    console.log('version failed to fetch, skipping...');
+    return this.registryVersion;
   }
 
-  async loadRegistryServices() {
+  async loadRegistrySchemas() {
     const urlPattern = /# url: ([^\n]+)\n/;
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_FILES,
@@ -151,25 +159,28 @@ module.exports = class SchemaRegistry {
 
     return data.repository.object.entries.map(entry => ({
       name: entry.name.replace(/\.graphql$/, ''),
-      url: entry.object.text.match(urlPattern)[1],
       sdl: entry.object.text.replace(urlPattern, ''),
+      url: entry.object.text.match(urlPattern)[1],
     }));
   }
 
-  async loadLocalServices() {
+  async loadLocalSchemas() {
     return Promise.all(this.endpoints.map(async (service) => {
       const url = service.url[this.env];
-      const sdl = await fetchLocalSDL(makeRemoteExecutor(url));
-      return { name: service.name, url, sdl };
+      return {
+        name: service.name,
+        sdl: await fetchLocalSDL(url),
+        url,
+      };
     }));
   }
 
-  async load() {
+  async reload() {
     if (this.env === 'production' && (!this.registryVersion || this.registryVersion !== await this.getRegistryVersion())) {
-      this.services = await this.loadRegistryServices();
+      this.services = await this.loadRegistrySchemas();
       this.schema = await this.buildSchema(this.services);
     } else {
-      this.services = await this.loadLocalServices();
+      this.services = await this.loadLocalSchemas();
       this.schema = await this.buildSchema(this.services);
     }
     return this.schema;
@@ -178,7 +189,7 @@ module.exports = class SchemaRegistry {
   autoRefresh(interval=3000) {
     this.stopAutoRefresh();
     this.intervalId = setTimeout(async () => {
-      await this.load();
+      await this.reload();
       this.intervalId = null;
       this.autoRefresh(interval);
     }, interval);
