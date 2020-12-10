@@ -25,7 +25,7 @@ This example uses live integration with the GitHub API. You'll need to setup you
 
 1. Create a [new GitHub repo](https://github.com/new) _with a README_ (or other default file, so long as the repo is not empty). Public or private doesn't matter.
 2. Create a [personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) with (only) `repo` access.
-3. Make a copy of the provided `repo.template.json` file named `repo.json`. This copy will contain secrets and is `gitignored`. Add the following:
+3. Make a copy of the provided `repo.template.json` file and name it `repo.json`. This copy will contain secrets (so is git-ignored). Add the following:
   - `owner`: your GitHub username
   - `repo`: name of the new repo
   - `token`: your personal access token
