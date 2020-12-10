@@ -1,42 +1,24 @@
 # Chapter 10 – Hot schema reloading
 
-This example demonstrates the gateway server refreshing the schema in response to "push" input of service changes via mutations as well as "pull" input of service health via subschema SDL polling.
+This example demonstrates reloading the combined gateway schema without restarting its server; a technique commonly known as a "hot" reload. This allows service schemas to be dyanmically added, removed, or updated in response to administrative actions or changes in service health.
 
 **This example demonstrates:**
 
-- Hot reload of the combined gateway schema (no server restart).
+- Hot reload of the gateway schema (no server restart).
 - Polling for remote subschema changes.
-- Mutations for adding/removing remote subservices.
+- Mutations for dynamically adding/removing subservices.
 - Handling subservice request timeouts.
 
 ## Setup
 
 ```shell
-cd 06-hot-reloading-with-directives.
+cd hot-schema-reloading
 
 yarn install
-start-service-accounts
+yarn start-services
 ```
 
 Then, in a separate terminal tab:
-
-```shell
-start-service-inventory
-```
-
-In a third terminal tab:
-
-```shell
-start-service-products
-```
-
-In a fourth terminal tab:
-
-```shell
-start-service-reviews
-```
-
-And, finally, in a fifth terminal tab:
 
 ```shell
 yarn start-gateway
@@ -45,10 +27,8 @@ yarn start-gateway
 The following services are available for interactive queries:
 
 - **Stitched gateway:** http://localhost:4000/graphql
-- _Accounts subservice_: http://localhost:4001/graphql
-- _Inventory subservice_: http://localhost:4002/graphql
-- _Products subservice_: http://localhost:4003/graphql
-- _Reviews subservice_: http://localhost:4004/graphql
+- _Inventory subservice_: http://localhost:4001/graphql
+- _Products subservice_: http://localhost:4002/graphql
 
 ## Summary
 
@@ -56,36 +36,54 @@ Visit the [stitched gateway](http://localhost:4000/graphql) and try running the 
 
 ```graphql
 query {
-  allEndpoints {
+  endpoints {
     url
+    sdl
   }
 }
 ```
-
-Note that the available types and root fields reflect all four of the services returned.
 
 Then, try the following mutation:
 
 ```graphql
 mutation {
-  removeEndpoint(url: "http://localhost:4004/graphql") {
+  removeEndpoint(url: "http://localhost:4001/graphql") {
     success
   }
 }
 ```
 
-Reload the [stitched gateway](http://localhost:4000/graphql) and see how the available types and root fields automatically adjust after the Reviews service has been removed from the gateway.
+Refresh [gateway GraphiQL](http://localhost:4000/graphql) and see how the available types and root fields automatically adjust after the Reviews service has been removed from the gateway.
 
 Then, try the following mutation:
 
 ```graphql
 mutation {
-  addEndpoint(url: "http://localhost:4004/graphql") {
+  addEndpoint(url: "http://localhost:4001/graphql") {
     success
+    endpoint {
+      url
+      sdl
+    }
   }
 }
 ```
 
-Reload the [stitched gateway](http://localhost:4000/graphql) and see how the available types and root fields have been restored.
+Refresh [gateway GraphiQL](http://localhost:4000/graphql) and see how the available types and root fields have been restored.
 
-Finally, try stopping the Review service by closing its terminal. Reload the [stitched gateway](http://localhost:4000/graphql) to once again see how the available types and root fields adjust automatically.
+### Dropping services
+
+This configuration can also handle dropping services when they go offline. To try it, run each service in thier own terminal window:
+
+```shell
+# first terminal:
+yarn start-service-inventory
+
+# second terminal:
+yarn start-service-products
+
+# third terminal:
+yarn start-gateway
+```
+
+Now try stopping the Products service by exiting its program (`CTRL+C`). Refresh [gateway GraphiQL](http://localhost:4000/graphql) and notice that the schema has responded to the change automatically.

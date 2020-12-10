@@ -1,0 +1,22 @@
+type Endpoint {
+  url: String!
+  sdl: String
+}
+
+type Query {
+  endpoints: [Endpoint!]!
+}
+
+type AddEndpointResult {
+  endpoint: Endpoint
+  success: Boolean!
+}
+
+type RemoveEndpointResult {
+  success: Boolean!
+}
+
+type Mutation {
+  addEndpoint(url: String!): AddEndpointResult!
+  removeEndpoint(url: String!): RemoveEndpointResult!
+}
