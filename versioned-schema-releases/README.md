@@ -3,13 +3,13 @@
 This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). In fact, using a Git repo offers several distinct advantages:
 
 - Multiple subservice schemas may be composed on a branch together and released at once, affording the opportunity for hard schema cutovers across multiple services.
-- Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using standard [continuous integration services](https://docs.github.com/en/free-pro-team@latest/actions). Infact, versioning subschemas _in your gateway app's repo_ even allows CI to test using both your release candidate schemas and your actual gateway server code.
+- Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using standard [continuous integration services](https://docs.github.com/en/free-pro-team@latest/actions). Infact, versioning subschemas _in your gateway app's repo_ even allows CI to run tests using both your release candidate schemas and your actual gateway server code.
 - Git is a defacto-standard tool with numerous frontends available, and can be adapted to meet virtually any versioning and deployment needs.
 
 **This example demonstrates:**
 
 - Using GitHub API to manage a simple schema registry.
-- Hot reloading from a remote Git registry.
+- Hot reloading from a remote Git repo.
 - Running development and production environments.
 
 ## Setup
