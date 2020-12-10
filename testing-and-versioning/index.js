@@ -8,17 +8,17 @@ const makeRemoteExecutor = require('./lib/make_remote_executor');
 const makeRegistrySchema = require('./services/registry/schema');
 const ENV = process.env.NODE_ENV || 'development';
 
-let github;
+let repo;
 
 try {
-  github = require('./github.json');
+  repo = require('./repo.json');
 } catch (err) {
-  throw 'Make a local "github.json" file based on "github.template.json"';
+  throw 'Make a local "repo.json" file based on "repo.template.json"';
 }
 
 const registry = new SchemaRegistry({
   env: ENV,
-  github,
+  repo,
   endpoints: [
     {
       name: 'inventory',
@@ -55,9 +55,10 @@ const registry = new SchemaRegistry({
 });
 
 registry.load().then(() => {
+  const port = ENV === 'development' ? 4000 : 4444;
   const app = express();
   app.use('/graphql', graphqlHTTP(() => ({ schema: registry.schema, graphiql: true })));
-  app.listen(4000, () => console.log('gateway running http://localhost:4000/graphql'));
+  app.listen(port, () => console.log(`${ENV} gateway running http://localhost:${port}/graphql`));
   if (ENV === 'production') {
     registry.autoRefresh();
   }

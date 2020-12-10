@@ -2,7 +2,6 @@ const { fetch } = require('cross-fetch');
 const makeRemoteExecutor = require('./make_remote_executor');
 
 async function jsonOrError(res, status) {
-  console.log(res.status, res.url);
   if (res.status !== status) {
     const json = await res.json();
     const err = new Error(json.message || res.statusText);
@@ -49,7 +48,7 @@ module.exports = class GitHubClient {
     return jsonOrError(res, 201);
   }
 
-  async updateHead(branchName, sha, force=true) {
+  async updateHead(branchName, sha, force=false) {
     const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/git/refs/heads/${branchName}`, {
       method: 'PATCH',
       headers: this.headers,
@@ -94,7 +93,8 @@ module.exports = class GitHubClient {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        title: `Graph Schema: ${branchName}`,
+        title: `Gateway Schema Release: ${branchName}`,
+        body: 'Release candidate with revised remote schemas',
         head: branchName,
         base: this.mainBranch,
       }),

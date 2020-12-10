@@ -5,9 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start-service-gateway": "nodemon index.js",
-    "start-service-inventory": "nodemon services/inventory/index.js",
-    "start-service-products": "nodemon services/products/index.js",
-    "start-services": "concurrently \"yarn:start-service-*\""
+    "start-service-inventory": "nodemon -e js,graphql services/inventory/index.js",
+    "start-service-products": "nodemon -e js,graphql services/products/index.js",
+    "start-development": "concurrently \"yarn:start-service-*\"",
+    "start-production": "NODE_ENV=production node index.js"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.0.0",

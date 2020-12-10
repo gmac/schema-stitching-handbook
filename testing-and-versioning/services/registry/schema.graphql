@@ -1,7 +1,6 @@
 type RemoteService {
   name: String!
   url: String!
-  sdl: String!
 }
 
 type SchemaVersion {

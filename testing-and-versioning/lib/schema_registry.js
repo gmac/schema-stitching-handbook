@@ -14,9 +14,10 @@ const FETCH_REGISTRY_FILES = `query FetchRegistryFiles($owner:String!, $repo:Str
       ...on Tree {
         entries {
           name
-          object
-          ... on Blob {
-            text
+          object {
+            ...on Blob {
+              text
+            }
           }
         }
       }
@@ -24,6 +25,8 @@ const FETCH_REGISTRY_FILES = `query FetchRegistryFiles($owner:String!, $repo:Str
   }
 }`;
 
+// fetches local SDLs using a retry loop
+// coordinates gateway reload while restarting services
 async function fetchLocalSDL(executor) {
   return new Promise((resolve, reject) => {
     async function next(attempt=1) {
@@ -31,7 +34,7 @@ async function fetchLocalSDL(executor) {
         const { data } = await executor({ document: '{ _sdl }' });
         resolve(data._sdl);
       } catch (err) {
-        if (attempt >= 5) reject(err);
+        if (attempt >= 10) reject(err);
         setTimeout(() => next(attempt+1), 500);
       }
     }
@@ -42,10 +45,10 @@ async function fetchLocalSDL(executor) {
 module.exports = class SchemaRegistry {
   constructor(config) {
     this.env = config.env;
-    this.client = new GitHubClient(config.github);
+    this.client = new GitHubClient(config.repo);
     this.endpoints = config.endpoints;
     this.buildSchema = config.buildSchema;
-    this.registryPath = config.github.registryPath;
+    this.registryPath = config.repo.registryPath;
     this.registryVersion = null;
     this.schema = null;
     this.services = [];
@@ -79,17 +82,17 @@ module.exports = class SchemaRegistry {
   async createOrUpdateRelease(branchName, message) {
     let branch, created = false;
     try {
+      branch = await this.client.getHead(branchName);
+      message = message || 'update release candidate';
+    } catch (err) {
+      if (err.status !== 404) throw err;
       branch = await this.client.createHead(branchName);
       message = message || 'create release candidate';
       created = true;
-    } catch (err) {
-      if (err.status !== 422) throw err;
-      branch = await this.client.getHead(branchName);
-      message = message || 'update release candidate';
     }
     const tree = await this.client.createTree(branch.object.sha, this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
-    const head = this.client.updateHead(branchName, commit.sha);
+    const head = await this.client.updateHead(branchName, commit.sha);
     let url = commit.html_url;
 
     if (created) {
@@ -107,7 +110,7 @@ module.exports = class SchemaRegistry {
   treeFiles() {
     return this.services.map(({ name, url, sdl }) => ({
       path: `${this.registryPath}/${name}.graphql`,
-      content: `# $url ${url}\n\n${sdl}`,
+      content: `# url: ${url}\n${sdl}`,
       mode: '100644',
       type: 'blob',
     }));
@@ -123,11 +126,13 @@ module.exports = class SchemaRegistry {
       }
     });
 
-    return data.repository.object.oid;
+    const version = data.repository.object.oid;
+    console.log(`version ${Date.now()}: ${version}`);
+    return version;
   }
 
   async loadRegistryServices() {
-    const urlPattern = /# \$url ([^\n]+)\n/;
+    const urlPattern = /# url: ([^\n]+)\n/;
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_FILES,
       variables: {
@@ -137,7 +142,12 @@ module.exports = class SchemaRegistry {
       }
     });
 
+    if (!data.repository.object) {
+      throw 'No repo content found at registry path. Have you committed files yet?';
+    }
+
     this.registryVersion = data.repository.object.oid;
+    console.log(`VERSION UPDATE: ${this.registryVersion}`);
 
     return data.repository.object.entries.map(entry => ({
       name: entry.name.replace(/\.graphql$/, ''),
@@ -165,7 +175,7 @@ module.exports = class SchemaRegistry {
     return this.schema;
   }
 
-  autoRefresh(interval=5000) {
+  autoRefresh(interval=3000) {
     this.stopAutoRefresh();
     this.intervalId = setTimeout(async () => {
       await this.load();
