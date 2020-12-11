@@ -24,11 +24,11 @@ yarn install
 This example uses live integration with the GitHub API. You'll need to setup your repo:
 
 1. Create a [new GitHub repo](https://github.com/new) _with a README_ (or other default file, so long as the repo is not empty). Public or private doesn't matter.
-2. Create a [personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) with (only) `repo` access.
-3. Make a copy of the provided `repo.template.json` file and name it `repo.json`. This copy will contain secrets (so is git-ignored). Add the following:
-  - `owner`: your GitHub username
-  - `repo`: name of the new repo
-  - `token`: your personal access token
+2. Create a [personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) with `repo`-only access.
+3. Make a copy of the provided `/repo.template.json` file and rename it `/repo.json`. This copy will contain secrets (so is git-ignored). Add the following:
+  - `owner`: your GitHub username.
+  - `repo`: name of the new registry repo.
+  - `token`: your personal access token.
   - `mainBranch`: name of the default (master) branch in your repo; GitHub defaults to `main`, but you can customize that.
   - `registryPath`: a directory path to where versioned schemas will be managed from.
 
@@ -86,7 +86,7 @@ The following services are now available for interactive queries:
 
 ### 4. Hot-reload version releases
 
-You'll notice that the production server is polling the registry repo for version changes. Let's give it some... go into the Products subservice and add a new dummy field to the `Product` type:
+You'll notice that the production server is polling the registry repo for version changes. Let's give it something to find... go into the Products subservice and add a new dummy field to the `Product` type:
 
 ```graphql
 type Product {
@@ -95,7 +95,7 @@ type Product {
 }
 ```
 
-Now commit those changes to a release candidate:
+Now commit those changes to a release branch:
 
 ```graphql
 mutation {
@@ -108,7 +108,7 @@ mutation {
 }
 ```
 
-Try adding another dummy field to the schema, and then run that mutation again to add the additional change into the release branch. You can even make changes to both subservices and stage them together for release.
+Try adding another dummy field to the schema, and then run the above mutation again to add the additional change into the release branch. You can even make changes to both subservices and stage them together for release.
 
 With all changes staged in your PR, watch the `production` gateway terminal logs and then merge the release PR. You should see the production gateway cutover on the next polling cycle (remember, you'll still need to reload GraphiQL to populate the revised schema in the UI):
 
@@ -121,4 +121,12 @@ version 1607572603563: d2709f88d9f60994d6d248902b8183534d4715a9
 
 ## Summary
 
-Tktk...
+There's [a lot to be said](https://www.apollographql.com/docs/federation/managed-federation/advanced-topics/) about schema versioning and release strategies. Let's be brief and distill a few key points:
+
+### Post-deploy hooks don't fix everything
+
+Say you dilligently wire up your gateway schema release command to your subservice post-deploy hook... Neat! However, there will still be some latency between that hook and the next gateway polling interval. This latency compounds when deploying multiple instances of a subservice app and the deploy hook doesn't fire until all instances are spun up. Long story short: there will always be latancy.
+
+Therefore, you may find that post-deploy release hooks aren't a magic bullet for orchestrating schema rollouts. Whether the gateway schema cutover takes seconds to rollout (thanks to post-deploy hooks), or a minute (until you press a merge button by hand), either scenario presents a window in which schema-mismatch errors may occur. At which time, releases really just boil down to being either breaking or non-breaking; the former of which should probably be done during a maintenance window.
+
+Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to remember what problem they are actually solving. The best release strategies will always stage new subservice schemas quietly behind the gateway proxy in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if the gateway schema cutover takes seconds or minutes after a deploy. This is also where multiple subservice schemas staged together as one release becomes very useful. 
