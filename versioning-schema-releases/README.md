@@ -121,7 +121,7 @@ version 1607572603563: d2709f88d9f60994d6d248902b8183534d4715a9
 
 ## Summary
 
-There's [a lot to be said](https://www.apollographql.com/docs/federation/managed-federation/advanced-topics/) about schema versioning and release strategies. Let's be brief and distill a few key points:
+There's [a lot to be said](https://www.apollographql.com/docs/federation/managed-federation/advanced-topics/) about schema versioning and release strategies. Let's be (fairly) brief and distill a few key points:
 
 ### Post-deploy hooks don't fix everything
 
@@ -131,6 +131,8 @@ Therefore, you may find that post-deploy hooks aren't a magic bullet for orchest
 
 Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always stage new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subservice schemas and releasing them together as one cutover becomes very useful. 
 
-### Versioning schemas with your gateway app is a neat idea
+### Versioning schemas with gateway code is a neat idea
 
-Stitching offers a rich toolkit of features with which to assemble your combined gateway schema. This extensibility is a great feature of stitching, but also means you should tailor your own test coverage to the design of your application. Among the most effective ways to do this is to version your schemas and gateway code in proximity of one another using shared repos or submodules. This allows your schemas to run integration tests using your real application code, versus relying on a representational test harness. 
+Stitching offers a rich toolkit of features with which to assemble your combined gateway schema. This extensibility is a great feature of stitching, but also means you should tailor your own test coverage to the design of your application. Among the most effective ways to do this is to version your schemas and gateway code in proximity of one another using shared repos or submodules. This allows your schemas to run integration tests using your real application code, versus relying on a representational test harness.
+
+Also as the size of your app cluster grows, you'll inevitably want to run development environments with only select subservices running. As long as your gateway has easy access to the schema registry, it can always build its full schema and run without backing subservices (requests to those subservices will simply fail). This example is purposely designed around basic patterns that may be adapted to the specific needs of each app stack.
