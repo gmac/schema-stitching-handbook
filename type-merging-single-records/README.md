@@ -1,6 +1,6 @@
 # Chapter 3 – Single-record type merging
 
-**Watch the [Chapter 2 Video](https://www.youtube.com/watch?v=KBACiSA5sEQ)**
+**Watch the [Chapter 3 Video](https://www.youtube.com/watch?v=KBACiSA5sEQ)**
 
 [![Single-Record Type Merge video](../images/video-player.png)](https://www.youtube.com/watch?v=KBACiSA5sEQ)
 

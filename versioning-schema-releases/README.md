@@ -65,7 +65,7 @@ mutation {
 }
 ```
 
-The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo containing the initial schema version (if you didn't get a PR link, check your repo config). Review the PR on GitHub, then **merge it!**. You can also get fancy and merge it with a local mutation:
+The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo containing the initial schema version (if you didn't get a PR link, check your repo config). Review the PR on GitHub, then **merge it!** You can also get fancy and merge it with a local mutation:
 
 ```graphql
 mutation {

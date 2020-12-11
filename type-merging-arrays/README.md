@@ -1,5 +1,7 @@
 # Chapter 4 – Array-batched type merging
 
+**Watch the [Chapter 4 Video](https://www.youtube.com/watch?v=VmK0KBHTcWs)**
+
 [![Array-batched Type Merge video](../images/video-player.png)](https://www.youtube.com/watch?v=VmK0KBHTcWs)
 
 This example explores the core techniques for merging typed objects using array queries, covering most of the topics discussed in [batched merging documentation](https://www.graphql-tools.com/docs/stitch-type-merging#batching).
