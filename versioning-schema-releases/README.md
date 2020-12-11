@@ -4,7 +4,7 @@ This example demonstrates using a GitHub repo as a central registry that coordin
 
 - Multiple subservice schemas may be composed on a branch together and released at once, affording the opportunity for hard schema cutovers across multiple services.
 - Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using [continuous integration services](https://docs.github.com/en/free-pro-team@latest/actions). In fact, versioning subschemas _in your gateway app's repo_ allows CI to run tests using both your release candidate schemas and your actual gateway server code.
-- Git is a defacto-standard tool with numerous frontends available, and can be adapted to meet virtually any versioning and deployment needs.
+- Git is a defacto-standard tool with numerous frontends available, and can be adapted to meet virtually any versioning and deployment need.
 
 **This example demonstrates:**
 
@@ -21,7 +21,7 @@ yarn install
 
 ### 1. Configure a registry repo
 
-This example uses live integration with the GitHub API. You'll need to setup your repo:
+This example uses live integration with the GitHub API. You'll need to setup a repo:
 
 1. Create a [new GitHub repo](https://github.com/new) _with a README_ (or other default file, so long as the repo is not empty). Public or private doesn't matter.
 2. Create a [personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) with `repo`-only access.
@@ -30,7 +30,7 @@ This example uses live integration with the GitHub API. You'll need to setup you
   - `repo`: name of the new registry repo.
   - `token`: your personal access token.
   - `mainBranch`: name of the default (master) branch in your repo; GitHub defaults to `main`, but you can customize that.
-  - `registryPath`: a directory path to where versioned schemas will be managed from.
+  - `registryPath`: a directory path to where versioned schemas will be placed in the repo.
 
 ### 2. Development server &amp; initial schema commit
 
@@ -51,8 +51,9 @@ Visit the gateway, and note that you have some development-only mutations availa
 - `createSchemaReleaseBranch`
 - `updateSchemaReleaseBranch`
 - `createOrUpdateSchemaReleaseBranch`
+- `mergeSchemaReleaseBranch`
 
-Run a `createSchemaReleaseBranch` to build a release candidate:
+Run `createSchemaReleaseBranch` to build a release candidate:
 
 ```graphql
 mutation {
@@ -65,7 +66,7 @@ mutation {
 }
 ```
 
-The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo containing the initial schema version (if you didn't get a PR link, check your repo config). Review the PR on GitHub, then **merge it!** You can also get fancy and merge it with a local mutation:
+The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo containing the initial schema version (if you don't get a link, check your repo config). Review the PR on GitHub, then **merge it!** You can also get fancy and merge it using a local mutation:
 
 ```graphql
 mutation {
@@ -119,7 +120,7 @@ mutation {
 
 Try adding another dummy field to the schema, and then run the above mutation again to add the additional change into the release branch. You can even make changes to both subservices and stage them together for release.
 
-With all changes staged in your PR, watch the `production` gateway terminal logs and then merge the release PR (via GitHub or the registry mutation). You should see the production gateway cutover on the next polling cycle (remember, you'll still need to reload GraphiQL to populate the revised schema in the UI):
+With all changes staged in your PR, watch the `production` gateway terminal logs and then merge the release PR (via GitHub UI or `mergeSchemaReleaseBranch`). You should see the production gateway cutover on the next polling cycle (remember, you'll still need to reload GraphiQL to bring the revised schema into the UI):
 
 ```shell
 version 1607572592741: 9d2a592013beddcca779e58d5f8fbb6930434ef4
@@ -136,12 +137,12 @@ There's [a lot to be said](https://www.apollographql.com/docs/federation/managed
 
 Say you dilligently call `mergeSchemaReleaseBranch` (or similar release command) from your subservice post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. This latency compounds when deploying many instances of a subservice app and the post-deploy hook doesn't fire until all instances are running. Long story short: there will always be latancy.
 
-Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to being either _non-breaking_ or _breaking_; the later of which should probably be done during a maintenance window.
+Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to either being _non-breaking_ or _breaking_; the later of which should probably be done during a maintenance window.
 
-Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always stage new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subschemas and releasing them together in a single cutover becomes very useful.
+Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always deploy new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subschemas and releasing them together as a single gateway cutover becomes very useful.
 
-### Versioning schemas with gateway code is a neat idea
+### Versioning subschemas with gateway code is a neat idea
 
-Stitching offers a rich toolkit of features with which to assemble your combined gateway schema. This extensibility is a great feature of stitching, but also means you should tailor your own test coverage to the design of your application. Among the most effective ways to do this is to version your schemas and gateway code in proximity of one another using shared repos or submodules. This allows your schemas to run integration tests using your real application code, versus relying on a representational test harness.
+Stitching offers a rich toolkit of features with which to assemble your combined gateway schema. This extensibility is a great feature of stitching, but also means you should tailor your own test coverage to the design of your application. Among the most effective ways to do this is to version your subschemas and gateway code in proximity of one another using a shared repo or submodules. This allows your schemas to run integration tests using your real application code, versus relying on a representational gateway test harness.
 
-Also as the size of your app cluster grows, you'll inevitably want to run development environments with only select subservices running. As long as your gateway has easy access to the schema registry, it can always build its full schema and run without backing subservices (requests to those subservices will simply fail). This example is purposely designed around basic patterns that may be adapted to the specific needs of each app stack.
+Also as the size of your service cluster grows, you'll inevitably want to run development environments with only select subservices running. As long as your development gateway has easy access to the schema registry, it can always build its full schema and run with missing or mocked subservices (requests to missing subservices will simply fail). The example code in this chapter purposely keeps to basic design patterns that may be adapted to more specific needs.
