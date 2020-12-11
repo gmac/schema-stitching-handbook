@@ -68,8 +68,8 @@ module.exports = class SchemaRegistry {
     const pr = await this.client.createPullRequest(branchName);
     return {
       name: branchName,
-      commitSHA: commit.sha,
-      commitUrl: commit.html_url,
+      sha: commit.sha,
+      url: commit.html_url,
       pullRequestUrl: pr.html_url,
     };
   }
@@ -78,11 +78,14 @@ module.exports = class SchemaRegistry {
     const branch = await this.client.getBranch(branchName);
     const tree = await this.client.createTree(branch.object.sha, await this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
-    await this.client.updateBranchHead(branchName, commit.sha);
+    const head = await this.client.updateBranchHead(branchName, commit.sha);
+    let pr = await this.client.getPullRequest(branchName);
+    pr = pr || await this.client.createPullRequest(branchName);
     return {
       name: branchName,
-      commitSHA: commit.sha,
-      commitUrl: commit.html_url,
+      sha: commit.sha,
+      url: commit.html_url,
+      pullRequestUrl: pr.html_url,
     };
   }
 
@@ -100,12 +103,22 @@ module.exports = class SchemaRegistry {
     const tree = await this.client.createTree(branch.object.sha, await this.treeFiles());
     const commit = await this.client.createCommit(branch.object.sha, tree.sha, message);
     const head = await this.client.updateBranchHead(branchName, commit.sha);
-    const pr = created ? await this.client.createPullRequest(branchName) : {};
+    let pr = !created ? await this.client.getPullRequest(branchName) : null;
+    pr = pr || await this.client.createPullRequest(branchName);
+
     return {
       name: branchName,
-      commitSHA: commit.sha,
-      commitUrl: commit.html_url,
+      sha: commit.sha,
+      url: commit.html_url,
       pullRequestUrl: pr.html_url,
+    };
+  }
+
+  async mergeReleaseBranch(branchName, message) {
+    const release = await this.client.mergePullRequest(branchName, message);
+    return {
+      name: branchName,
+      sha: release.sha,
     };
   }
 

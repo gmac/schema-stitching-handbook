@@ -17,6 +17,9 @@ module.exports = function makeRegistrySchema(registry) {
         },
         async createOrUpdateSchemaReleaseBranch(root, { name, message }) {
           return registry.createOrUpdateReleaseBranch(name, message);
+        },
+        async mergeSchemaReleaseBranch(root, { name, message }) {
+          return registry.mergeReleaseBranch(name, message);
         }
       }
     }

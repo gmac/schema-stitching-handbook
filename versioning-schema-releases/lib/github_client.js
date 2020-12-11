@@ -93,18 +93,45 @@ module.exports = class GitHubClient {
     return jsonOrError(res, 201);
   }
 
+  async getPullRequest(branchName) {
+    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/pulls?head=${this.owner}:${branchName}&state=open`, {
+      method: 'GET',
+      headers: this.headers,
+    });
+
+    const json = await jsonOrError(res, 200);
+    return json[0];
+  }
+
   async createPullRequest(branchName) {
     const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/pulls`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        title: `Gateway Schema Release: ${branchName}`,
-        body: 'Release candidate with revised remote schemas',
+        title: `Gateway schema release: ${branchName}`,
+        body: 'Release candidate for remote schema revisions',
         head: branchName,
         base: this.mainBranch,
       }),
     });
 
     return jsonOrError(res, 201);
+  }
+
+  async mergePullRequest(branchName, message) {
+    const pr = await this.getPullRequest(branchName);
+    if (!pr) throw new Error('Not found');
+
+    const res = await fetch(`https://api.github.com/repos/${this.owner}/${this.repo}/pulls/${pr.number}/merge`, {
+      method: 'PUT',
+      headers: this.headers,
+      body: JSON.stringify({
+        commit_title: `[gateway schema release]: ${branchName}`,
+        commit_message: message || 'merged by schema registry',
+        merge_method: 'squash',
+      }),
+    });
+
+    return jsonOrError(res, 200);
   }
 };

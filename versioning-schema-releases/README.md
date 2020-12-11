@@ -58,14 +58,23 @@ Run a `createSchemaReleaseBranch` to build a release candidate:
 mutation {
   createSchemaReleaseBranch(name: "initial-release") {
     name
-    commitSHA
-    commitUrl
+    sha
+    url
     pullRequestUrl
   }
 }
 ```
 
-The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo that contains the initial schema version. Review it on GitHub, then **merge that PR!** If you didn't get a PR link, check your repo config.
+The `name` argument is a GitHub branch name for this release candidate. Running that mutation, you should get a response that includes the `pullRequestUrl` of a newly-created PR in the remote repo containing the initial schema version (if you didn't get a PR link, check your repo config). Review the PR on GitHub, then **merge it!**. You can also get fancy and merge it with a local mutation:
+
+```graphql
+mutation {
+  mergeSchemaReleaseBranch(name: "initial-release") {
+    name
+    sha
+  }
+}
+```
 
 ### 3. Production server
 
@@ -101,8 +110,8 @@ Now commit those changes to a release branch:
 mutation {
   createOrUpdateSchemaReleaseBranch(name: "incremental-release") {
     name
-    commitSHA
-    commitUrl
+    sha
+    url
     pullRequestUrl
   }
 }
@@ -110,7 +119,7 @@ mutation {
 
 Try adding another dummy field to the schema, and then run the above mutation again to add the additional change into the release branch. You can even make changes to both subservices and stage them together for release.
 
-With all changes staged in your PR, watch the `production` gateway terminal logs and then merge the release PR. You should see the production gateway cutover on the next polling cycle (remember, you'll still need to reload GraphiQL to populate the revised schema in the UI):
+With all changes staged in your PR, watch the `production` gateway terminal logs and then merge the release PR (via GitHub or the registry mutation). You should see the production gateway cutover on the next polling cycle (remember, you'll still need to reload GraphiQL to populate the revised schema in the UI):
 
 ```shell
 version 1607572592741: 9d2a592013beddcca779e58d5f8fbb6930434ef4
@@ -125,11 +134,11 @@ There's [a lot to be said](https://www.apollographql.com/docs/federation/managed
 
 ### Post-deploy hooks don't fix everything
 
-Say you dilligently wire up your gateway schema release command to your subservice post-deploy hook... Neat! However, there will still be some latency between that hook and the next gateway polling interval. This latency compounds when deploying multiple instances of a subservice app and the deploy hook doesn't fire until all instances are spun up. Long story short: there will always be latancy.
+Say you dilligently call `mergeSchemaReleaseBranch` (or similar release command) from your subservice post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. This latency compounds when deploying many instances of a subservice app and the post-deploy hook doesn't fire until all instances are running. Long story short: there will always be latancy.
 
-Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really just boil down to being either breaking or non-breaking; the former of which should probably be done during a maintenance window, regardless.
+Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to being either _non-breaking_ or _breaking_; the later of which should probably be done during a maintenance window.
 
-Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always stage new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subservice schemas and releasing them together as one cutover becomes very useful. 
+Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always stage new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subschemas and releasing them together in a single cutover becomes very useful.
 
 ### Versioning schemas with gateway code is a neat idea
 
