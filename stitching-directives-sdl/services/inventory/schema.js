@@ -10,7 +10,7 @@ const typeDefs = `
   ${readFileSync(__dirname, 'schema.graphql')}
 `;
 
-const inventory = [
+const inventories = [
   { upc: '1', unitsInStock: 3 },
   { upc: '2', unitsInStock: 0 },
   { upc: '3', unitsInStock: 5 },
@@ -28,10 +28,11 @@ module.exports = makeExecutableSchema({
       }
     },
     Query: {
-      mostStockedProduct: () => inventory.reduce((acc, i) => acc.unitsInStock >= i.unitsInStock ? acc : i, inventory[0]),
-      _products(_root, { keys }) {
-        return keys.map(key => ({ ...key, ...inventory.find(i => i.upc === key.upc) || new NotFoundError() }));
-      },
+      mostStockedProduct: () => inventories.reduce((acc, i) => acc.unitsInStock >= i.unitsInStock ? acc : i, inventories[0]),
+      _products: (_root, { keys }) => keys.map(key => {
+        const inventory = inventories.find(i => i.upc === key.upc);
+        return inventory ? { ...key, ...inventory } : new NotFoundError();
+      }),
       _sdl: () => typeDefs,
     },
   }

@@ -30,7 +30,9 @@ The following services are available for interactive queries:
 
 ## Summary
 
-While reviewing this example, it's important to remember that these SDL directives are just annotations for the static merge configuration that's been discussed throughout previous chapters. Anything expressed using SDL directives has an underlying static configuration setting. Let's look at the patterns used in this example and compare them to how they'd be written using static configuration.
+While reviewing this example, it's important to remember that these SDL directives are just annotations for the static merge configuration that's been discussed throughout previous chapters. Let's review the patterns used in this example and compare them to their static configuration counterparts.
+
+Note that this example uses several needlessly complex key patterns for the sake of demonstration. For simplicity, it's generally best to use the basic picked key patterns whenever possible. Sending object keys is generally only necessary when implementing computed fields.
 
 ### Single picked key
 
@@ -91,7 +93,9 @@ merge: {
 
 Again, the `@key` directive specified a base selection set for the merged type, and then the `@merge(keyField: "upc")` directive marks the merger array query&mdash;specifying that a `upc` field should be picked from each original object for the query argument array.
 
-### Key object
+### Object keys
+
+Now open the Inventory schema and see the expression of an object key, denoted by the `_Key` scalar. This special scalar builds a typed object like those sent to [federation services](../federation-services):
 
 ```graphql
 type Product @key(selectionSet: "{ upc }") {
@@ -106,7 +110,12 @@ type Query {
 }
 ```
 
+This translates into the following configuration:
+
 ```js
+// uses lodash-like behavior for removing unused keys...
+const { omitBy, isNil} = require('lodash');
+
 merge: {
   Product: {
     selectionSet: '{ upc }',
@@ -114,25 +123,33 @@ merge: {
       shippingEstimate: { selectionSet: '{ price weight }' },
     },
     fieldName: '_products',
-    key: ({ upc, price, weight }) => ({ __typename: 'Product', upc, price, weight }),
+    key: ({ upc, price, weight }) => omitBy({ __typename: 'Product', upc, price, weight }, isNil),
     argsFromKeys: (keys) => ({ keys }),
   }
 }
 ```
 
-```js
-[
-  { upc: '1', __typename: 'Product' },
-  { upc: '2', __typename: 'Product' }
-]
+The `_Key` scalar generates an object with a `__typename` and all _utilized_ selectionSet fields on the type. For example, when the `shippingEstimate` field is requested, the resulting object keys are this:
 
+```js
 [
   { upc: '1', price: 899, weight: 100, __typename: 'Product' },
   { upc: '2', price: 1299, weight: 1000, __typename: 'Product' }
 ]
 ```
 
-### Typed input
+However, when `shippingEstimate` is NOT requested, the generated object keys will only contain fields from the base selectionSet and a `__typename`:
+
+```js
+[
+  { upc: '1', __typename: 'Product' },
+  { upc: '2', __typename: 'Product' }
+]
+```
+
+### Typed inputs
+
+Similar to the [object keys](#object-keys) discussed above, an input object type may be used to constrain the specific fields included on a object key:
 
 ```graphql
 type User @key(selectionSet: "{ id }") {
@@ -148,6 +165,8 @@ type Query {
 }
 ```
 
+This translates into the following configuration:
+
 ```js
 merge: {
   User: {
@@ -159,7 +178,18 @@ merge: {
 }
 ```
 
+In this case, the generated object keys will contain nothing but utilized selectionSet fields that are whitelisted by the input type:
+
+```js
+[
+  { id: '1' },
+  { id: '2' }
+]
+```
+
 ### Nested inputs
+
+A more advanced form of [typed input keys](#typed-inputs), this pattern uses the `keyArg` parameter to specify an input path at which to format the stitching query arguments:
 
 ```graphql
 type Product @key(selectionSet: "{ upc }") {
