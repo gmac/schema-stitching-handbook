@@ -104,3 +104,7 @@ To support stitched subscriptions, you need two things:
 1. The gateway server and all subscription-enabled remote servers require a configured WebSocket server. See the various server recipes in [graphql-ws](https://github.com/enisdenjo/graphql-ws#recipes). In this example, the gateway uses `ApolloServer` which is configured out of the box.
 
 2. The gateway schema must include a `subscriber` function for subscription-enabled subschemas. This function must return an [AsyncIterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/asyncIterator), for which there is also a [graphql-ws recipe](https://github.com/enisdenjo/graphql-ws#async-iterator) used in this example.
+
+### Concerning subscription packages
+
+You'll see lots of existing documentation and examples written around graphql-transport-ws, which is an older package superseded by graphql-ws. Somewhat confusingly, these packages are NOT interoperable, so a server built using one package will not talk to a client of the other package. This is particularly confusing now (at the time of writing) because most major GraphQL UIs (playground, graphiql) have not yet been updated to talk to a graphql-ws server. This example technically uses both. The gateway -> subservice creates a complete link using graphql-ws, while the UI -> gateway link is setup automatically using graphql-transport-ws on both the client and server. These two separate links are joined through an AsyncInterable object, which constitutes a generic interface for the two links to interact. 
