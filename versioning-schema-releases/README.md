@@ -135,7 +135,7 @@ There's [a lot to be said](https://www.apollographql.com/docs/federation/managed
 
 ### Post-deploy hooks don't fix everything
 
-Say you dilligently call `mergeSchemaReleaseBranch` (or similar release command) from your subservice post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. This latency compounds when deploying many instances of a subservice app and the post-deploy hook doesn't fire until all instances are running. Long story short: there will always be latancy.
+Say you dilligently call `mergeSchemaReleaseBranch` (or a similar release command) from your subservice post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. This latency compounds when deploying many instances of a subservice app and the post-deploy hook doesn't fire until all instances are running. Long story short: there will always be latancy.
 
 Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to either being _non-breaking_ or _breaking_; the later of which should probably be done during a maintenance window.
 

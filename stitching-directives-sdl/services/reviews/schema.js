@@ -34,10 +34,7 @@ module.exports = makeExecutableSchema({
     },
     Query: {
       review: (_root, { id }) => reviews.find(review => review.id === id) || new NotFoundError(),
-      _users: (_root, { keys }) => {
-        console.log(keys);
-        return keys
-      },
+      _users: (_root, { keys }) => keys,
       _products: (_root, { input }) => input.keys,
       _sdl: () => typeDefs,
     },

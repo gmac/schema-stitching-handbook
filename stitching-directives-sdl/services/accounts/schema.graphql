@@ -4,10 +4,8 @@ type User @key(selectionSet: "{ id }") {
   username: String!
 }
 
-scalar _Key
-
 type Query {
   me: User
-  _users(keys: [_Key!]!): [User]! @merge
+  user(id: ID!): User @merge(keyField: "id")
   _sdl: String!
 }

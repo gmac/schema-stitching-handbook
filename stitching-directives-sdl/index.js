@@ -35,9 +35,21 @@ async function makeGatewaySchema() {
   });
 }
 
+// fetch remote schemas with a retry loop
+// (allows the gateway to wait for all services to startup)
 async function fetchRemoteSchema(executor) {
-  const result = await executor({ document: '{ _sdl }' });
-  return buildSchema(result.data._sdl);
+  return new Promise((resolve, reject) => {
+    async function next(attempt=1) {
+      try {
+        const { data } = await executor({ document: '{ _sdl }' });
+        resolve(buildSchema(data._sdl));
+      } catch (err) {
+        if (attempt >= 10) reject(err);
+        setTimeout(() => next(attempt+1), 300);
+      }
+    }
+    next();
+  });
 }
 
 makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));

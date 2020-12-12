@@ -21,7 +21,7 @@ module.exports = makeExecutableSchema({
   resolvers: {
     Query: {
       me: () => users[0],
-      _users: (_root, { keys }) => keys.map(key => users.find(user => user.id === key.id) || new NotFoundError()),
+      user: (_root, { id }) => users.find(user => user.id === id) || new NotFoundError(),
       _sdl: () => typeDefs,
     }
   }
