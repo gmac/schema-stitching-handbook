@@ -30,9 +30,7 @@ The following services are available for interactive queries:
 
 ## Summary
 
-While reviewing this example, it's important to remember that these SDL directives are just annotations for the static merge configuration that's been discussed throughout previous chapters. Let's review the patterns used in this example and compare them to their static configuration counterparts.
-
-Note that this example uses several needlessly complex key patterns for the sake of demonstration. For simplicity, it's generally best to use the basic picked key patterns whenever possible. Sending object keys is generally only necessary when implementing computed fields.
+While reviewing this example, it's important to remember that these SDL directives are just annotations for the static merge configuration that's been discussed throughout previous chapters. Let's review the patterns used in this example and compare them to their static configuration counterparts...
 
 ### Single picked key
 
@@ -62,7 +60,7 @@ merge: {
 }
 ```
 
-Here the `@key` directive specified a base selection set for the merged type, and then the `@merge(keyField: "id")` directive marks the merger query&mdash;specifying that the `id` field should be picked from the original object as the query argument.
+Here the `@key` directive specifies a base selection set for the merged type, and the `@merge(keyField: "id")` directive marks a merger query&mdash;specifying that the `id` field should be picked from the original object as the query argument.
 
 ### Picked keys array
 
@@ -91,7 +89,7 @@ merge: {
 }
 ```
 
-Again, the `@key` directive specified a base selection set for the merged type, and then the `@merge(keyField: "upc")` directive marks the merger array query&mdash;specifying that a `upc` field should be picked from each original object for the query argument array.
+Again, the `@key` directive specifies a base selection set for the merged type, and the `@merge(keyField: "upc")` directive marks a merger array query&mdash;specifying that a `upc` field should be picked from each original object for the query argument array.
 
 ### Object keys
 
@@ -113,8 +111,8 @@ type Query {
 This translates into the following configuration:
 
 ```js
-// uses lodash-like behavior for removing unused keys...
-const { omitBy, isNil} = require('lodash');
+// uses lodash-like behavior for picking keys...
+const { pick } = require('lodash');
 
 merge: {
   Product: {
@@ -123,13 +121,13 @@ merge: {
       shippingEstimate: { selectionSet: '{ price weight }' },
     },
     fieldName: '_products',
-    key: ({ upc, price, weight }) => omitBy({ __typename: 'Product', upc, price, weight }, isNil),
+    key: (obj) => ({ __typename: 'Product', ...pick(obj, ['upc', 'price', 'weight']) }),
     argsFromKeys: (keys) => ({ keys }),
   }
 }
 ```
 
-The `_Key` scalar generates an object with a `__typename` and all _utilized_ selectionSet fields on the type. For example, when the `shippingEstimate` field is requested, the resulting object keys are this:
+The `_Key` scalar generates an object with a `__typename` and all _utilized_ selectionSet fields on the type. For example, when the `shippingEstimate` field is requested, the resulting object keys look like:
 
 ```js
 [
@@ -208,3 +206,7 @@ type Query {
   _products(input: ProductInput): [Product]! @merge(keyArg: "input.keys")
 }
 ```
+
+### For demonstration only!
+
+This example uses several needlessly complex key patterns for the sake of demonstration. For simplicity, it's generally best to use the basic picked key patterns whenever possible. Sending object keys is generally only necessary when implementing computed fields or communicating with federation services.
