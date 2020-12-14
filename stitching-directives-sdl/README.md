@@ -62,7 +62,7 @@ merge: {
 
 Here the `@key` directive specifies a base selection set for the merged type, and the `@merge(keyField: "id")` directive marks a merger query&mdash;specifying that the `id` field should be picked from the original object as the query argument.
 
-### Picked keys array
+### Picked keys with additional arguments
 
 Next, open the Products schema and see the expression of an [array-batched merge query](../type-merging-arrays):
 
@@ -72,7 +72,11 @@ type Product @key(selectionSet: "{ upc }") {
 }
 
 type Query {
-  products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
+  products(upcs: [ID!]!, order: String): [Product]! @merge(
+    keyField: "upc"
+    keyArg: "upcs"
+    additionalArgs: """ order: "price" """
+  )
 }
 ```
 
@@ -84,7 +88,7 @@ merge: {
     selectionSet: '{ upc }'
     fieldName: 'products',
     key: ({ upc }) => upc,
-    argsFromKeys: (upcs) => ({ upcs }),
+    argsFromKeys: (upcs) => ({ upcs, order: 'price' }),
   }
 }
 ```
@@ -93,7 +97,7 @@ Again, the `@key` directive specifies a base selection set for the merged type, 
 
 ### Object keys
 
-Now open the Inventory schema and see the expression of an object key, denoted by the `_Key` scalar. This special scalar builds a typed object like those sent to [federation services](../federation-services):
+Now open the Inventory schema and see the expression of an object key, denoted by a generic scalar (here called `_Key`). In the absence of `keyField`, a generated key assumes the shape of a typed object like those sent to [federation services](../federation-services):
 
 ```graphql
 type Product @key(selectionSet: "{ upc }") {
@@ -111,9 +115,7 @@ type Query {
 This translates into the following configuration:
 
 ```js
-// uses lodash-like behavior for picking keys...
-const { pick } = require('lodash');
-
+// assume "pick" works like the lodash method...
 merge: {
   Product: {
     selectionSet: '{ upc }',
@@ -127,7 +129,7 @@ merge: {
 }
 ```
 
-The `_Key` scalar generates an object with a `__typename` and all _utilized_ selectionSet fields on the type. For example, when the `shippingEstimate` field is requested, the resulting object keys look like:
+The `_Key` scalar is an object with a `__typename` and all _utilized_ selectionSet fields on the type. For example, when the computed `shippingEstimate` field is requested, the resulting object keys look like:
 
 ```js
 [
@@ -136,7 +138,7 @@ The `_Key` scalar generates an object with a `__typename` and all _utilized_ sel
 ]
 ```
 
-However, when `shippingEstimate` is NOT requested, the generated object keys will only contain fields from the base selectionSet and a `__typename`:
+However, when `shippingEstimate` is NOT requested, the generated object keys will only contain fields from the base selectionSet:
 
 ```js
 [
@@ -166,11 +168,12 @@ type Query {
 This translates into the following configuration:
 
 ```js
+// assume "pick" works like the lodash method...
 merge: {
   User: {
     selectionSet: '{ id }',
     fieldName: '_users',
-    key: ({ id }) => ({ id }),
+    key: (obj) => pick(obj, ['id']),
     argsFromKeys: (keys) => ({ keys }),
   }
 }
