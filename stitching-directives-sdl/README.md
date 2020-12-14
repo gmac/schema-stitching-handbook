@@ -30,7 +30,34 @@ The following services are available for interactive queries:
 
 ## Summary
 
-While reviewing this example, it's important to remember that these SDL directives are just annotations for the static merge configuration that's been discussed throughout previous chapters. Let's review the patterns used in this example and compare them to their static configuration counterparts...
+First, try a query that includes data from all services:
+
+```graphql
+query {
+  products(upcs: [1, 2]) {
+    name
+    price
+    weight
+    inStock
+    shippingEstimate
+    reviews {
+      id
+      body
+      author {
+        name
+        username
+        totalReviews
+      }
+      product {
+        name
+        price
+      }
+    }
+  }
+}
+```
+
+Neat, it works! All those merges were configured through schema SDL annotations. Let's review the patterns used in this example and compare them to their static configuration counterparts. Keep in mind: SDL directives are always just annotations for the static configuration that's been discussed throughout previous chapters.
 
 ### Single picked key
 
