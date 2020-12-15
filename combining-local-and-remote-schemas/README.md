@@ -17,7 +17,7 @@ This example explores basic techniques for combining local and remote schemas to
 ## Setup
 
 ```shell
-cd 01-combining-local-and-remote-schemas
+cd combining-local-and-remote-schemas
 
 yarn install
 yarn start-services

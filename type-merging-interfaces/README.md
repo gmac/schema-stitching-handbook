@@ -1,5 +1,9 @@
 # Chapter 5 – Cross-service interfaces
 
+**Watch the [Chapter 5 Video](https://www.youtube.com/watch?v=wPB5oI_Tjik)**
+
+[![Cross-service interfaces](../images/video-player.png)](https://www.youtube.com/watch?v=wPB5oI_Tjik)
+
 This example explores setting up a GraphQL interface that spans across service boundaries, as described in the [merged interfaces documentation](https://www.graphql-tools.com/docs/stitch-type-merging#merged-interfaces). This is an extremely powerful feature made possible by the flexibility of type merging, yet it's easy to overlook.
 
 **This example demonstrates:**
@@ -9,7 +13,7 @@ This example explores setting up a GraphQL interface that spans across service b
 ## Setup
 
 ```shell
-cd 04-cross-service-interfaces
+cd cross-service-interfaces
 
 yarn install
 yarn start-gateway

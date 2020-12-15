@@ -11,7 +11,7 @@ This example explores stitching mutation and subscription services into a combin
 ## Setup
 
 ```shell
-cd 05-mutations-and-subscriptions
+cd mutations-and-subscriptions
 
 yarn install
 yarn start-services

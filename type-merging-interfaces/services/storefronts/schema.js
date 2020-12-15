@@ -34,7 +34,10 @@ const productDeals = [
 // graphql resolvers
 const resolvers = {
   Query: {
-    storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+    storefront: (root, { id }, _, info) => {
+      console.log(require('graphql').print(info.operation));
+      return storefronts.find(s => s.id === id) || new NotFoundError()
+    },
   },
   Storefront: {
     products(storefront) {

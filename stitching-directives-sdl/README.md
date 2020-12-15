@@ -1,5 +1,9 @@
 # Chapter 9 – Stitching directives SDL
 
+**Watch the [Chapter 9 Video](https://www.youtube.com/watch?v=dE9cJsxOLeQ)**
+
+[![Stitching Directives SDL](../images/video-player.png)](https://www.youtube.com/watch?v=dE9cJsxOLeQ)
+
 This example demonstrates the use of stitching directives to configure type merging via subschema SDLs. Shifting this configuration out of the gateway makes subschemas autonomous, and allows them to push their own configuration up to the gateway&mdash;enabling more sophisticated schema releases.
 
 The `@graphql-tools/stitching-directives` package provides importable directives that can be used to annotate types and fields within subschemas, a validator to ensure the directives are used appropriately, and a configuration transformer that can be used on the gateway to convert the subschema directives into explicit configuration setting.
