@@ -1,5 +1,5 @@
 {
-  "name": "type-merging-interfaces",
+  "name": "type-merging-nullables",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

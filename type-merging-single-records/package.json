@@ -1,5 +1,5 @@
 {
-  "name": "single-record-type-merge",
+  "name": "type-merging-single-records",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

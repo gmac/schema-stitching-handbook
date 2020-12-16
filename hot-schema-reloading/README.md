@@ -74,6 +74,18 @@ mutation {
 
 Refresh [gateway GraphiQL](http://localhost:4000/graphql) and see how the available types and root fields have been restored.
 
+### Without polling
+
+This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema to be called manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
+
+```graphql
+mutation {
+  reloadAllEndpoints {
+    success
+  }
+}
+```
+
 ### Dropping services
 
 This configuration can also handle dropping services when they go offline. To try it, run each service in thier own terminal window:
@@ -90,15 +102,3 @@ yarn start-gateway
 ```
 
 Now try stopping the Products service by exiting its program (`CTRL+C`). Refresh [gateway GraphiQL](http://localhost:4000/graphql) and notice that the schema has responded to the change automatically.
-
-### Without polling
-
-This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema and gets called manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
-
-```graphql
-mutation {
-  reloadAllEndpoints {
-    success
-  }
-}
-```
