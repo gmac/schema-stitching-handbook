@@ -7,14 +7,13 @@ const typeDefs = readFileSync(__dirname, 'schema.graphql');
 const products = [
   { upc: '1', name: 'Cookbook', price: 15.99 },
   { upc: '2', name: 'Toothbrush', price: 3.99 },
-  { upc: '3', name: 'Sofa', price: 499.99 },
 ];
 
 module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
-      products(root, { upcs }) => upcs.map(upc => products.find(p => p.upc === upc) || new NotFoundError()),
+      products: (root, { upcs }) => upcs.map(upc => products.find(p => p.upc === upc) || new NotFoundError()),
     }
   }
 });

@@ -5,15 +5,14 @@ const typeDefs = readFileSync(__dirname, 'schema.graphql');
 
 // data fixtures
 const users = [
-  { id: '1', username: 'gthreepwood' },
-  { id: '2', username: 'govmarley' },
-  { id: '3', username: 'gplechuck' },
+  { id: '1', username: 'hanshotfirst' },
+  { id: '2', username: 'bigvader23' },
 ];
 
 module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
-    User: {
+    Query: {
       users: (root, { ids }) => ids.map(id => users.find(u => u.id === id) || new NotFoundError()),
     }
   }

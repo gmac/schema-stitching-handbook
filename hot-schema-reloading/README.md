@@ -76,7 +76,7 @@ Refresh [gateway GraphiQL](http://localhost:4000/graphql) and see how the availa
 
 ### Without polling
 
-This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema to be called manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
+Polling is by no means necessary for triggering a gateway schema reload. An even simpler solution is to setup a dedicated mutation that reloads the gateway schema, and then call it manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
 
 ```graphql
 mutation {
@@ -85,6 +85,8 @@ mutation {
   }
 }
 ```
+
+See [versioning schema releases](../versioning-schema-releases) for a deeper exploration of hot-reloads that fetch from a versioned schema registry.
 
 ### Dropping services
 

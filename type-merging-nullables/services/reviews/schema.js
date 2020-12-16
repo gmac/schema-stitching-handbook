@@ -6,14 +6,13 @@ const typeDefs = readFileSync(__dirname, 'schema.graphql');
 // data fixtures
 const reviews = [
   { id: '1', productUpc: '1', userId: '1', body: 'love it' },
-  { id: '2', productUpc: '2', userId: '2', body: 'total garbage' },
 ];
 
 module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
-      reviews(root, { ids }) => ids.map(id => reviews.find(r => r.id === id) || new NotFoundError()),
+      reviews: (root, { ids }) => ids.map(id => reviews.find(r => r.id === id) || new NotFoundError()),
 
       // Users will _always_ return a stub record,
       // regardless of whether there's a local representation of the user.
@@ -22,7 +21,7 @@ module.exports = makeExecutableSchema({
       // type User {
       //   reviews: [Review]!
       // }
-      _users(root, { ids }) => ids.map(id => ({ id })),
+      _users: (root, { ids }) => ids.map(id => ({ id })),
 
       // Products will only build a stub record when there's a local record of it,
       // otherwise, returning null without an error.
@@ -32,7 +31,7 @@ module.exports = makeExecutableSchema({
       // type Product {
       //   reviews: [Review]
       // }
-      _products(root, { upcs }) => upcs.map(upc => reviews.find(r.productUpc === upc) ? ({ upc }) : null),
+      _products: (root, { upcs }) => upcs.map(upc => reviews.find(r => r.productUpc === upc) ? ({ upc }) : null),
     },
     Review: {
       product: (review) => ({ upc: review.productUpc }),
