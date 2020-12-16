@@ -96,7 +96,7 @@ query {
 # --> [{ id: 'DOES_NOT_EXIST', reviews: [] }]
 ```
 
-What's odd about this is that the Reviews service is resolving a record for the `"DOES_NOT_EXIST"` ID on the blind assumption that it must exist somewhere. In effect, the query is parroting all input into a legitimized result. Should it? That's entirely up to your own service architecture. One possible advantage this pattern offers is that the not-null `reviews:[Review]!` association works because the service always guarentees a record with populated fields.
+What's odd here is that the Reviews service is resolving a record for the `"DOES_NOT_EXIST"` ID on the blind assumption that it must exist somewhere else. In effect, the query is parroting all input into a legitimized result. Should it? That's entirely up to your own service architecture. One possible advantage of this pattern is that the not-null `reviews:[Review]!` association works because the service always guarentees a record with valid fields.
 
 ### Nullable associations
 
@@ -117,7 +117,7 @@ type Product {
 _products: (root, { upcs }) => upcs.map(upc => reviews.find(r => r.productUpc === upc) ? ({ upc }) : null)
 ```
 
-In this implementation, only product UPCs that match a review in the database are treated a valid records. Unknown records simply return null _without errors_, for example:
+In this implementation, only product UPCs that match a review in the database are treated as valid records. Unknown records simply return null without errors, for example:
 
 ```graphql
 query {
@@ -130,7 +130,7 @@ query {
 # --> [null]
 ```
 
-From a pure service-oriented architecture perspective, this result makes more sense because the Reviews service abstains from opinion on unknown IDs; it neither legitimizes with result, nor delegitimizes with error. The only requirement for this to work is that the `reviews:[Review]` association must be nullable because a value may not always be returned. The `upc:ID!` field may still be not-null because it's part of the merged type's selectionSet (see gateway setup in `index.js`), and therefore will always be collected from other services.
+From a pure service-oriented architecture perspective, this result makes a lot more sense because the Reviews service abstains from opinion on unknown IDs; it neither legitimizes them with a result, nor delegitimizes them with an error. The only caveat for this to work is that the `reviews:[Review]` association must be nullable because a value may not always be returned. The `upc:ID!` field may still be not-null because it is part of the Product type `selectionSet` (in `index.js`), and therefore will always be collected from other services.
 
 ### Which approach is correct?
 
