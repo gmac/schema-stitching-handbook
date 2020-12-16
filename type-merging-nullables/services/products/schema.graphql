@@ -1,0 +1,9 @@
+type Product {
+  upc: ID!
+  name: String!
+  price: Float!
+}
+
+type Query {
+  products(upcs: [ID!]!): [Product]!
+}

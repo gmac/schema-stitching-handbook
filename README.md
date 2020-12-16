@@ -35,9 +35,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - Distributing a GraphQL interface across services.
 
-- **Chapter 6 - Nullable merges**
+- **[Chapter 6 - Nullable merges](./type-merging-nullables)**
 
-  - tktk
+  - Selecting nullability for merged fields.
+  - Returning nullable and not-nullable results.
 
 - **Chapter 7 - Computed fields**
 

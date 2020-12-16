@@ -1,5 +1,5 @@
 {
-  "name": "array-batched-type-merge",
+  "name": "type-merging-arrays",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
