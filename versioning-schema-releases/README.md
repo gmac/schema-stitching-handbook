@@ -1,6 +1,6 @@
 # Chapter 11 – Versioning schema releases
 
-This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't terribly difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). Using a Git repo actually offers several distinct advantages:
+This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't prohibitively difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). Using a Git repo actually offers several distinct advantages:
 
 - Multiple subservice schemas may be composed on a branch together and released at once, affording the opportunity for hard schema cutovers across multiple services.
 - Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using [continuous integration services](https://docs.github.com/en/free-pro-team@latest/actions). In fact, versioning subschemas _in your gateway app's repo_ allows CI to run tests using both your release candidate schemas and your actual gateway server code.
@@ -135,11 +135,17 @@ There's [a lot to be said](https://www.apollographql.com/docs/federation/managed
 
 ### Post-deploy hooks don't fix everything
 
-Say you dilligently call `mergeSchemaReleaseBranch` (or a similar release command) from your subservice post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. This latency compounds when deploying many instances of a subservice app and the post-deploy hook doesn't fire until all instances are running. Long story short: there will always be latancy.
+Say you dilligently call `mergeSchemaReleaseBranch` (or a similar release command) from your subservice's post-deploy hook... Neat! However, there will still be latency between that release and the next gateway polling interval. Even if you're not polling, post-deploy hooks probably won't time perfectly with your subservice(s) starting up, especially when deploying many instances. Long story short: there will always be latancy.
 
-Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to either being _non-breaking_ or _breaking_; the later of which should probably be done during a maintenance window.
+Therefore, you may find that post-deploy hooks aren't a magic bullet for orchestrating seamless schema rollouts. Whether the revised gateway schema rolls out in seconds (thanks to post-deploy hooks), or minutes (until you press a merge button by hand), either scenario presents a window in which conflicting schema errors may occur. That said, releases really boil down to either being _non-breaking_ or _breaking_; the later of which needs a maintenance window or a deeper strategy.
 
-Now, that's not to say that post-deploy hooks aren't a worthwhile _convenience_. It's just important to know what problem they are actually solving. The best release strategies will always deploy new subservice schemas quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy. This is also where staging changes to multiple subschemas and releasing them together as a single gateway cutover becomes very useful.
+### Zero-downtime rollouts follow a basic formula
+
+The best release strategies will always deploy updated subservices quietly behind the gateway proxy layer in a way that activates new features without breaking existing ones. Following this pattern, it doesn't really matter if a gateway schema rollout takes seconds or minutes after a subservice deploy:
+
+1. Deploy all updated subservices while keeping existing subservice features operational.
+2. Push all updated subservice schemas to the gateway as a single cutover.
+3. Decomission old subservices, and/or outdated subservice features.
 
 ### Versioning subschemas with gateway code is a neat idea
 

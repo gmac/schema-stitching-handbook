@@ -76,7 +76,7 @@ Refresh [gateway GraphiQL](http://localhost:4000/graphql) and see how the availa
 
 ### Without polling
 
-Polling is by no means necessary for triggering a gateway schema reload. An even simpler solution is to setup a dedicated mutation that reloads the gateway schema, and then call it manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
+Polling is by no means necessary for triggering gateway schema reloads. An even simpler solution is to setup a dedicated mutation that reloads the gateway schema, and then call it manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
 
 ```graphql
 mutation {

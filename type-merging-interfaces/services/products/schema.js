@@ -15,9 +15,7 @@ const products = [
 // graphql resolvers
 const resolvers = {
   Query: {
-    products(root, { ids }) {
-      return ids.map(id => products.find(p => p.id === id) || new NotFoundError());
-    }
+    products: (root, { ids }) => ids.map(id => products.find(p => p.id === id) || new NotFoundError()),
   }
 };
 

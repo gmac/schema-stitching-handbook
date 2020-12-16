@@ -17,7 +17,7 @@ module.exports = makeExecutableSchema({
       // Users will _always_ return a stub record,
       // regardless of whether there's a local representation of the user.
       // We're trusting that remote services are sending in valid User IDs...
-      // this is necessary to fulfill the schema nullability requirement:
+      // Returning a stub record is necessary to fulfill the schema nullability requirement:
       // type User {
       //   reviews: [Review]!
       // }
@@ -27,7 +27,7 @@ module.exports = makeExecutableSchema({
       // otherwise, returning null without an error.
       // This allows the reviews service to have no opinions about unknown products;
       // it will neither confirm nor deny that they exist.
-      // This is allowed because schema nullability permits it:
+      // Returning null is permitted by the schema nullability spec:
       // type Product {
       //   reviews: [Review]
       // }
