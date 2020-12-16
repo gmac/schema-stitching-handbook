@@ -16,7 +16,12 @@ type RemoveEndpointResult {
   success: Boolean!
 }
 
+type ReloadAllEndpointsResult {
+  success: Boolean!
+}
+
 type Mutation {
   addEndpoint(url: String!): AddEndpointResult!
   removeEndpoint(url: String!): RemoveEndpointResult!
+  reloadAllEndpoints: ReloadAllEndpointsResult!
 }

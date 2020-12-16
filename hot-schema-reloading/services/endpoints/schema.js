@@ -32,6 +32,10 @@ module.exports = function makeEndpointsSchema(loader) {
           }
           return { success };
         },
+        async reloadAllEndpoints() {
+          await loader.reload();
+          return { success: true };
+        },
       },
     }
   });

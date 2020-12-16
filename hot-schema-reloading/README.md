@@ -9,6 +9,9 @@ This example demonstrates reloading the combined gateway schema without restarti
 - Mutations for dynamically adding/removing subservices.
 - Handling subservice request timeouts.
 
+**Related examples:**
+- See [versioning schema releases](../versioning-schema-releases) for more ideas on versioning and reloading.
+
 ## Setup
 
 ```shell
@@ -87,3 +90,15 @@ yarn start-gateway
 ```
 
 Now try stopping the Products service by exiting its program (`CTRL+C`). Refresh [gateway GraphiQL](http://localhost:4000/graphql) and notice that the schema has responded to the change automatically.
+
+### Without polling
+
+This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema that can be called manually or in response to your own deployment hooks. Try running the `reloadAllEndpoints` mutation to manually trigger a reload:
+
+```graphql
+mutation {
+  reloadAllEndpoints {
+    success
+  }
+}
+```
