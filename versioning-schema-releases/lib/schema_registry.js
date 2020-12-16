@@ -55,7 +55,7 @@ module.exports = class SchemaRegistry {
     this.endpoints = config.endpoints;
     this.buildSchema = config.buildSchema;
     this.registryPath = config.repo.registryPath;
-    this.registryVersion = null;
+    this.remoteVersion = null;
     this.schema = null;
     this.services = [];
   }
@@ -132,7 +132,7 @@ module.exports = class SchemaRegistry {
     }));
   }
 
-  async getRegistryVersion() {
+  async getRemoteVersion() {
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_VERSION,
       variables: {
@@ -149,10 +149,24 @@ module.exports = class SchemaRegistry {
     }
 
     console.log('version failed to fetch, skipping...');
-    return this.registryVersion;
+    return this.remoteVersion;
   }
 
-  async loadRegistrySchemas() {
+  async loadStaticRegistry() {
+    const { stitchingDirectivesTypeDefs } = stitchingDirectives();
+    return this.endpoints.map(async (service) => {
+      return {
+        name: service.name,
+        url: service.url.production,
+        sdl: `
+          ${stitchingDirectivesTypeDefs}
+          ${readFileSync(__dirname, `../services/${service.name}/schema.graphql`)}
+        `,
+      };
+    });
+  }
+
+  async loadRemoteRegistry() {
     const urlPattern = /# url: ([^\n]+)\n/;
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_FILES,
@@ -167,8 +181,8 @@ module.exports = class SchemaRegistry {
       throw 'No repo content found at registry path. Have you committed files yet?';
     }
 
-    this.registryVersion = data.repository.object.oid;
-    console.log(`VERSION UPDATE: ${this.registryVersion}`);
+    this.remoteVersion = data.repository.object.oid;
+    console.log(`VERSION UPDATE: ${this.remoteVersion}`);
 
     return data.repository.object.entries.map(entry => ({
       name: entry.name.replace(/\.graphql$/, ''),
@@ -177,7 +191,7 @@ module.exports = class SchemaRegistry {
     }));
   }
 
-  async loadLocalSchemas() {
+  async loadDevSchemas() {
     return Promise.all(this.endpoints.map(async (service) => {
       const url = service.url[this.env];
       return {
@@ -189,11 +203,21 @@ module.exports = class SchemaRegistry {
   }
 
   async reload() {
-    if (this.env === 'production' && (!this.registryVersion || this.registryVersion !== await this.getRegistryVersion())) {
-      this.services = await this.loadRegistrySchemas();
+    if (this.env === 'production' && !this.services.length) {
+      // initial startup in production mode... load schema from a static cache
+      // (useful when registry shares a repo with gateway application code)
+      // could also use `loadRemoteRegistry` if we trust its availability.
+      this.services = await this.loadStaticRegistry();
       this.schema = await this.buildSchema(this.services);
+
+    } else if (this.env === 'production' && (!this.remoteVersion || this.remoteVersion !== await this.getRemoteVersion())) {
+      // subsequent production reload (polling update, API refresh request)
+      // attempt to reload from the remote registry.
+      this.services = await this.loadRemoteRegistry();
+      this.schema = await this.buildSchema(this.services);
+
     } else {
-      this.services = await this.loadLocalSchemas();
+      this.services = await this.loadDevSchemas();
       this.schema = await this.buildSchema(this.services);
     }
     return this.schema;
