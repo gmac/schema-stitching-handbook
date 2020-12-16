@@ -93,7 +93,7 @@ Now try stopping the Products service by exiting its program (`CTRL+C`). Refresh
 
 ### Without polling
 
-This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema that can be called manually or in response to your own deployment hooks. Try running the `reloadAllEndpoints` mutation to manually trigger a reload:
+This example uses polling to watch for changes, though that is by no means necessary. You can just as easily setup a mutation that reloads the gateway schema and gets called manually or in response to deployment hooks. Try running the `reloadAllEndpoints` mutation in this example to manually trigger a reload:
 
 ```graphql
 mutation {
