@@ -10,6 +10,7 @@ This example demonstrates reloading the combined gateway schema without restarti
 - Handling subservice request timeouts.
 
 **Related examples:**
+
 - See [versioning schema releases](../versioning-schema-releases) for more ideas on versioning and reloading.
 
 ## Setup

@@ -15,6 +15,11 @@ This example focuses on [array batching](https://github.com/gmac/schema-stitchin
 - Handling array errors.
 - Nullability & error remapping.
 
+**Related examples:**
+
+- See [single-record type merging](../type-merging-single-records) for additional information on basic merge patterns.
+- See [stitching directives SDL](../stitching-directives-sdl) to write this merge configuration as schema directives.
+
 ## Setup
 
 ```shell

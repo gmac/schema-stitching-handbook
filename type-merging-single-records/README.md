@@ -14,6 +14,11 @@ Using single-record queries means that every record accessed requires a _dedicat
 - Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
 - Query/execution batching.
 
+**Related examples:**
+
+- See [array-batched type merging](../type-merging-arrays) to improve the performance of these basic patterns.
+- See [stitching directives SDL](../stitching-directives-sdl) to write this merge configuration as schema directives.
+
 ## Setup
 
 ```shell
