@@ -54,26 +54,26 @@ query {
       upc
       name
       manufacturer {
-        name
         products {
           upc
           name
         }
+        name
       }
     }
   }
 }
 ```
 
-If you study the results of this query, the final composition traverses back and forth across the service graph:
+If you study the results of this query, the final composition traverses across the service graph:
 
 - `Storefront` (Storefronts schema)
   - `Storefront.products -> Product` (Products schema)
-    - `Product.manufacturer -> Manufacturer` (Manufacturers + Products schema)
-      - `Manufacturer.name` (Manufacturers schema)
+    - `Product.manufacturer -> Manufacturer` (Products + Manufacturers schemas)
       - `Manufacturer.products` (Products schema)
+      - `Manufacturer.name` (Manufacturers schema)
 
-That means the gateway performed four rounds of resolution for each generation of data (`Services -> Products -> Manufacturers -> Products`).
+That means the gateway performed three rounds of resolution for each service's data (`Services -> Products -> Manufacturers`).
 
 ### Batching
 
