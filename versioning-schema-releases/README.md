@@ -129,6 +129,18 @@ VERSION UPDATE: d2709f88d9f60994d6d248902b8183534d4715a9
 version 1607572603563: d2709f88d9f60994d6d248902b8183534d4715a9
 ```
 
+### Without polling
+
+Polling is by no means necessary to trigger gateway schema reloads. An even simpler solution is to setup a dedicated mutation that reloads the gateway schema, and then call it manually or in response to deployment hooks. Try running the `_reloadGateway` mutation in this example to manually trigger a reload:
+
+```graphql
+mutation {
+  _reloadGateway
+}
+```
+
+Of course, this sort of reload trigger **should not** be exposed in public APIs. You should [filter](https://www.graphql-tools.com/docs/api/modules/_packages_utils_src_filterschema_#filterschema) this sort of utility out of public-facing schemas, or use a separate non-GraphQL endpoint (such as a REST service) to trigger the action.
+
 ## Summary
 
 There's [a lot to be said](https://www.apollographql.com/docs/federation/managed-federation/advanced-topics/) about schema versioning and release strategies. Let's be (fairly) brief and distill a few key points:

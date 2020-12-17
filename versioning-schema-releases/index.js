@@ -3,6 +3,7 @@ const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
+const { stitchingDirectivesTransformer } = stitchingDirectives();
 const SchemaRegistry = require('./lib/schema_registry');
 const makeRemoteExecutor = require('./lib/make_remote_executor');
 const makeRegistrySchema = require('./services/registry/schema');
@@ -36,7 +37,6 @@ const registry = new SchemaRegistry({
     }
   ],
   buildSchema: async (services) => {
-    const { stitchingDirectivesTransformer } = stitchingDirectives();
     const subschemas = services.map(({ url, sdl }) => ({
       schema: buildSchema(sdl),
       executor: makeRemoteExecutor(url, { timeout: 5000 }),
@@ -50,6 +50,15 @@ const registry = new SchemaRegistry({
     return stitchSchemas({
       subschemaConfigTransforms: [stitchingDirectivesTransformer],
       subschemas,
+      // Includes a "reload" mutation directly in the gateway proxy layer...
+      // allows a reload to be triggered manually rather than just by polling
+      // (filter this mutation out of public APIs!)
+      typeDefs: 'type Mutation { _reloadGateway: Boolean! }',
+      resolvers: {
+        Mutation: {
+          _reloadGateway: async () => !!await registry.reload()
+        }
+      }
     });
   }
 });
