@@ -1,0 +1,11 @@
+type Product {
+  categoryId: ID
+  metadataIds: [ID!]
+  name: String!
+  price: Float!
+  upc: ID!
+}
+
+type Query {
+  products(upcs: [ID!]!): [Product]!
+}

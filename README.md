@@ -40,9 +40,11 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Selecting nullability for merged fields.
   - Returning nullable and not-nullable results.
 
-- **Chapter 7 - Computed fields**
+- **[Chapter 7 - Computed fields](./computed-fields)**
 
-  - tktk
+  - Configuring computed fields.
+  - Sending complex inputs to subservices.
+  - Normalizing subservice deprecations in the gateway.
 
 - **[Chapter 8 - Federation services](./federation-services)**
 

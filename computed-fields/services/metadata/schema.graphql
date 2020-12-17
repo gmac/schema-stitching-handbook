@@ -1,0 +1,42 @@
+type Category {
+  id: ID!
+  name: String!
+}
+
+interface Metadata {
+  id: ID!
+  name: String!
+}
+
+type GeoLocation implements Metadata {
+  id: ID!
+  name: String!
+  lat: Float!
+  lon: Float!
+}
+
+type SportsTeam implements Metadata {
+  id: ID!
+  name: String!
+  location: GeoLocation
+}
+
+type TelevisionSeries implements Metadata {
+  id: ID!
+  name: String!
+  season: Int
+}
+
+type Product {
+  category: Category @deprecated(reason: "gateway access only")
+  metadata: [Metadata] @deprecated(reason: "gateway access only")
+}
+
+input ProductKey {
+  categoryId: ID
+  metadataIds: [ID!]
+}
+
+type Query {
+  _products(keys: [ProductKey!]!): [Product]!
+}
