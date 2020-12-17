@@ -152,21 +152,7 @@ module.exports = class SchemaRegistry {
     return this.remoteVersion;
   }
 
-  async loadStaticRegistry() {
-    const { stitchingDirectivesTypeDefs } = stitchingDirectives();
-    return this.endpoints.map(async (service) => {
-      return {
-        name: service.name,
-        url: service.url.production,
-        sdl: `
-          ${stitchingDirectivesTypeDefs}
-          ${readFileSync(__dirname, `../services/${service.name}/schema.graphql`)}
-        `,
-      };
-    });
-  }
-
-  async loadRemoteRegistry() {
+  async loadRemoteSchemas() {
     const urlPattern = /# url: ([^\n]+)\n/;
     const { data } = await this.client.graphql({
       document: FETCH_REGISTRY_FILES,
@@ -191,6 +177,23 @@ module.exports = class SchemaRegistry {
     }));
   }
 
+  // Load schemas for initial production startup...
+  // ideally loads from a local cache, rather than relying on a remote source
+  async loadStartupSchemas() {
+    // If you use your gateway app's repo as the schema registry,
+    // then you can simply read schemas from the local source during startup:
+
+    // return this.endpoints.map(async (service) => {
+    //   return {
+    //     name: service.name,
+    //     url: service.url.production,
+    //     sdl: readFileSync(__dirname, `../${this.registryPath}/${service.name}.graphql`)
+    //   };
+    // });
+
+    return this.loadRemoteSchemas();
+  }
+
   async loadDevSchemas() {
     return Promise.all(this.endpoints.map(async (service) => {
       const url = service.url[this.env];
@@ -203,19 +206,19 @@ module.exports = class SchemaRegistry {
   }
 
   async reload() {
-    if (this.env === 'production' && !this.services.length) {
-      // initial startup in production mode... load schema from a static cache
-      // (useful when registry shares a repo with gateway application code)
-      // could also use `loadRemoteRegistry` if we trust its availability.
-      this.services = await this.loadStaticRegistry();
-      this.schema = await this.buildSchema(this.services);
+    if (this.env === 'production') {
+      if (!this.schema) {
+        // initial startup in production environment...
+        // ideally reads schemas from a local cache rather than relying on a remote source
+        this.services = await this.loadStartupSchemas();
+        this.schema = await this.buildSchema(this.services);
 
-    } else if (this.env === 'production' && (!this.remoteVersion || this.remoteVersion !== await this.getRemoteVersion())) {
-      // subsequent production reload (polling update, API refresh request)
-      // attempt to reload from the remote registry.
-      this.services = await this.loadRemoteRegistry();
-      this.schema = await this.buildSchema(this.services);
-
+      } else if (!this.remoteVersion || this.remoteVersion !== await this.getRemoteVersion()) {
+        // subsequent production reload (polling update, API refresh request)
+        // attempt to reload from the remote schema registry
+        this.services = await this.loadRemoteSchemas();
+        this.schema = await this.buildSchema(this.services);
+      }
     } else {
       this.services = await this.loadDevSchemas();
       this.schema = await this.buildSchema(this.services);
