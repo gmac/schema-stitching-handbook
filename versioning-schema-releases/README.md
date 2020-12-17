@@ -145,10 +145,12 @@ The best release strategies will always deploy updated subservices quietly behin
 
 1. Deploy all updated subservices while keeping existing subservice features operational.
 2. Push all updated subservice schemas to the gateway as a single cutover.
-3. Decomission old subservices, and/or outdated subservice features.
+3. Decommission old subservices, and/or outdated subservice features.
 
 ### Versioning subschemas with gateway code is a neat idea
 
-Stitching offers a rich toolkit of features with which to assemble your combined gateway schema. This extensibility is a great feature of stitching, but also means you should tailor your own test coverage to the design of your application. Among the most effective ways to do this is to version your subschemas and gateway code in proximity of one another using a shared repo or submodules. This allows your schemas to run integration tests using your real application code, versus relying on a representational gateway test harness. This also allows your gateway application to still start itself up in the event of a registry service outage, even if it can't live-update itself until the registry service is restored.
+Keeping your subschemas and gateway code versioned in proximity of one another using a shared repo or submodules actually solves a lot of problems:
 
-Also as the size of your service cluster grows, you'll inevitably want to run development environments with only select subservices running. As long as your development gateway has easy access to the schema registry, it can always build its full schema and run with missing or mocked subservices (requests to missing subservices will simply fail). The example code in this chapter purposely keeps to basic design patterns that may be adapted to more specific needs.
+- Test coverage can be tailored to your application design; subschemas are composed together and run integration tests using your real application code, versus relying on a representational gateway test harness.
+- The production gateway may start itself up using a local copy of subschemas, versus relying on the availablity of a remote registry. In the event of a registry outage, the gateway is only ever blocked from performing live updates. It can always be redeployed and restarted safely.
+- Development environments can be run with only select subservices running (this is extremely important as your service cluster grows). The rest of the gateway schema can then be filled in with mocked subschemas from the local registry.
