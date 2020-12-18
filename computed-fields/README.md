@@ -86,9 +86,7 @@ merge: {
 }
 ```
 
-In this pattern, the `category` and `metadata` fields each specify _field-level selection sets_; these selection sets will only be collected from other services when the associated field is request. The results of these selection sets are built into an object key and sent off to the Metadata service to be built into its version of the `Product` type:
-
-**metadata schema:**
+In this pattern, the `category` and `metadata` fields each specify _field-level selection sets_; these selection sets will only be collected from other services when the associated field is request. The results of these selection sets are built into an object key and sent off to the Metadata service to be resolved into its version of the `Product` type:
 
 ```graphql
 type Product {
@@ -105,3 +103,11 @@ type Query {
   _products(keys: [ProductKey!]!): [Product]!
 }
 ```
+
+### Resolving `metadata` as a computed field 
+
+The `metadata` field is a pretty good candidate as a computed field.
+
+Looking at the way associations are structured, the Products service holds metadata record IDs without any associated type information. Therefore, it has little choice but to send these untyped IDs over to their origin service to be resolved into type objects. In this case, computed fields are a solution to what is inherently a shortcoming in the data model&mdash;ideally the entire `product<->metadata` association table would migrate over to the Metadata service where both ID and type information is available.
+
+Even if the Product service did have both ID and type information available, there may still be merit having the Metadata service _internalize_ the `Product` type rather than _externalizing_ all of the bespoke Metadata types.
