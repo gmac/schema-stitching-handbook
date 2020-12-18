@@ -28,8 +28,8 @@ type TelevisionSeries implements Metadata {
 }
 
 type Product {
-  category: Category @deprecated(reason: "gateway access only")
-  metadata: [Metadata] @deprecated(reason: "gateway access only")
+  category: Category @deprecated(reason: "gateway access only") # @computed(selectionSet: "{ categoryId }")
+  metadata: [Metadata] @deprecated(reason: "gateway access only") # @computed(selectionSet: "{ metadataIds }")
 }
 
 input ProductKey {

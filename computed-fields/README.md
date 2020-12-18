@@ -6,7 +6,7 @@ Computed fields involve selecting data from various services, and then sending t
 
 _In general, computed fields are most appropraite when:_
 
-- A service holds foreign keys without their associated type information (i.e. a service knows an ID but doesn't know its type). In these cases, the keys can be sent to a remote service to be resolved into typed objects.
+- A service holds foreign keys without their associated type information (i.e.: a service knows an ID but doesn't know its type). In these cases, the keys can be sent to a remote service to be resolved into typed objects.
 - A service manages a collection of bespoke GraphQL types that are of no concern to the rest of the service architecture. In such cases, it may make sense to encapsulate the service by sending external types _in_ for data rather than releasing its types _out_ into the greater service architecture.
 
 _However, computed fields have several distinct disadvantages:_
@@ -96,8 +96,8 @@ _metadata schema:_
 
 ```graphql
 type Product {
-  category: Category
-  metadata: [Metadata]
+  category: Category # @computed(selectionSet: "{ categoryId }")
+  metadata: [Metadata] # @computed(selectionSet: "{ metadataIds }")
 }
 
 input ProductKey {
@@ -165,4 +165,4 @@ stitchSchemas({
 });
 ```
 
-The `RemoveObjectFieldDeprecations` transform will un-deprecate these fields within the gateway schema. The subservice-level deprecations at least offer some insight on why certain fields don't work when accessed directly.
+The `RemoveObjectFieldDeprecations` transform will un-deprecate these fields within the gateway schema. The subservice-level deprecations at least offer some insight as to why certain fields don't work when accessed directly.
