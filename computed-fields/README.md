@@ -70,4 +70,38 @@ query {
 }
 ```
 
-tktk
+The `category` and `metadata` associations come from the Metadata service, and are merged with Products service data using computed fields:
+
+```js
+merge: {
+  Product: {
+    computedFields: {
+      category: { selectionSet: '{ categoryId }' },
+      metadata: { selectionSet: '{ metadataIds }' },
+    },
+    fieldName: '_products',
+    key: ({ categoryId, metadataIds }) => ({ categoryId, metadataIds }),
+    argsFromKeys: (keys) => ({ keys }),
+  }
+}
+```
+
+In this pattern, the `category` and `metadata` fields each specify _field-level selection sets_; these selection sets will only be collected from other services when the associated field is request. The results of these selection sets are built into an object key and sent off to the Metadata service to be built into its version of the `Product` type:
+
+**metadata schema:**
+
+```graphql
+type Product {
+  category: Category
+  metadata: [Metadata]
+}
+
+input ProductKey {
+  categoryId: ID
+  metadataIds: [ID!]
+}
+
+type Query {
+  _products(keys: [ProductKey!]!): [Product]!
+}
+```
