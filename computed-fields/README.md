@@ -104,10 +104,26 @@ type Query {
 }
 ```
 
-### Resolving `metadata` as a computed field 
+### Resolving metadata
 
 The `metadata` field is a pretty good candidate as a computed field.
 
-Looking at the way associations are structured, the Products service holds metadata record IDs without any associated type information. Therefore, it has little choice but to send these untyped IDs over to their origin service to be resolved into type objects. In this case, computed fields are a solution to what is inherently a shortcoming in the data model&mdash;ideally the entire `product<->metadata` association table would migrate over to the Metadata service where both ID and type information is available.
+Looking at the way associations are structured, the Products service holds metadata record IDs without any associated type information. Therefore, it has little choice but to send these untyped IDs over to their origin service to be resolved into type objects (this is inherently a shortcoming in the data model&mdash;in a perfect solution, all `product<->metadata` association data would migrate over to the Metadata service where both ID and type information is available).
 
-Even if the Product service did have both ID and type information available, there may still be merit having the Metadata service _internalize_ the `Product` type rather than _externalizing_ all of the bespoke Metadata types.
+Even if the Product service did have all association data available, there may still be merit in having the Metadata service _internalize_ the `Product` type rather than _externalizing_ all of the bespoke Metadata types. Encapsulation of concerns is a valid factor to weigh against implementation complexity.
+
+### Resolving category
+
+The `catagory` field is a needlessly complex association going through computed fields. It could just as easily use a [basic foreign key pattern](../type-merging-single-records) in the Products service, which would eliminate the unsightly `categoryId` field from its schema:
+
+```graphql
+type Product {
+  ...
+  # categoryId: ID << remove this
+  category: Category
+}
+
+type Category {
+  id: ID!
+}
+```
