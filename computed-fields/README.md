@@ -2,7 +2,7 @@
 
 This example demonstrates the core techniques for passing field dependencies between subservices, covering most of the topics discussed in the official [computed fields documentation](https://www.graphql-tools.com/docs/stitch-type-merging#computed-fields).
 
-Computed fields involve selecting data from various services, and then sending that data as input into another service that internally computes a result upon it. If you're familiar with the `_entities` query of the [Apollo Federation spec](https://www.apollographql.com/docs/federation/federation-spec/#query_entities), computed fields work pretty much the same way. Computed fields are fairly complex and therefore not a preferred solution in schema stitching for basic needs. However, they can solve some tricky problems involving the directionality of foreign keys.
+Computed fields involve selecting data from various services, and then sending that data as input into another service that internally computes a result upon it. If you're familiar with the `_entities` query of the [Apollo Federation spec](https://www.apollographql.com/docs/federation/federation-spec/#query_entities), computed fields work pretty much the same way. Computed fields are fairly complex and therefore not a preferred solution for basic needs. However, they can solve some tricky problems involving the directionality of foreign keys.
 
 _In general, computed fields are most appropraite when:_
 
@@ -11,8 +11,8 @@ _In general, computed fields are most appropraite when:_
 
 _However, computed fields have several distinct disadvantages:_
 
-- A subservice with computed fields cannot independently resolve its complete schema without input from other services. Outside of the gateway context where services are linked together, computed fields are left as defunct holes in a subschema.
-- Computed fields rely on passing complex object keys between services, versus primitive scalar keys. While a primitive key may be recognized as empty and therefore skip requesting data, complex object keys are always seen as truthy values even if their _contents_ are empty. Thus, the gateway is forced to always request data on their behalf, even for predictably empty results.
+- A subservice with computed fields cannot independently resolve its full schema without input from other services. This means computed fields are defunct holes in a subschema unless accessed through the gateway with dependencies satisfied.
+- Computed fields rely on passing complex object keys between services rather than primitive scalar keys. Where a primitive key may be recognized as empty and therefore skip requesting data, complex object keys are always seen as truthy values even if their _contents_ are empty. Thus, the gateway is forced to always request data on their behalf, even for predictably empty results.
 
 **This example demonstrates:**
 

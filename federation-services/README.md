@@ -101,3 +101,18 @@ How each system handles origins informs how a federation service gets translated
 1. All fields with a `@requires` directive are made into computed fields.
 1. All fields with an `@external` directive are removed _unless they are part of the `@key`_. Stitching expects schemas to only publish fields that they actually have data for. This is considerably simpler than the federation approach where services may be responsible for data they don't have.
 1. By eliminating the indirection of `@external` fields, the `@provides` directive is no longer necessary. Stitching's query planner can automate the optimial selection of as many fields as possible from as few services as possible.
+
+### Adapting Federation SDLs
+
+Federation SDLs can also be translated directly into [stitching SDLs](../stitching-directives-sdl) following roughly the same process as above:
+
+1. Prepend stitching directives type definition string.
+1. `@key(fields: "id")` becomes `@key(selectionSet: "{ id }")`
+1. `@requires(fields: "weight")` becomes `@computed(selectionSet: "{ weight }")`
+1. Fields with an `@external` directive are removed from the schema _unless they are part of the `@key`_.
+1. `@external` directives are discarded.
+1. `@provides` directives are discarded.
+1. Find the names of all types marked with `@key`. If there are one or more names:
+  * Add an `_Any` scalar.
+  * Add an `_Entity` union populated with all `@key` type names.
+  * Add an `_entities(representations: [_Any!]!): [_Entity]! @merge` query.

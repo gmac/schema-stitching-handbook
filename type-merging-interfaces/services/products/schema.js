@@ -12,11 +12,11 @@ const products = [
   { id: '5', name: 'iOS Survival Guide', price: 24.99 },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    products: (root, { ids }) => ids.map(id => products.find(p => p.id === id) || new NotFoundError()),
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      products: (root, { ids }) => ids.map(id => products.find(p => p.id === id) || new NotFoundError()),
+    }
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});

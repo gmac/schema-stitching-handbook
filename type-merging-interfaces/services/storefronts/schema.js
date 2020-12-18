@@ -31,23 +31,23 @@ const productDeals = [
   { id: '2', name: 'Best Sellers', price: 19.99, productIds: ['3', '4'] },
 ];
 
-// graphql resolvers
-const resolvers = {
-  Query: {
-    storefront: (root, { id }, _, info) => storefronts.find(s => s.id === id) || new NotFoundError(),
-  },
-  Storefront: {
-    products(storefront) {
-      return storefront.productOfferKeys.map(key => {
-        const [__typename, id] = key.split(':');
-        const obj = __typename === 'Product' ? { id } : productDeals.find(d => d.id === id);
-        return  obj ? { __typename, ...obj } : new NotFoundError();
-      });
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+    },
+    Storefront: {
+      products(storefront) {
+        return storefront.productOfferKeys.map(key => {
+          const [__typename, id] = key.split(':');
+          const obj = __typename === 'Product' ? { id } : productDeals.find(d => d.id === id);
+          return  obj ? { __typename, ...obj } : new NotFoundError();
+        });
+      }
+    },
+    ProductDeal: {
+      products: (deal) => deal.productIds.map(id => ({ id })),
     }
-  },
-  ProductDeal: {
-    products: (deal) => deal.productIds.map(id => ({ id })),
   }
-};
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+});
