@@ -77,7 +77,7 @@ That means the gateway performed three rounds of resolution for each service's d
 
 ### Batching
 
-While the gateway performed four _rounds_ of resolution, it actually had to perform a single subschema delegation (or, proxy) _per record_ in each round because we're only fetching one record at a time. This is both expensive for the gateway to process, and for the subservice to fulfill. Thankfully, stitching has a built-in solution for the later inefficiency. Clear your gateway terminal log and run the following query in GraphiQL:
+While the gateway performed three _rounds_ of resolution, it actually had to perform a single subschema delegation (or, proxy) _per record_ in each round because we're only fetching one record at a time. This is both expensive for the gateway to process, and for the subservice to fulfill. Thankfully, stitching has a built-in solution for the later inefficiency. Clear your gateway terminal log and run the following query in GraphiQL:
 
 ```graphql
 query {
@@ -154,4 +154,4 @@ query ($graphqlTools0__v0_upc: ID!, $graphqlTools1__v0_upc: ID!, $graphqlTools2_
 
 Now we're sending a **single request** that resolves all three single-record queries at once, courtesy of [batched execution](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching). There are very few reasons NOT to enable this free batching optimization (it will be enabled by default in the future).
 
-Batch execution is superb for optimizing the exchange with the subservices. However, there are still overhead processing costs on the gateway for delegating each record individually, so batch execution alone is not a perfect solution. The best optimization strategy is to pair batch execution with delegating arrays of records at a time, as discussed in [chapter three](../03-array-batched-type-merging).
+Batch execution is superb for optimizing the exchange with the subservices. However, there are still overhead processing costs on the gateway for delegating each record individually, so batch execution alone is not a perfect solution. The best optimization strategy is to pair batch execution with delegating [arrays of records](../type-merging-arrays) at a time.
