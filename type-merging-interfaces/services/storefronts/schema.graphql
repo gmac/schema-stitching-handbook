@@ -16,7 +16,7 @@ type ProductDeal implements ProductOffering {
 type Storefront {
   id: ID!
   name: String!
-  products: [ProductOffering]!
+  productOfferings: [ProductOffering]!
 }
 
 type Query {

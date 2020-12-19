@@ -35,10 +35,11 @@ module.exports = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
-      storefront: (root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
+      storefront: (_root, { id }) => storefronts.find(s => s.id === id) || new NotFoundError(),
     },
     Storefront: {
-      products(storefront) {
+      productOfferings(storefront, _args, _ctx, info) {
+        console.log(require('graphql').print(info.operation))
         return storefront.productOfferKeys.map(key => {
           const [__typename, id] = key.split(':');
           const obj = __typename === 'Product' ? { id } : productDeals.find(d => d.id === id);
