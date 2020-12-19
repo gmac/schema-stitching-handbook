@@ -6,7 +6,7 @@
 
 This example explores the core techniques for merging typed objects across subschemas using single-record queries, covering most of the topics discussed in the [documented basic example](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example).
 
-Using single-record queries means that every record accessed requires a _dedicated_ subschema delegation, versus a single delegation for an entire set of records. This 1:1 delegation strategy has far greater overhead than the array-batched technique discussed in [chapter three](../03-array-batched-type-merging). However&mdash;it's still useful when interacting with services beyond our control, and it's an excellent way to observe the behavior of [execution batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching).
+Using single-record queries means that every record accessed requires a _dedicated_ subschema delegation, versus a single delegation for an entire set of records. This 1:1 delegation strategy has far greater overhead than the array-batched technique discussed in the [merged arrays chapter](../type-merging-arrays). However&mdash;it's still useful when interacting with services beyond our control, and it's an excellent way to observe the behavior of [execution batching](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching).
 
 **This example demonstrates:**
 
