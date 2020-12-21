@@ -4,12 +4,12 @@ This example demonstrates the core techniques for passing field dependencies bet
 
 Computed fields involve selecting data from various services, and then sending that data as input into another service that internally computes a result upon it. If you're familiar with the `_entities` query of the [Apollo Federation spec](https://www.apollographql.com/docs/federation/federation-spec/#query_entities), computed fields work pretty much the same way. Computed fields are fairly complex and therefore not a preferred solution for basic needs. However, they can solve some tricky problems involving the directionality of foreign keys.
 
-_In general, computed fields are most appropraite when:_
+In general, computed fields are most appropraite when:
 
 - A service holds foreign keys without their associated type information (i.e.: a service knows an ID but doesn't know its type). In these cases, the keys can be sent to a remote service to be resolved into typed objects.
 - A service manages a collection of bespoke GraphQL types that are of no concern to the rest of the service architecture. In such cases, it may make sense to encapsulate the service by sending external types _in_ for data rather than releasing its types _out_ into the greater service architecture.
 
-_However, computed fields have several distinct disadvantages:_
+However, computed fields have several distinct disadvantages:
 
 - A subservice with computed fields cannot independently resolve its full schema without input from other services. This means computed fields are defunct holes in a subschema unless accessed through the gateway with dependencies satisfied.
 - Computed fields rely on passing complex object keys between services rather than primitive scalar keys. Where a primitive key may be recognized as empty and therefore skip requesting data, complex object keys are always seen as truthy values even if their _contents_ are empty. Thus, the gateway is forced to always request data on their behalf, even for predictably empty results.
