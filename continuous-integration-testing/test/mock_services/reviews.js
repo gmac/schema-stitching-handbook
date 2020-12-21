@@ -15,9 +15,6 @@ module.exports = {
     },
     User: {
       reviews: (u) => reviews.filter(r => r.author.id === u.id),
-    },
-  },
-  mocks: {
-    Int: () => 7,
+    }
   }
 };

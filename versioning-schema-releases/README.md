@@ -3,7 +3,7 @@
 This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't prohibitively difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). Using a Git repo actually offers several distinct advantages:
 
 - Multiple subservice schemas may be composed on a branch together and released at once, affording the opportunity for hard schema cutovers across multiple services.
-- Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using [continuous integration services](https://docs.github.com/en/free-pro-team@latest/actions). In fact, versioning subschemas _in your gateway app's repo_ allows CI to run tests using both your release candidate schemas and your actual gateway server code.
+- Comprehensive test suites may be written to assure the integrity of the composed gateway schema, and can easily run using [continuous integration services](../continuous-integration-testing). In fact, versioning subschemas _in your gateway app's repo_ allows CI to run tests using both your release candidate schemas and your actual gateway server code.
 - Git is a defacto-standard tool with numerous frontends available, and can be adapted to meet virtually any versioning and deployment need.
 
 **This example demonstrates:**
@@ -11,6 +11,10 @@ This example demonstrates using a GitHub repo as a central registry that coordin
 - Using GitHub API to manage a simple schema registry.
 - Hot reloading from a remote Git repo.
 - Running development and production environments.
+
+**Related examples:**
+
+- See [continuous integration testing](../continuous-integration-testing) for ideas on testing your versioned subschemas.
 
 ## Setup
 
@@ -163,6 +167,6 @@ The best release strategies will always deploy updated subservices quietly behin
 
 Keeping your subschemas and gateway code versioned in proximity of one another using a shared repo or submodules actually solves a lot of problems:
 
-- Test coverage can be tailored to your application design; subschemas are composed together and run integration tests using your real application code, versus relying on a representational gateway test harness.
+- Test coverage can be tailored to your application design; subschemas are composed together and [run integration tests](../continuous-integration-testing) using your real application code, versus relying on a representational gateway test harness.
 - The production gateway may start itself up using a local copy of subschemas, versus relying on the availablity of a remote registry. In the event of a registry outage, the gateway is only ever blocked from performing live updates. It can always be redeployed and restarted safely.
 - Development environments can be run with only select subservices running (this is extremely important as your service cluster grows). The rest of the gateway schema can then be filled in with mocked subschemas from the local registry.
