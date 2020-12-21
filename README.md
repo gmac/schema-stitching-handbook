@@ -68,9 +68,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Hot reloading from a remote Git registry.
   - Running development and production environments.
 
-- **Chapter 12 - Continuous Integration (CI) testing**
+- **[Chapter 12 - Continuous Integration (CI) testing](./continuous-integration-testing)**
 
-  - tktk
+  - Adding test coverage to a stitched schema.
+  - Mocking subservices as local test fixtures.
 
 - **Appendices**
 
