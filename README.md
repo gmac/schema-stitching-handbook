@@ -71,7 +71,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 - **[Chapter 12 - Continuous Integration (CI) testing](./continuous-integration-testing)**
 
   - Adding test coverage to a stitched schema.
-  - Mocking subservices.
+  - Mocking subservices as local test fixtures.
 
 - **Appendices**
 
