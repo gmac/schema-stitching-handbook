@@ -1,0 +1,25 @@
+{
+  "name": "stitching-directives-sdl",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start-service-accounts": "nodemon -e js,graphql services/accounts/index.js",
+    "start-service-inventory": "nodemon -e js,graphql services/inventory/index.js",
+    "start-service-products": "nodemon -e js,graphql services/products/index.js",
+    "start-service-reviews": "nodemon -e js,graphql services/reviews/index.js",
+    "start-service-gateway": "nodemon -e js,graphql index.js",
+    "start-services": "concurrently \"yarn:start-service-*\""
+  },
+  "dependencies": {
+    "@graphql-tools/schema": "alpha",
+    "@graphql-tools/stitch": "alpha",
+    "@graphql-tools/stitching-directives": "alpha",
+    "concurrently": "^5.3.0",
+    "cross-fetch": "^3.0.6",
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.4.0",
+    "nodemon": "^2.0.6"
+  }
+}
