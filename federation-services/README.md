@@ -93,7 +93,7 @@ The stitched gateway has loaded all federation SDLs, adapted their directives in
 Federation and Stitching use fundamentally similar patterns to combine underlying subservices (in fact, both tools have shared origins in [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/)). However, their specific implementations have an important differentiator:
 
 - **Apollo Federation uses a _centralized_ approach**, where all types have a single "origin" service (i.e.: where the unextended type definition is). Querying for a type always starts from its origin and builds out to its remote extensions.
-- **Stitching uses a _decentralized_ approach**, where any service may originate any type. Regardless of where a typed object is first represented, that original object may be filled in with missing details from other services.
+- **Stitching uses a _decentralized_ approach**, where any service may equally originate any type. Regardless of where a typed object is first represented, that original object may be filled in with missing details from other services.
 
 How each system handles origins informs how a federation service gets translated into a stitched subschema:
 

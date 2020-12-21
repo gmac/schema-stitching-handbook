@@ -1,0 +1,14 @@
+directive @key(selectionSet: String!) on OBJECT
+directive @merge(keyField: String, keyArg: String, additionalArgs: String, key: [String!], argsExpr: String) on FIELD_DEFINITION
+directive @computed(selectionSet: String!) on FIELD_DEFINITION
+
+type User @key(selectionSet: "{ id }") {
+  id: ID!
+  name: String!
+  username: String!
+}
+
+type Query {
+  user(id: ID!): User @merge(keyField: "id")
+  _sdl: String!
+}
