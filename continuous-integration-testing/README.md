@@ -1,6 +1,6 @@
 # Chapter 12 – Continuous Integration Testing
 
-This example demonstrates setting up test coverage for a stitched schema. Like all application code, sitched schemas are subject to development errors and therefore should also be tested rigourously through a continuous integration pipeline while [versioning schema releases](../versioning-schema-releases).
+This example demonstrates setting up test coverage for a stitched schema. Like all application code, sitched schemas are subject to development errors and therefore should also be tested rigorously through a continuous integration pipeline while [versioning schema releases](../versioning-schema-releases).
 
 Effective test coverage happens at two levels:
 
