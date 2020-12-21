@@ -4,25 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-service-gateway": "nodemon index.js",
-    "start-service-inventory": "nodemon -e js,graphql services/inventory/index.js",
-    "start-service-products": "nodemon -e js,graphql services/products/index.js",
-    "start-development": "concurrently \"yarn:start-service-*\"",
-    "start-production": "NODE_ENV=production node index.js",
+    "start-gateway": "node index.js",
     "test": "jest test"
   },
   "dependencies": {
-    "@graphql-tools/mock": "^7.0.0",
-    "@graphql-tools/schema": "^7.0.0",
     "@graphql-tools/stitch": "^7.0.4",
     "@graphql-tools/stitching-directives": "^1.0.0",
-    "abort-controller": "^3.0.0",
-    "concurrently": "^5.3.0",
     "cross-fetch": "^3.0.6",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
-    "graphql": "^15.4.0",
-    "jest": "^26.6.3",
-    "nodemon": "^2.0.6"
+    "graphql": "^15.4.0"
+  },
+  "devDependencies": {
+    "@graphql-tools/mock": "^7.0.0",
+    "@graphql-tools/schema": "^7.0.0",
+    "@graphql-tools/utils": "^7.1.6",
+    "jest": "^26.6.3"
   }
 }

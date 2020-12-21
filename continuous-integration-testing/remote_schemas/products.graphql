@@ -1,5 +1,3 @@
-# url: https://localhost:4002/graphql?env=production
-
 directive @key(selectionSet: String!) on OBJECT
 directive @merge(keyField: String, keyArg: String, additionalArgs: String, key: [String!], argsExpr: String) on FIELD_DEFINITION
 directive @computed(selectionSet: String!) on FIELD_DEFINITION
@@ -12,7 +10,6 @@ type Product @key(selectionSet: "{ upc }") {
 }
 
 type Query {
-  topProducts(first: Int = 2): [Product]!
   products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
   _sdl: String!
 }
