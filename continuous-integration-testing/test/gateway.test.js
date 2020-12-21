@@ -4,11 +4,14 @@ describe('gateway schema', () => {
 
   const USER_QUERY = `{
     user(id: "1") {
+      # id << must work without this selected
       name
       username
       reviews {
+        # id << must work without this selected
         body
         product {
+          # upc << must work without this selected
           name
           price
           weight
@@ -39,12 +42,15 @@ describe('gateway schema', () => {
 
   const REVIEW_QUERY = `{
     review(id: "1") {
+      # id << must work without this selected
       body
       author {
+        # id << must work without this selected
         name
         username
       }
       product {
+        # upc << must work without this selected
         name
         price
         weight
@@ -74,12 +80,15 @@ describe('gateway schema', () => {
 
   const PRODUCTS_QUERY = `{
     products(upcs: ["2"]) {
+      # upc << must work without this selected
       name
       price
       weight
       reviews {
+        # id << must work without this selected
         body
         author {
+          # id << must work without this selected
           name
           username
         }
