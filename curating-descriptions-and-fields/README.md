@@ -1,4 +1,4 @@
-# Chapter 13 – Curating descriptions &amp; public fields
+# Curating descriptions &amp; public fields
 
 This example demonstrates curating element descriptions and public fields to ensure that the final stitched gateway is clean and well-documented. This includes some topics from the official [automatic merge documentation](https://www.graphql-tools.com/docs/stitch-combining-schemas#automatic-merge).
 
