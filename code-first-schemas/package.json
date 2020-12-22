@@ -12,14 +12,15 @@
     "start-services": "concurrently \"yarn:start-service-*\""
   },
   "dependencies": {
-    "@graphql-tools/schema": "^7.2.0-alpha-bacafb47.0",
-    "@graphql-tools/stitch": "^7.1.7-alpha-bacafb47.0",
-    "@graphql-tools/stitching-directives": "alpha",
+    "@graphql-tools/schema": "^7.1.2",
+    "@graphql-tools/stitch": "^7.1.6",
+    "@graphql-tools/stitching-directives": "^1.1.0",
     "concurrently": "^5.3.0",
     "cross-fetch": "^3.0.6",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.4.0",
+    "nexus": "^1.0.0",
     "nodemon": "^2.0.6"
   }
 }

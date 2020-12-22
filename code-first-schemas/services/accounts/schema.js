@@ -43,7 +43,9 @@ accountsSchemaTypes.Query = new GraphQLObjectType({
     },
     _sdl: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve: (_root, _args, _context, info) => printSchemaWithDirectives(info.schema), 
+      resolve(_root, _args, _context, info) {
+        return printSchemaWithDirectives(info.schema);
+      } 
     },
   }),
 });
