@@ -35,7 +35,7 @@ You'll notice that the private gateway includes all artifacts of our original st
 
 Type and field descriptions are used as documentation in frontend clients like GraphiQL, and may also be used while generating API documentation websites. As such, maintaining good quality element descriptions is quite important, yet becomes extremely difficult as overlapping types and fields are spread across services maintained by different teams. How do we ensure that a robust "official" description in one service is not overridden by a shallow description added elsewhere in the future?
 
-One approach is to concatenate descriptions from across services. While this works, it often makes for repetitive and/or disorganized composites. A better solution may be to devise a system that annotates around canonical descriptions, for example:
+One approach is to concatenate descriptions from across services. While this works, it often makes for a repetitive and/or disorganized aggregate. A better solution may be to annotate around a canonical description, for example:
 
 ```graphql
 # IGNORE - documented in Accounts service
@@ -49,10 +49,10 @@ type User @key(selectionSet: "{ id }") {
 
 While these annotations are unsightly at the subservice level, they solve several problems:
 
-- Types and fields are identified as _deliberately_ undocumented so that they do not inadvertantly introduce competing descriptions that override the canonical ones.
-- The location of canonical descriptions are identified throughout the service architecture for all teams to reference.
+- Types and fields are identified as _deliberately undocumented_ so that they do not inadvertantly introduce a competing description in the future.
+- The location of canonical descriptions are observed throughout the service architecture for all teams to reference. Realistically, canonical descriptions probably won't change all that often.
 
-With these sorts of annotations in place, `typeMergingOptions` can define a programatic strategy for resolving type and field descriptions. For example, here we'll collect the first available description without an `IGNORE` prefix for each element across subschemas:
+With these sorts of annotations in place, `typeMergingOptions` can define a programatic strategy for resolving type and field descriptions. For example, here we'll collect the first available description without an `IGNORE` prefix for each element across subschemas. There are many ways this basic formula can be adapted to an organization's specific needs:
 
 ```js
 function compactDescription(obj) {
@@ -87,8 +87,6 @@ stitchSchemas({
 });
 ```
 
-There are many ways this basic formula can be adapted to an organization's specific needs.
-
 ### Filtering public fields
 
 The last step in composing a clean and elegant gateway schema is to remove internal implementation details that should not be made available to the general public. This is quite simple using `filterSchema` and `pruneSchema` helpers from GraphQL Tools utils:
@@ -104,7 +102,7 @@ const publicSchema = pruneSchema(filterSchema({
 }));
 ```
 
-Filtering a schema will remove unwanted elements, and pruning it will cleanup orphans. This results in two versions of our schema: the complete original schema, and the polished public schema. Each of these schemas may be served at their own endpoint, giving the public one polished experience, while the complete set of fields remains available for internal purposes at another location:
+Filtering a schema will remove unwanted elements, and pruning it will cleanup orphans. This results in two versions of our schema: the complete original schema, and the polished public schema. Each of these schemas may be served at their own endpoint&mdash;this gives public consumers one API with access limitations, while the complete set of fields remain available for internal purposes at another location:
 
 ```js
 const app = express();

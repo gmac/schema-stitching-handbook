@@ -29,7 +29,7 @@ The main focus of this example is the test suite itself. The basic server config
 
 ## Summary
 
-This example builds its test suite upon a strategic setup:
+This example builds a test suite around some organization strategies:
 
 1. Versioned copies of subservice schemas are available in the stitched gateway's repo. As discussed in [versioning schema releases](../versioning-schema-releases), there are numerous advantages to versioning published subservice schemas with the gateway application&mdash;among them being the ability to test subschemas and stitching code together.
 2. The `lib/schema_builder.js` code builds a stitched schema used by the production server _and the test suite_. In this example, subschema configs are built separately from the stitched schema; this allows tests to build subschema configs, adjust them for testing, and then build them into the stitched schema.
