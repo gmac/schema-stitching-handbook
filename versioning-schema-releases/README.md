@@ -1,4 +1,4 @@
-# Chapter 11 – Versioning schema releases
+# Versioning schema releases
 
 This example demonstrates using a GitHub repo as a central registry that coordinates the versioning and release of subschemas. Similar to the goals of [managed federation](https://www.apollographql.com/docs/federation/managed-federation/overview/), a central registry allows subschemas to be precomposed and tested together before releasing into production. This isn't prohibitively difficult to setup&mdash;a simple Git repo with some light code wrappings can generally get the job done as well or better than [hosted services](https://www.apollographql.com/docs/studio/getting-started/#1-create-your-account). Using a Git repo actually offers several distinct advantages:
 
@@ -143,7 +143,7 @@ mutation {
 }
 ```
 
-Of course, this sort of reload trigger **should not** be exposed in public APIs. You should [filter](https://www.graphql-tools.com/docs/api/modules/_packages_utils_src_filterschema_#filterschema) this sort of utility out of public-facing schemas, or use a separate non-GraphQL endpoint (such as a REST service) to trigger the action.
+Of course, this sort of reload trigger **should not** be exposed in public APIs. You should [remove this sort of utility](../curating-descriptions-and-fields) from public-facing schemas, or use a separate non-GraphQL endpoint (such as a REST service) to trigger the action.
 
 ## Summary
 

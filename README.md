@@ -4,7 +4,9 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 ## Table of Contents
 
-- **[Chapter 1 - Combining local and remote schemas](./combining-local-and-remote-schemas)**
+### Foundation
+
+- **[Combining local and remote schemas](./combining-local-and-remote-schemas)**
 
   - Adding a locally-executable schema.
   - Adding a remote schema, fetched via introspection.
@@ -12,74 +14,78 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **[Chapter 2 - Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
+- **[Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
 
   - Adding a remote mutation service.
   - Adding a remote subscription service.
   - Adding a subscriber proxy.
 
-- **[Chapter 3 - Single-record type merging](./type-merging-single-records)**
+- **[Single-record type merging](./type-merging-single-records)**
 
-  - One-way type merge using single-record queries.
-  - Multi-directional type merge using single-record queries.
+  - Type merging using single-record queries.
   - Query/execution batching.
 
-- **[Chapter 4 - Array-batched type merging](./type-merging-arrays)**
+- **[Array-batched type merging](./type-merging-arrays)**
 
-  - One-way type merge using array queries.
-  - Multi-directional type merge using array queries.
+  - Type merging using array queries.
   - Handling array errors.
   - Nullability & error remapping.
 
-- **[Chapter 5 - Cross-service interfaces](./type-merging-interfaces)**
+- **[Cross-service interfaces](./type-merging-interfaces)**
 
   - Distributing a GraphQL interface across services.
 
-- **[Chapter 6 - Nullable merges](./type-merging-nullables)**
+- **[Nullable merges](./type-merging-nullables)**
 
   - Selecting nullability for merged fields.
   - Returning nullable and not-nullable results.
 
-- **[Chapter 7 - Computed fields](./computed-fields)**
+- **[Computed fields](./computed-fields)**
 
   - Configuring computed fields.
   - Sending complex inputs to subservices.
   - Normalizing subservice deprecations in the gateway.
 
-- **[Chapter 8 - Federation services](./federation-services)**
+- **[Stitching directives SDL](./stitching-directives-sdl)**
 
-  - Integrating Apollo Federation services into a stitched schema.
-  - Fetching and parsing Federation SDLs.
+  - `@key` directive for type-level selection sets.
+  - `@merge` directive for type merging services.
+  - `@computed` directive for computed fields.
 
-- **[Chapter 9 - Stitching directives SDL](./stitching-directives-sdl)**
+### Architecture
 
-  - Use of the `@key`, `@merge`, and `@computed` directives to specify type merging configuration.
-
-- **[Chapter 10 - Hot schema reloading](./hot-schema-reloading)**
+- **[Hot schema reloading](./hot-schema-reloading)**
 
   - Hot reload of the combined gateway schema (no server restart).
   - Polling for remote subschema changes.
   - Mutations for adding/removing remote subservices.
   - Handling subservice request timeouts.
 
-- **[Chapter 11 - Versioning schema releases](./versioning-schema-releases)**
+- **[Versioning schema releases](./versioning-schema-releases)**
 
   - Using GitHub API to manage a simple schema registry.
   - Hot reloading from a remote Git registry.
   - Running development and production environments.
 
-- **[Chapter 12 - Continuous Integration (CI) testing](./continuous-integration-testing)**
+- **[Continuous Integration (CI) testing](./continuous-integration-testing)**
 
   - Adding test coverage to a stitched schema.
   - Mocking subservices as local test fixtures.
 
-- **[Chapter 13 - Grooming descriptions &amp; public fields](./grooming-descriptions-and-fields)**
+- **[Curating descriptions &amp; public fields](./curating-descriptions-and-fields)**
 
   - Selecting desired element descriptions from across subschemas.
   - Filtering unwanted fields from the final schema.
   - Serving public (filtered) and private (unfiltered) API versions.
 
-- **Appendices**
+### Other Integrations
 
-  - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
-  - [What is Query Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching)
+- **[Federation services](./federation-services)**
+
+  - Integrating Apollo Federation services into a stitched schema.
+  - Fetching and parsing Federation SDLs.
+
+### Appendices
+
+- [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
+- [What is Query Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching)

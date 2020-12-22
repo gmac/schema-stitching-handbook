@@ -33,7 +33,9 @@ You'll notice that the private gateway includes all artifacts of our original st
 
 ### Selecting element descriptions
 
-Type and field descriptions are used as documentation in frontend clients like GraphiQL, and may also be used while generating API documentation websites. As such, maintaining good quality element descriptions is quite important, yet becomes extremely difficult as overlapping types and fields are spread across services. You may want to devise an annotation system that denotes where the official descriptions for each type and field are written:
+Type and field descriptions are used as documentation in frontend clients like GraphiQL, and may also be used while generating API documentation websites. As such, maintaining good quality element descriptions is quite important, yet becomes extremely difficult as overlapping types and fields are spread across services maintained by different teams. How do we ensure that a robust "official" description in one service is not overridden by a shallow description added elsewhere in the future?
+
+One approach is to concatenate descriptions from across services. While this works, it often makes for repetitive and/or disorganized composites. A better solution may be to devise a system that annotates around canonical descriptions, for example:
 
 ```graphql
 # IGNORE - documented in Accounts service
@@ -44,6 +46,11 @@ type User @key(selectionSet: "{ id }") {
   reviews: [Review]
 }
 ```
+
+While these annotations are unsightly at the subservice level, they solve several problems:
+
+- Types and fields are identified as _deliberately_ undocumented so that they do not inadvertantly introduce competing descriptions that override the canonical ones.
+- The location of canonical descriptions are identified throughout the service architecture for all teams to reference.
 
 With these sorts of annotations in place, `typeMergingOptions` can define a programatic strategy for resolving type and field descriptions. For example, here we'll collect the first available description without an `IGNORE` prefix for each element across subschemas:
 
@@ -79,6 +86,8 @@ stitchSchemas({
   }
 });
 ```
+
+There are many ways this basic formula can be adapted to an organization's specific needs.
 
 ### Filtering public fields
 

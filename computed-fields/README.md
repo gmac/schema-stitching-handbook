@@ -1,4 +1,4 @@
-# Chapter 7 – Computed fields
+# Computed fields
 
 This example demonstrates the core techniques for passing field dependencies between subservices, covering most of the topics discussed in the official [computed fields documentation](https://www.graphql-tools.com/docs/stitch-type-merging#computed-fields).
 

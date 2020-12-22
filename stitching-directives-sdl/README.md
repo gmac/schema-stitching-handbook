@@ -1,6 +1,6 @@
-# Chapter 9 – Stitching directives SDL
+# Stitching directives SDL
 
-**Watch the [Chapter 9 Video](https://www.youtube.com/watch?v=dE9cJsxOLeQ)**
+**Watch the [chapter video](https://www.youtube.com/watch?v=dE9cJsxOLeQ)**
 
 [![Stitching Directives SDL](../images/video-player.png)](https://www.youtube.com/watch?v=dE9cJsxOLeQ)
 
@@ -13,7 +13,9 @@ Note: the service setup in this example is based on the [official demonstration 
 
 **This example demonstrates:**
 
-- Use of the @key, @computed and @merge directives to specify type merging configuration.
+- `@key` directive for type-level selection sets.
+- `@merge` directive for type merging services.
+- `@computed` directive for computed fields.
 
 ## Setup
 
