@@ -18,7 +18,7 @@ Note: the service setup in this example is based on the [official demonstration 
 ## Setup
 
 ```shell
-cd stitching-directives-with-code-first
+cd code-first-schemas
 
 yarn install
 yarn start-services
