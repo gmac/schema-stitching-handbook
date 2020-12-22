@@ -73,6 +73,12 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Adding test coverage to a stitched schema.
   - Mocking subservices as local test fixtures.
 
+- **[Chapter 13 - Grooming descriptions &amp; public fields](./grooming-descriptions-and-fields)**
+
+  - Selecting desired element descriptions from across subschemas.
+  - Filtering unwanted fields from the final schema.
+  - Serving public (filtered) and private (unfiltered) API versions.
+
 - **Appendices**
 
   - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
