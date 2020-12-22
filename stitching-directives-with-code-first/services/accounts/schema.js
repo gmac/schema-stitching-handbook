@@ -12,7 +12,7 @@ const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { printSchemaWithDirectives } = require('@graphql-tools/utils');
 const NotFoundError = require('../../lib/not_found_error');
 
-const { stitchingDirectives: directives, stitchingDirectivesValidator } = stitchingDirectives();
+const { allDirectives: directives, stitchingDirectivesValidator } = stitchingDirectives();
 
 const users = [
   { id: '1', name: 'Ada Lovelace', username: '@ada' },
