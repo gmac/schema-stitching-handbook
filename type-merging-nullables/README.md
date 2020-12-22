@@ -1,4 +1,4 @@
-# Chapter 6 – Nullable merges
+# Nullable merges
 
 This example demonstrates using nullable and not-null fields in merged data, as discussed in [null records documentation](https://www.graphql-tools.com/docs/stitch-type-merging#null-records).
 

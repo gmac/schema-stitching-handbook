@@ -1,6 +1,6 @@
-# Chapter 5 – Cross-service interfaces
+# Cross-service interfaces
 
-**Watch the [Chapter 5 Video](https://www.youtube.com/watch?v=wPB5oI_Tjik)**
+**Watch the [chapter video](https://www.youtube.com/watch?v=wPB5oI_Tjik)**
 
 [![Cross-service interfaces](../images/video-player.png)](https://www.youtube.com/watch?v=wPB5oI_Tjik)
 

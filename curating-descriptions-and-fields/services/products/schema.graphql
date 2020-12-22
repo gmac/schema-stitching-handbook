@@ -1,0 +1,17 @@
+""" Represents a retail product. """
+type Product @key(selectionSet: "{ upc }") {
+  """ The Univeral Product Code (UPC) of this product. """
+  upc: ID!
+  """ The name of this product. """
+  name: String!
+  """ The price of this product, in whole GBP (£). """
+  price: Int!
+  """ The weight of this product, in grams. """
+  weight: Int!
+}
+
+type Query {
+  """ Fetches an array of Products by their UPC references. """
+  products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
+  _sdl: String!
+}

@@ -1,4 +1,4 @@
-# Chapter 10 – Hot schema reloading
+# Hot schema reloading
 
 This example demonstrates reloading the combined gateway schema without restarting its server; a technique commonly known as a "hot" reload. This allows service schemas to be dyanmically added, removed, or updated in response to administrative actions or changes in service health.
 

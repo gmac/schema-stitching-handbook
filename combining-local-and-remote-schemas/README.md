@@ -1,6 +1,6 @@
-# Chapter 1 – Combining local and remote schemas
+# Combining local and remote schemas
 
-**Watch the [Chapter 1 Video](https://www.youtube.com/watch?v=8-mZqjgIdiI)**
+**Watch the [chapter video](https://www.youtube.com/watch?v=8-mZqjgIdiI)**
 
 [![Combining Schemas video](../images/video-player.png)](https://www.youtube.com/watch?v=8-mZqjgIdiI)
 

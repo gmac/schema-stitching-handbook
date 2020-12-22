@@ -1,4 +1,4 @@
-# Chapter 8 - Federation services
+# Federation services
 
 This example demonstrates the integration of [Apollo Federation services](https://www.apollographql.com/docs/federation/implementing-services/) into a stitched schema, as described in [Federation services documentation](https://www.graphql-tools.com/docs/stitch-type-merging#federation-services).
 

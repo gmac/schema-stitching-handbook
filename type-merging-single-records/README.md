@@ -1,6 +1,6 @@
-# Chapter 3 – Single-record type merging
+# Single-record type merging
 
-**Watch the [Chapter 3 Video](https://www.youtube.com/watch?v=KBACiSA5sEQ)**
+**Watch the [chapter video](https://www.youtube.com/watch?v=KBACiSA5sEQ)**
 
 [![Single-Record Type Merge video](../images/video-player.png)](https://www.youtube.com/watch?v=KBACiSA5sEQ)
 
@@ -10,8 +10,8 @@ Using single-record queries means that every record accessed requires a _dedicat
 
 **This example demonstrates:**
 
-- Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using single-record queries.
-- Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
+- [One-way type merging](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using single-record queries.
+- [Multi-directional type merging](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using single-record queries.
 - Query/execution batching.
 
 **Related examples:**

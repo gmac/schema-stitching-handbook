@@ -1,0 +1,35 @@
+""" Represents a review written by a User, for a Product. """
+type Review {
+  """ The primary key of this review. """
+  id: ID!
+  """ The review body, formatted as markdown text. """
+  body: String
+  """ The User that authored this review. """
+  author: User
+  """ The reviewed Product. """
+  product: Product
+}
+
+# IGNORE - documented in Accounts service
+type User @key(selectionSet: "{ id }") {
+  # IGNORE - documented in Accounts service
+  id: ID!
+  """ Reviews written by this user. """
+  reviews: [Review]
+}
+
+# IGNORE - documented in Products service
+type Product @key(selectionSet: "{ upc }") {
+  # IGNORE - documented in Products service
+  upc: ID!
+  """ Reviews written about this product. """
+  reviews: [Review]
+}
+
+type Query {
+  """ Fetches a Review by ID reference """
+  review(id: ID!): Review
+  _users(ids: [ID!]!): [User]! @merge(keyField: "id")
+  _products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
+  _sdl: String!
+}

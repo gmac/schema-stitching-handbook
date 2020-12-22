@@ -1,6 +1,6 @@
-# Chapter 4 – Array-batched type merging
+# Array-batched type merging
 
-**Watch the [Chapter 4 Video](https://www.youtube.com/watch?v=VmK0KBHTcWs)**
+**Watch the [chapter video](https://www.youtube.com/watch?v=VmK0KBHTcWs)**
 
 [![Array-batched Type Merge video](../images/video-player.png)](https://www.youtube.com/watch?v=VmK0KBHTcWs)
 
@@ -10,8 +10,8 @@ This example focuses on [array batching](https://github.com/gmac/schema-stitchin
 
 **This example demonstrates:**
 
-- Establishing a [one-way type merge](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using array queries.
-- Establishing a [multi-directional type merge](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
+- [One-way type merging](https://www.graphql-tools.com/docs/stitch-type-merging#unidirectional-merges) using array queries.
+- [Multi-directional type merging](https://www.graphql-tools.com/docs/stitch-type-merging#basic-example) using array queries.
 - Handling array errors.
 - Nullability & error remapping.
 
