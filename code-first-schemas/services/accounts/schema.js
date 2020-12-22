@@ -12,7 +12,7 @@ const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { printSchemaWithDirectives } = require('@graphql-tools/utils');
 const NotFoundError = require('../../lib/not_found_error');
 
-const { allDirectives: directives, stitchingDirectivesValidator } = stitchingDirectives();
+const { allStitchingDirectives, stitchingDirectivesValidator } = stitchingDirectives();
 
 const users = [
   { id: '1', name: 'Ada Lovelace', username: '@ada' },
@@ -66,7 +66,7 @@ accountsSchemaTypes.User = new GraphQLObjectType({
 
 const accountsSchema = new GraphQLSchema({
   query: accountsSchemaTypes.Query,
-  directives: [...specifiedDirectives, ...directives],
+  directives: [...specifiedDirectives, ...allStitchingDirectives],
 });
 
 module.exports = stitchingDirectivesValidator(accountsSchema);
