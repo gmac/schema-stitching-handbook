@@ -1,4 +1,4 @@
-# Chapter X – Stitching directives with Code-First Schemas
+# Stitching Directives with Code-First Schemas
 
 This example demonstrates the use of stitching directives to configure type merging, similar to the prior example, but uses code-first schemas instead of SDL.
 
