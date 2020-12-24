@@ -50,7 +50,7 @@ query {
 }
 ```
 
-If you study the results here, `Storefront.products` now returns the `ProductOffering` interface:
+If you study the results here, `Storefront.productOfferings` field returns the `ProductOffering` interface:
 
 ```graphql
 # Products schema
@@ -61,7 +61,7 @@ interface ProductOffering {
 }
 ```
 
-This interface is now implemented by two types:
+This interface is implemented by two types:
 
 - `Product`: a basic product record from the Products service.
 - `ProductDeal`: a wrapper for a set of products given a special price, managed in the Storefronts service.
