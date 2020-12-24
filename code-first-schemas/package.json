@@ -6,7 +6,7 @@
   "scripts": {
     "start-service-accounts": "nodemon -e js,graphql services/accounts/index.js",
     "start-service-inventory": "nodemon -e js,graphql services/inventory/index.js",
-    "start-service-products": "nodemon -e js,graphql services/products/index.js",
+    "start-service-products": "nodemon --watch services/products/**/*.ts --exec ts-node services/products/index.ts",
     "start-service-reviews": "nodemon -e js,graphql services/reviews/index.js",
     "start-service-gateway": "nodemon -e js,graphql index.js",
     "start-services": "concurrently \"yarn:start-service-*\""
@@ -15,12 +15,18 @@
     "@graphql-tools/schema": "^7.1.2",
     "@graphql-tools/stitch": "^7.1.6",
     "@graphql-tools/stitching-directives": "^1.1.0",
+    "@types/node": "^14.14.16",
+    "class-validator": "^0.12.2",
     "concurrently": "^5.3.0",
     "cross-fetch": "^3.0.6",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.4.0",
     "nexus": "^1.0.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^9.1.1",
+    "type-graphql": "^1.1.1",
+    "typescript": "^4.1.3"
   }
 }
