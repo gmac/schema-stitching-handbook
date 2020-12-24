@@ -84,6 +84,10 @@ const Query = queryType({
 
 const inventorySchema = makeSchema({ types: [Query] });
 
-const inventorySchemaWithStitchingDirectives = extendSchema(inventorySchema, parse(allStitchingDirectivesTypeDefs));
+// Directive usage without definitions will throw an error on the gateway when it attempts to build
+// a non-executable schema from the subschema's SDL. The below code will add the definitions.
+// Alternatively, the schema could be built on the gateway  using options { assumeValidSDL: true },
+// but this skips the extra layer of validation.
+const extendedSchema = extendSchema(inventorySchema, parse(allStitchingDirectivesTypeDefs));
 
-module.exports = stitchingDirectivesValidator(inventorySchemaWithStitchingDirectives);
+module.exports = stitchingDirectivesValidator(extendedSchema);

@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 import { stitchingDirectives } from '@graphql-tools/stitching-directives';
-import { GraphQLResolveInfo, /*extendSchema, parse*/ } from 'graphql';
-import { Arg, buildSchema, Directive, /*Extensions,*/ Field, ID, Info, Int, ObjectType, Query, Resolver } from 'type-graphql';
+import { GraphQLResolveInfo, extendSchema, parse } from 'graphql';
+import { Arg, buildSchema, Directive, /* Extensions, */ Field, ID, Info, Int, ObjectType, Query, Resolver } from 'type-graphql';
 import * as NotFoundError from '../../lib/not_found_error';
 
 const { allStitchingDirectivesTypeDefs, stitchingDirectivesValidator } = stitchingDirectives();
@@ -61,12 +61,12 @@ const productsSchema = buildSchema({
   resolvers: [ProductResolver],
   validate: false,
 }).then(schema => {
-  // The commented line below is only necessary if using @Extensions rather than @Directive
-  // because printSchemaWithDirectives will not generate an astNode if the directive
-  // does not exist in the schema, but TypeGraphQL will!
-  //
-  // const schema = extendSchema(schema, parse(allStitchingDirectivesTypeDefs));
-  return stitchingDirectivesValidator(schema);
+  // Directive usage without definitions will throw an error on the gateway when it attempts to build
+  // a non-executable schema from the subschema's SDL. The below code will add the definitions.
+  // Alternatively, the schema could be built on the gateway  using options { assumeValidSDL: true },
+  // but this skips the extra layer of validation.
+  const extendedSchema = extendSchema(schema, parse(allStitchingDirectivesTypeDefs));
+  return stitchingDirectivesValidator(extendedSchema);
 });
 
 export default productsSchema;
