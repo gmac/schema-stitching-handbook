@@ -42,17 +42,21 @@ async function fetchRemoteSchema(executor) {
     async function next(attempt=1) {
       try {
         const { data } = await executor({ document: '{ _sdl }' });
-        // assumeValidSDL is necessary if a code-first schema implements directive usage
-        // but not the actual directive definitions. Alternatively, extendSchema from
-        // 'graphql-js' could always be used to add in the necessary typeDefs, or
-        // using:
+        resolve(buildSchema(data._sdl));
+        // Or:
+        //
+        // resolve(buildSchema(data._sdl, { assumeValidSDL: true }));
+        //
+        // `assumeValidSDL: true` is necessary if a code-first schema implements directive
+        // usage, either directly or by exetnsions, but not addition of actual custom
+        // directives. Alternatively, extendSchema from 'graphql-js' could always be used
+        // to add in the necessary typeDefs, or using:
+        //
         // const newSchema = new GraphQLSchema({
         //   ...originalSchema.toConfig(),
         //   directives: [...originalSchema.getDirectives(), ...allStitchingDirectives]
         // });
         //
-        // resolve(buildSchema(data._sdl, { assumeValidSDL: true }));
-        resolve(buildSchema(data._sdl));
       } catch (err) {
         if (attempt >= 10) reject(err);
         setTimeout(() => next(attempt+1), 300);
