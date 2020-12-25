@@ -75,7 +75,7 @@ The Accounts subservice showcases how schemas created with vanilla `graphql-js` 
 The Inventory subservice demonstrates using stitching directives with a schema created using the `nexus` library:
 
 - _Directive usages_: implemented as "directives within extensions," i.e. following the Gatsby/graphql-compose convention of embedding third party directives under the `directives` key of each GraphQL entity's `extensions` property.
-- _Directive declarations_: `nexus` does not yet support custom directive declarations, and so the directives type definitions exported by the `@graphql-tools/stitching-directives` package are added to the schema using the `extendSchema` method from `graphql-js` .  
+- _Directive declarations_: `nexus` does not yet support passing in built `graph-js` `GraphQLDirective` objects, but you can easily create a new schema from the `nexus` schema programatically (using `new GraphQLSchema({ ...originalSchema.toConfig(), directives: [...originalSchema.getDirectives(), ...allStitchingDirectives] })`.  
 
 ### Products subservice
 

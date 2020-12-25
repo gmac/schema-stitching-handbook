@@ -1,11 +1,11 @@
 const { scalarType, objectType, nonNull, list, queryType, makeSchema } = require('nexus');
-const { extendSchema, parse } = require('graphql');
+const { GraphQLSchema } = require('graphql');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { printSchemaWithDirectives } = require('@graphql-tools/utils');
 const NotFoundError = require('../../lib/not_found_error');
 const readFileSync = require('../../lib/read_file_sync');
 
-const { allStitchingDirectivesTypeDefs, stitchingDirectivesValidator } = stitchingDirectives();
+const { allStitchingDirectives, stitchingDirectivesValidator } = stitchingDirectives();
 
 const inventories = [
   { upc: '1', unitsInStock: 3 },
@@ -88,6 +88,9 @@ const inventorySchema = makeSchema({ types: [Query] });
 // a non-executable schema from the subschema's SDL. The below code will add the definitions.
 // Alternatively, the schema could be built on the gateway  using options { assumeValidSDL: true },
 // but this skips the extra layer of validation.
-const extendedSchema = extendSchema(inventorySchema, parse(allStitchingDirectivesTypeDefs));
+const extendedSchema = new GraphQLSchema({
+  ...inventorySchema.toConfig(),
+  directives: [...inventorySchema.getDirectives(), ...allStitchingDirectives],
+});
 
 module.exports = stitchingDirectivesValidator(extendedSchema);
