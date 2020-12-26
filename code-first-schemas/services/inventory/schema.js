@@ -85,12 +85,13 @@ const Query = queryType({
 const inventorySchema = makeSchema({ types: [Query] });
 
 // Directive usage without definitions will throw an error on the gateway when it attempts to build
-// a non-executable schema from the subschema's SDL. The below code will add the definitions.
-// Alternatively, the schema could be built on the gateway  using options { assumeValidSDL: true },
-// but this skips the extra layer of validation.
+// a non-executable schema from the subschema's SDL. The below code will add the definitions:
 const extendedSchema = new GraphQLSchema({
   ...inventorySchema.toConfig(),
   directives: [...inventorySchema.getDirectives(), ...allStitchingDirectives],
 });
+
+// Alternatively, the schema could be built on the gateway  using options { assumeValidSDL: true },
+// but this would skip a layer of validation.
 
 module.exports = stitchingDirectivesValidator(extendedSchema);
