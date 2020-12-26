@@ -48,9 +48,9 @@ async function fetchRemoteSchema(executor) {
         // resolve(buildSchema(data._sdl, { assumeValidSDL: true }));
         //
         // `assumeValidSDL: true` is necessary if a code-first schema implements directive
-        // usage, either directly or by exetnsions, but not addition of actual custom
-        // directives. Alternatively, extendSchema from 'graphql-js' could always be used
-        // to add in the necessary typeDefs, or using:
+        // usage, either directly or by extensions, but not addition of actual custom
+        // directives. Alternatively, a new schema with the directives could be created
+        // from the nexus schema using:
         //
         // const newSchema = new GraphQLSchema({
         //   ...originalSchema.toConfig(),
