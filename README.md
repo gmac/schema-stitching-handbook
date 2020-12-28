@@ -85,6 +85,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Integrating Apollo Federation services into a stitched schema.
   - Fetching and parsing Federation SDLs.
 
+- **[Code-first schemas](./code-first-schemas)**
+
+  - Integrating schemas created with `graphql-js`, `nexus`, and `type-graphql` into a stitched schema.
+
 ### Appendices
 
 - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
