@@ -31,14 +31,14 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Handling array errors.
   - Nullability & error remapping.
 
-- **[Cross-service interfaces](./type-merging-interfaces)**
-
-  - Distributing a GraphQL interface across services.
-
 - **[Nullable merges](./type-merging-nullables)**
 
   - Selecting nullability for merged fields.
   - Returning nullable and not-nullable results.
+
+- **[Cross-service interfaces](./type-merging-interfaces)**
+
+  - Distributing a GraphQL interface across services.
 
 - **[Computed fields](./computed-fields)**
 
