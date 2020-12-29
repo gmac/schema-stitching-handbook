@@ -89,9 +89,9 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - Integrating subschemas created with `graphql-js`, `nexus`, and `type-graphql`.
 
-- **Subservice languages**
+- **[Subservice languages](./subservice-languages)**
 
-  - [Ruby](./subservice-languages/ruby)
+  - Integrating [Ruby applications](./subservice-languages/ruby)
 
 ### Appendices
 
