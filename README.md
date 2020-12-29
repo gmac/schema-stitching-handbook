@@ -87,12 +87,12 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 - **[Subservice languages](./subservice-languages)**
 
-  - **[JavaScript](./javascript)** schemas created with:
+  - **[JavaScript](./subservice-languages/javascript)** schemas created with:
     - `graphql-js`
     - `nexus`
     - `type-graphql`
 
-  - **[Ruby](./ruby)** schemas created with:
+  - **[Ruby](./subservice-languages/ruby)** schemas created with:
     - Class-based definitions
     - Parsed definitions string
 
