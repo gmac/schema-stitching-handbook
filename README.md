@@ -85,13 +85,16 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Integrating Apollo Federation services into a stitched schema.
   - Fetching and parsing Federation SDLs.
 
-- **[Code-first subschemas](./code-first-schemas)**
-
-  - Integrating subschemas created with `graphql-js`, `nexus`, and `type-graphql`.
-
 - **[Subservice languages](./subservice-languages)**
 
-  - Integrating [Ruby applications](./subservice-languages/ruby)
+  - **[JavaScript](./javascript)** schemas created with:
+    - `graphql-js`
+    - `nexus`
+    - `type-graphql`
+
+  - **[Ruby](./ruby)** schemas created with:
+    - Class-based definitions
+    - Parsed definitions string
 
 ### Appendices
 
