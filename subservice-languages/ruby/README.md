@@ -1,6 +1,10 @@
 # Ruby subservices
 
-This example demonstrates Ruby subservices within a stitched schema. The stitched gateway is unconcerned with what programming languages subservices use as long as they can provide an annotated SDL and fulfill their schema contract.
+This example demonstrates Ruby subservices within a stitched schema. Their GraphQL implementations use:
+
+- [graphql-ruby](https://github.com/rmosolgo/graphql-ruby) for GraphQL execution.
+- [graphql-ruby-schema-directives](https://github.com/gmac/graphql-ruby-schema-directives) for class-based schema directives.
+- `GraphQL::Schema.from_definition` for parsing SDL strings into executable schemas.
 
 ## Setup
 
