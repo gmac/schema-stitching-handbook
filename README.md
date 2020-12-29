@@ -14,7 +14,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Avoiding schema conflicts using transforms.
   - Basic error handling.
 
-- **[Mutations &amp; Subscriptions](./mutations-and-subscriptions)**
+- **[Mutations &amp; subscriptions](./mutations-and-subscriptions)**
 
   - Adding a remote mutation service.
   - Adding a remote subscription service.
@@ -85,9 +85,13 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Integrating Apollo Federation services into a stitched schema.
   - Fetching and parsing Federation SDLs.
 
-- **[Code-first schemas](./code-first-schemas)**
+- **[Code-first subschemas](./code-first-schemas)**
 
-  - Integrating schemas created with `graphql-js`, `nexus`, and `type-graphql` into a stitched schema.
+  - Integrating subschemas created with `graphql-js`, `nexus`, and `type-graphql`.
+
+- **Subservice languages**
+
+  - [Ruby](./subservice-languages/ruby)
 
 ### Appendices
 
