@@ -82,7 +82,7 @@ The Inventory subservice demonstrates using stitching directives with a schema c
 The Products subservice shows how `TypeGraphQL` can easily implement third party directives including stitching directives.
 
 - _Directive usages_: implemented using the @Directive decorator syntax, TypeGraphQL's method of supporting third party directives within its code-first schema.
-- _Directive declarations_: not strictly required -- TypeGraphQL does not validate the directive usage SDL, and creates actual directives under the hood, as if they were created with SDL, so directive declarations are actually not required. This makes setup a bit easier, at the cost of skipping a potentially helpful validation step.
+- _Directive declarations_: directly added to the schema by using the compiled directives exported by the `@graphql-tools/stitching-directives` package.
 
 # Reviews subservice
 The Reviews subservice is available for comparison to remind us of how `makeExecutableSchema` utilizes directives with SDL.
