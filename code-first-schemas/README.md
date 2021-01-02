@@ -1,1 +1,0 @@
-Moved to [Node subschemas](../subservice-languages/javascript)

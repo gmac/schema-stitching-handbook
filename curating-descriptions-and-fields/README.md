@@ -42,7 +42,7 @@ One approach is to concatenate descriptions from across services. While this wor
 type User @key(selectionSet: "{ id }") {
   # IGNORE - documented in Accounts service
   id: ID!
-  """ Reviews written by this user. """
+  "Reviews written by this user."
   reviews: [Review]
 }
 ```
@@ -99,6 +99,7 @@ const publicSchema = pruneSchema(filterSchema({
   schema: privateSchema,
   rootFieldFilter: (type, fieldName) => !fieldName.startsWith('_'),
   fieldFilter: (type, fieldName) => !fieldName.startsWith('_'),
+  argumentFilter: (typeName, fieldName, argName) => !argName.startsWith('_'),
 }));
 ```
 

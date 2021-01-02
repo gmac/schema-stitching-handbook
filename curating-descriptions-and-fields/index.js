@@ -59,6 +59,7 @@ const publicSchema = pruneSchema(filterSchema({
   schema: privateSchema,
   rootFieldFilter: (type, fieldName) => !fieldName.startsWith('_'),
   fieldFilter: (type, fieldName) => !fieldName.startsWith('_'),
+  argumentFilter: (typeName, fieldName, argName) => !argName.startsWith('_'),
 }));
 
 // Serve the public and private schema versions at different locations.
