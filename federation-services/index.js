@@ -10,9 +10,9 @@ async function makeGatewaySchema() {
   return stitchSchemas({
     subschemaConfigTransforms: [stitchingDirectivesTransformer],
     subschemas: await Promise.all([
-      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4001/graphql')),
-      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4002/graphql')),
-      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4003/graphql')),
+      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4001/graphql', 'products')),
+      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4002/graphql', 'reviews')),
+      fetchFederationSubchema(makeRemoteExecutor('http://localhost:4003/graphql', 'users')),
     ])
   });
 }
@@ -25,30 +25,5 @@ async function fetchFederationSubchema(executor) {
     executor,
   };
 }
-
-// const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
-// const { stitchingDirectivesTransformer } = stitchingDirectives();
-// const sdl = `
-//   directive @key(selectionSet: String!) on OBJECT
-//   directive @computed(selectionSet: String!) on FIELD_DEFINITION
-//   directive @merge(argsExpr: String, keyArg: String, keyField: String, key: [String!], additionalArgs: String) on FIELD_DEFINITION
-
-//   type User @key(selectionSet: "{ id }") {
-//     id: ID!
-//     email: String!
-//     username: String!
-//   }
-
-//   scalar _Any
-//   union _Entity = User
-
-//   type Query {
-//     user(id: ID!): User
-//     _entities(representations: [_Any!]!): [_Entity]! @merge
-//   }
-// `;
-
-// const config = stitchingDirectivesTransformer({ schema: buildSchema(sdl) });
-// console.log(config.merge.User.key({ __typename: 'User', id: '123' }));
 
 makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));
