@@ -98,13 +98,13 @@ Federation and Stitching use fundamentally similar patterns to combine underlyin
 How each system handles origins informs how a federation service gets translated into a stitched subschema:
 
 1. All types with a `@key` directive become merged types; the key fields go into `selectionSet`.
-1. All fields with a `@requires` directive are made into computed fields. Stitching computed fields are slightly more robust than their federation counterpart because they may resolve dependencies from any number of services.
+1. All fields with a `@requires` directive are made into computed fields. Computed fields are slightly more robust than their federation counterparts because they may resolve dependencies from any number of services.
 1. All fields with an `@external` directive are removed _unless they are part of the `@key`_. Stitching expects schemas to only publish fields that they actually have data for. This is considerably simpler than the federation approach where services may be responsible for data they don't have.
 1. By eliminating the indirection of `@external` fields, the `@provides` directive is no longer necessary. The Stitching query planner can automate the optimial selection of as many fields as possible from as few services as possible.
 
 ### SDL integration
 
-The simplest way to make these adaptions is to translate a Federation SDL string into a Stitching SDL string, which can be done using the [`federation-to-stitching-sdl`](https://github.com/gmac/federation-to-stitching-sdl) package. A federation service's SDL can be obtained through its `_service` API:
+The simplest way to make the above adaptions is to translate a Federation SDL string into a Stitching SDL string, which can be done using the [`federation-to-stitching-sdl`](https://github.com/gmac/federation-to-stitching-sdl) package. A federation service's SDL can be obtained through its `_service` API:
 
 ```graphql
 query {
@@ -138,7 +138,7 @@ const gatewaySchema = stitchSchemas({
 
 ### Static config
 
-Written as static subservice configuration, a federation service merges types using the following:
+Written as static subservice configuration, a federation service merges types within a stitched gateway using the following:
 
 ```js
 const { pick } = require('lodash');
@@ -149,7 +149,7 @@ const gatewaySchema = stitchSchemas({
     merge: {
       Product: {
         selectionSet: '{ id }',
-        computedField: {
+        computedFields: {
           shippingEstimate: { selectionSet: '{ price weight }' }
         },
         fieldName: '_entities',
