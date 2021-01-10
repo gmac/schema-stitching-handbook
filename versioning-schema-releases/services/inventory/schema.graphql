@@ -1,16 +1,10 @@
-type Product @key(selectionSet: "{ upc }") {
+type Product {
   upc: ID!
   inStock: Boolean
 }
 
-input ProductKey {
-  upc: ID!
-  price: Int
-  weight: Int
-}
-
 type Query {
   mostStockedProduct: Product
-  _products(keys: [ProductKey!]!): [Product]! @merge
+  _products(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
   _sdl: String!
 }

@@ -9,13 +9,13 @@ type Review {
   product: Product
 }
 
-type User @key(selectionSet: "{ id }") {
+type User {
   id: ID!
   totalReviews: Int!
   reviews: [Review]
 }
 
-type Product @key(selectionSet: "{ upc }") {
+type Product {
   upc: ID!
   reviews: [Review]
 }

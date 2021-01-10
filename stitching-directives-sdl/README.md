@@ -70,7 +70,7 @@ Neat, it works! All those merges were configured through schema SDL annotations.
 Open the Accounts schema and see the expression of a [single-record merge query](../type-merging-single-records):
 
 ```graphql
-type User @key(selectionSet: "{ id }") {
+type User {
   id: ID!
   name: String!
   username: String!
@@ -93,14 +93,14 @@ merge: {
 }
 ```
 
-Here the `@key` directive specifies a base selection set for the merged type, and the `@merge(keyField: "id")` directive marks a merger query&mdash;specifying that the `id` field should be picked from the original object as the query argument.
+Here the `@merge(keyField: "id")` directive marks a merger query, and specifies that the `id` field acts as a selectionSet to be fetched with the original object and picked as the query argument.
 
 ### Picked keys with additional arguments
 
 Next, open the Products schema and see the expression of an [array-batched merge query](../type-merging-arrays):
 
 ```graphql
-type Product @key(selectionSet: "{ upc }") {
+type Product {
   upc: ID!
 }
 
@@ -126,7 +126,7 @@ merge: {
 }
 ```
 
-Again, the `@key` directive specifies a base selection set for the merged type, and the `@merge(keyField: "upc")` directive marks a merger array query&mdash;specifying that a `upc` field should be picked from each original object for the query argument array.
+Again, the `@merge(keyField: "upc")` directive marks a merger array query, and specifies that the `upc` field acts as a selectionSet to be fetched with each original object and picked into the query argument array. The `keyArg` argument specifies which query argument receives the array of keys, and `additionalArgs` specifies static values to provide for other arguments.
 
 ### Object keys
 

@@ -1,4 +1,4 @@
-type Product @key(selectionSet: "{ upc }") {
+type Product {
   upc: ID!
   name: String!
   price: Int!

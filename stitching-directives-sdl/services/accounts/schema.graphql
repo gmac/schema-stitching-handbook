@@ -1,4 +1,4 @@
-type User @key(selectionSet: "{ id }") {
+type User {
   id: ID!
   name: String!
   username: String!
