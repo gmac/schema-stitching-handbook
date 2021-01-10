@@ -25,9 +25,7 @@ module.exports = makeExecutableSchema({
     },
     Query: {
       mostStockedProduct: () => inventory.reduce((acc, i) => acc.unitsInStock >= i.unitsInStock ? acc : i, inventory[0]),
-      _products: (_root, { keys }) => {
-        return keys.map(key => ({ ...key, ...inventory.find(i => i.upc === key.upc) || new NotFoundError() }));
-      },
+      _products: (_root, { upcs }) => upcs.map(upc => inventory.find(i => i.upc === upc) || new NotFoundError()),
       _sdl: () => typeDefs,
     },
   }
