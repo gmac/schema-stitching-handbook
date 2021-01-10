@@ -1,5 +1,5 @@
 "Represents a human user with an account."
-type User @key(selectionSet: "{ id }") {
+type User {
   "The primary key of this user."
   id: ID!
   "A formal display name for this user."
