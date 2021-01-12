@@ -1,3 +1,4 @@
+const waitOn = require('wait-on');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { introspectSchema } = require('@graphql-tools/wrap');
 const makeServer = require('./lib/make_server');
@@ -69,4 +70,6 @@ async function makeGatewaySchema() {
   });
 }
 
-makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));
+waitOn({ resources: ['tcp:4001', 'tcp:4002', 'tcp:4003'] }, async () => {
+  makeServer(await makeGatewaySchema(), 'gateway', 4000);
+});

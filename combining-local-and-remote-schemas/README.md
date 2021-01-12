@@ -20,13 +20,7 @@ This example explores basic techniques for combining local and remote schemas to
 cd combining-local-and-remote-schemas
 
 yarn install
-yarn start-services
-```
-
-Then in a new terminal tab:
-
-```shell
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:

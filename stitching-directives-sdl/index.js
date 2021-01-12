@@ -1,3 +1,4 @@
+const waitOn = require('wait-on');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { buildSchema } = require('graphql');
@@ -35,21 +36,11 @@ async function makeGatewaySchema() {
   });
 }
 
-// fetch remote schemas with a retry loop
-// (allows the gateway to wait for all services to startup)
 async function fetchRemoteSchema(executor) {
-  return new Promise((resolve, reject) => {
-    async function next(attempt=1) {
-      try {
-        const { data } = await executor({ document: '{ _sdl }' });
-        resolve(buildSchema(data._sdl));
-      } catch (err) {
-        if (attempt >= 10) reject(err);
-        setTimeout(() => next(attempt+1), 300);
-      }
-    }
-    next();
-  });
+  const { data } = await executor({ document: '{ _sdl }' });
+  return buildSchema(data._sdl);
 }
 
-makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));
+waitOn({ resources: [4001, 4002, 4003, 4004].map(p => `tcp:${p}`) }, async () => {
+  makeServer(await makeGatewaySchema(), 'gateway', 4000);
+});

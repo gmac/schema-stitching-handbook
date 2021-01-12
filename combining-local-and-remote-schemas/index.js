@@ -1,3 +1,4 @@
+const waitOn = require('wait-on');
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { introspectSchema, RenameTypes, RenameRootFields } = require('@graphql-tools/wrap');
@@ -73,8 +74,8 @@ async function fetchRemoteSDL(executor) {
   return result.data._sdl;
 }
 
-makeGatewaySchema().then(schema => {
+waitOn({ resources: ['tcp:4001', 'tcp:4002'] }, async () => {
   const app = express();
-  app.use('/graphql', graphqlHTTP({ schema, graphiql: true }));
+  app.use('/graphql', graphqlHTTP({ schema: await makeGatewaySchema(), graphiql: true }));
   app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));
 });
