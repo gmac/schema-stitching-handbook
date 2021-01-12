@@ -17,13 +17,7 @@ Stitching is less opinionated than Federation, and is simpler without the comple
 cd federation-services
 
 yarn install
-yarn start-services
-```
-
-Then in a new terminal tab:
-
-```shell
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:
