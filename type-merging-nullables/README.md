@@ -13,7 +13,7 @@ This example demonstrates using nullable and not-null fields in merged data, as 
 cd type-merging-nullables
 
 yarn install
-yarn start-gateway
+yarn start
 ```
 
 The following service is available for interactive queries:
