@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-gateway": "node index.js",
+    "start": "node index.js",
     "test": "jest test"
   },
   "dependencies": {

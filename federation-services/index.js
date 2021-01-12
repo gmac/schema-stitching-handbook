@@ -1,3 +1,4 @@
+const waitOn = require('wait-on');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const { stitchingDirectivesTransformer } = stitchingDirectives();
@@ -26,4 +27,6 @@ async function fetchFederationSubchema(executor) {
   };
 }
 
-makeGatewaySchema().then(schema => makeServer(schema, 'gateway', 4000));
+waitOn({ resources: [4001, 4002, 4003].map(p => `tcp:${p}`) }, async () => {
+  makeServer(await makeGatewaySchema(), 'gateway', 4000);
+});

@@ -25,13 +25,7 @@ Using single-record queries means that every record accessed requires a _dedicat
 cd type-merging-single-records
 
 yarn install
-yarn start-services
-```
-
-Then in a new terminal tab:
-
-```shell
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:

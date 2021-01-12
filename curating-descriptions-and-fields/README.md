@@ -14,7 +14,7 @@ This example demonstrates curating element descriptions and public fields to ens
 cd curating-descriptions-and-fields
 
 yarn install
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:

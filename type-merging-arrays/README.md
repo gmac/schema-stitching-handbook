@@ -26,13 +26,7 @@ This example focuses on [array batching](https://github.com/gmac/schema-stitchin
 cd type-merging-arrays
 
 yarn install
-yarn start-services
-```
-
-Then in a new terminal tab:
-
-```shell
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:

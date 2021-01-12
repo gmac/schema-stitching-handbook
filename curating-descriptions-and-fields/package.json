@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-gateway": "nodemon -e js,graphql index.js"
+    "start": "nodemon -e js,graphql index.js"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.0.0",

@@ -16,7 +16,7 @@ This example explores setting up a GraphQL interface that spans across service b
 cd cross-service-interfaces
 
 yarn install
-yarn start-gateway
+yarn start
 ```
 
 The following service is available for interactive queries:

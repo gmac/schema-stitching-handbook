@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start-posts": "nodemon --watch services/posts services/posts/index.js",
+    "start-users": "nodemon --watch services/users services/users/index.js",
     "start-gateway": "nodemon index.js",
-    "start-service-posts": "nodemon services/posts/index.js",
-    "start-service-users": "nodemon services/users/index.js",
-    "start-services": "concurrently \"yarn:start-service-*\""
+    "start": "concurrently \"yarn:start-*\""
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.1.0",
@@ -21,6 +21,7 @@
     "graphql": "^15.4.0",
     "graphql-ws": "^2.0.0",
     "nodemon": "^2.0.6",
+    "wait-on": "^5.2.1",
     "ws": "^7.4.0"
   }
 }

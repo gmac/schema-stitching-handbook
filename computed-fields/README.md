@@ -30,7 +30,7 @@ However, computed fields have several distinct disadvantages:
 cd computed-fields
 
 yarn install
-yarn start-gateway
+yarn start
 ```
 
 The following service is available for interactive queries:

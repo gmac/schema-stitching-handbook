@@ -1,3 +1,4 @@
+const waitOn = require('wait-on');
 const { ApolloServer } = require('apollo-server');
 const { introspectSchema } = require('@graphql-tools/wrap');
 const { stitchSchemas } = require('@graphql-tools/stitch');
@@ -37,7 +38,8 @@ async function makeGatewaySchema() {
   });
 }
 
-makeGatewaySchema().then(schema => {
+waitOn({ resources: ['tcp:4001', 'tcp:4002'] }, async () => {
+  const schema = await makeGatewaySchema();
   const server = new ApolloServer({ schema }); // uses Apollo Server for its subscription UI features
   server.listen(4000).then(() => console.log(`gateway running at http://localhost:4000/graphql`));
 });

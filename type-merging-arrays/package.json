@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start-manufacturers": "nodemon --watch services/manufacturers services/manufacturers/index.js",
+    "start-products": "nodemon --watch services/products services/products/index.js",
+    "start-storefronts": "nodemon --watch services/storefronts services/storefronts/index.js",
     "start-gateway": "nodemon index.js",
-    "start-service-manufacturers": "node services/manufacturers/index.js",
-    "start-service-products": "node services/products/index.js",
-    "start-service-storefronts": "node services/storefronts/index.js",
-    "start-services": "concurrently \"yarn:start-service-*\""
+    "start": "concurrently \"yarn:start-*\""
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.0.0",
@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.4.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "wait-on": "^5.2.1"
   }
 }

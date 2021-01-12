@@ -23,7 +23,7 @@ Note: the service setup in this example is based on the [official demonstration 
 cd stitching-directives-sdl
 
 yarn install
-yarn start-services
+yarn start
 ```
 
 The following services are available for interactive queries:

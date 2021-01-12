@@ -14,13 +14,7 @@ This example explores stitching mutation and subscription services into a combin
 cd mutations-and-subscriptions
 
 yarn install
-yarn start-services
-```
-
-Then in a new terminal tab:
-
-```shell
-yarn start-gateway
+yarn start
 ```
 
 The following services are available for interactive queries:
