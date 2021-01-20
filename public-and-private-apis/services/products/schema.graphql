@@ -1,5 +1,5 @@
 "Represents a retail product."
-type Product {
+type Product @canonical {
   "The Univeral Product Code (UPC) of this product."
   upc: ID!
   "The name of this product."

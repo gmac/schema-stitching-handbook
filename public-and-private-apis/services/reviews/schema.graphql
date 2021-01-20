@@ -1,5 +1,5 @@
 "Represents a review written by a User, for a Product."
-type Review {
+type Review @canonical {
   "The primary key of this review."
   id: ID!
   "The review body, formatted as markdown text."
@@ -10,17 +10,13 @@ type Review {
   product: Product
 }
 
-# IGNORE - documented in Accounts service
 type User {
-  # IGNORE - documented in Accounts service
   id: ID!
   "Reviews written by this user."
   reviews: [Review]
 }
 
-# IGNORE - documented in Products service
 type Product {
-  # IGNORE - documented in Products service
   upc: ID!
   "Reviews written about this product."
   reviews: [Review]

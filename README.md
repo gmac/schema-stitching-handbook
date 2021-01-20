@@ -72,10 +72,9 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Adding test coverage to a stitched schema.
   - Mocking subservices as local test fixtures.
 
-- **[Curating descriptions &amp; public fields](./curating-descriptions-and-fields)**
+- **[Public and private APIs](./public-and-private-apis)**
 
-  - Selecting desired element descriptions from across subschemas.
-  - Filtering unwanted fields from the final schema.
+  - Filtering unwanted fields from the final stitched schema.
   - Serving public (filtered) and private (unfiltered) API versions.
 
 ### Other Integrations

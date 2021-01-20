@@ -10,44 +10,13 @@ const productsSchema = require('./services/products/schema');
 const reviewsSchema = require('./services/reviews/schema');
 
 function makeGatewaySchema() {
-  function compactDescription(obj) {
-    return obj.description ? obj.description.trim() : undefined;
-  }
-
-  function hasDescription(obj) {
-    const description = compactDescription(obj);
-    return !!description && !description.startsWith('IGNORE');
-  }
-
   return stitchSchemas({
     subschemaConfigTransforms: [stitchingDirectivesTransformer],
     subschemas: [
       { schema: reviewsSchema },
       { schema: accountsSchema },
       { schema: productsSchema },
-    ],
-    typeMergingOptions: {
-      // control the merging of types and fields to assure
-      // that only wanted descriptions are selected.
-      // These handlers select the first defined description
-      // for each type and field that is not prefixed by "IGNORE".
-      typeDescriptionsMerger(candidates) {
-        const candidate = candidates.find(({ type }) => hasDescription(type)) || candidates.pop();
-        return compactDescription(candidate.type);
-      },
-      fieldConfigMerger(candidates) {
-        const configs = candidates.map(c => c.fieldConfig);
-        const config = configs.find(field => hasDescription(field)) || configs.pop();
-        config.description = compactDescription(config);
-        return config;
-      },
-      inputFieldConfigMerger(candidates) {
-        const configs = candidates.map(c => c.inputFieldConfig);
-        const config = configs.find(field => hasDescription(field)) || configs.pop();
-        config.description = compactDescription(config);
-        return config;
-      },
-    },
+    ]
   });
 }
 
