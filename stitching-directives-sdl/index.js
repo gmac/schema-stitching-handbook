@@ -1,7 +1,7 @@
 const waitOn = require('wait-on');
 const { stitchSchemas } = require('@graphql-tools/stitch');
 const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
-const { buildSchema, printSchema } = require('graphql');
+const { buildSchema } = require('graphql');
 const makeServer = require('./lib/make_server');
 const makeRemoteExecutor = require('./lib/make_remote_executor');
 
@@ -9,8 +9,8 @@ const { stitchingDirectivesTransformer } = stitchingDirectives();
 
 async function makeGatewaySchema() {
   const accountsExec = makeRemoteExecutor('http://localhost:4001/graphql');
-  const productsExec = makeRemoteExecutor('http://localhost:4003/graphql');
   const inventoryExec = makeRemoteExecutor('http://localhost:4002/graphql');
+  const productsExec = makeRemoteExecutor('http://localhost:4003/graphql');
   const reviewsExec = makeRemoteExecutor('http://localhost:4004/graphql');
 
   return stitchSchemas({
