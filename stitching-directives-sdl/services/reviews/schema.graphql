@@ -13,6 +13,7 @@ type User @key(selectionSet: "{ id }") {
 
 type Product @key(selectionSet: "{ upc }") {
   upc: ID!
+  "Reviews written for this product"
   reviews: [Review]
 }
 

@@ -243,6 +243,19 @@ type Query {
 }
 ```
 
+### Canonical definitions
+
+Open the documentation sidebar of GraphiQL for the gateway schema, and have a look at the `Product` type definition. While this type is defined in three different ways by three different services, you'll see that element descriptions from the Products subschema are favored in the combined gateway schema because it is marked as `@canonical`:
+
+```
+"Represents a Product available for resale."
+type Product @canonical {
+  # ...
+}
+```
+
+Types marked as canonical will provide a preferred definition of the type and its fields to the combined gateway schema. That means we can write clean descriptions for a type and its fields in one service, and expect those definitions to be used in the combined gateway schema. Specific fields may also be marked as canonical to override a canonical type definition. Fields that are unique to a given subservice have no competing definitions, and are therefore canonical by default.
+
 ### For demonstration only!
 
 This example uses several needlessly complex key patterns for the sake of demonstration. For simplicity, it's generally best to use the basic picked key patterns whenever possible. Sending object keys is generally only necessary when implementing computed fields or communicating with federation services.
