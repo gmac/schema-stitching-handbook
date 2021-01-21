@@ -16,6 +16,7 @@ Note: the service setup in this example is based on the [official demonstration 
 - `@key` directive for type-level selection sets.
 - `@merge` directive for type merging services.
 - `@computed` directive for computed fields.
+- `@canonical` directive for preferred element definitions.
 
 ## Setup
 
