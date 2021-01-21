@@ -1,6 +1,9 @@
+"Stuff sitting in warehouse inventory"
 type Product @key(selectionSet: "{ upc }") {
   upc: ID!
+  "Specifies if this product is currently stocked."
   inStock: Boolean
+  "Specifies the estimated shipping cost of this product, in cents."
   shippingEstimate: Int @computed(selectionSet: "{ price weight }")
 }
 

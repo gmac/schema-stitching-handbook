@@ -1,7 +1,12 @@
-type Product {
+"Represents a Product available for resale."
+type Product @canonical {
+  "The primary key of this product."
   upc: ID!
+  "The name of this product."
   name: String!
+  "The price of this product in cents."
   price: Int!
+  "The weight of this product in grams."
   weight: Int!
 }
 
