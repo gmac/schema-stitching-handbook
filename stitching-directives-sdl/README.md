@@ -248,7 +248,7 @@ type Query {
 
 Open the documentation sidebar of GraphiQL for the gateway schema, and have a look at the `Product` type definition. While this type is defined in three different ways by three different services, you'll see that element descriptions from the Products subschema are favored in the combined gateway schema because it is marked as `@canonical`:
 
-```
+```graphql
 "Represents a Product available for resale."
 type Product @canonical {
   # ...
