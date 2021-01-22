@@ -24,6 +24,7 @@ async function fetchFederationSubchema(executor) {
   return {
     schema: buildSchema(sdl),
     executor,
+    batch: true,
   };
 }
 

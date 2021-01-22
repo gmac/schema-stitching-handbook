@@ -25,5 +25,8 @@ module.exports = buildFederatedSchema({
     User: {
       reviews: (user) => reviews.filter(review => review.userId === user.id),
     },
+    Query: {
+      review: (_root, { id }) => reviews.find(r => r.id === id) || new NotFoundError(),
+    },
   }
 });

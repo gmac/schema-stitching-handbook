@@ -4,16 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-products": "nodemon -e js,graphql --watch services/products services/products/index.js",
-    "start-reviews": "nodemon -e js,graphql --watch services/reviews services/reviews/index.js",
-    "start-users": "nodemon -e js,graphql --watch services/users services/users/index.js",
+    "start-service-products": "nodemon -e js,graphql --watch services/products services/products/index.js",
+    "start-service-reviews": "nodemon -e js,graphql --watch services/reviews services/reviews/index.js",
+    "start-service-users": "nodemon -e js,graphql --watch services/users services/users/index.js",
     "start-gateway": "nodemon -e js,graphql index.js",
-    "start": "concurrently \"yarn:start-*\""
+    "start": "concurrently \"yarn:start-*\"",
+    "start-services": "concurrently \"yarn:start-service-*\"",
+    "start-apollo": "nodemon -e js,graphql apollo.js"
   },
   "dependencies": {
     "@apollo/federation": "^0.20.6",
+    "@apollo/gateway": "^0.22.0",
     "@graphql-tools/stitch": "^7.1.7",
     "@graphql-tools/stitching-directives": "^1.1.1",
+    "apollo-server": "^2.19.2",
     "concurrently": "^5.3.0",
     "cross-fetch": "^3.0.6",
     "express": "^4.17.1",
