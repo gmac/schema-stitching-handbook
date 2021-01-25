@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 const { ApolloGateway } = require('@apollo/gateway');
+const waitOn = require('wait-on');
 
 const gateway = new ApolloGateway({
   serviceList: [
@@ -9,8 +10,10 @@ const gateway = new ApolloGateway({
   ],
 });
 
-const server = new ApolloServer({ gateway, subscriptions: false });
+waitOn({ resources: [4001, 4002, 4003].map(p => `tcp:${p}`) }, async () => {
+  const server = new ApolloServer({ gateway, subscriptions: false });
 
-server.listen(4000).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+  server.listen(4000).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+  });
 });
