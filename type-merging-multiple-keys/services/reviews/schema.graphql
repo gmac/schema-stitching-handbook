@@ -1,0 +1,16 @@
+type Review {
+  id: ID!
+  body: String
+  product: Product
+}
+
+type Product {
+  id: ID!
+  reviews: [Review]
+}
+
+type Query {
+  review(id: ID!): Review
+  productsById(ids: [ID!]!): [Product]! @merge(keyField: "id")
+  _sdl: String!
+}
