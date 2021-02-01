@@ -4,7 +4,7 @@ This example demonstrates the integration of [Apollo Federation services](https:
 
 As you get the hang of schema stitching, you may realize that Federation services are fairly complex for what they do. The `buildFederatedSchema` method from the `@apollo/federation` package creates a nuanced GraphQL resource that does not guarentee itself to be independently consistent or valid, but plugs seamlessly into a greater automation package. By comparison, stitching encourages services to be independently valid and self-contained GraphQL resources, which makes them quite primitive and durable. While federation automates service bindings at the cost of tightly-coupled complexity, stitching embraces loosely-coupled bindings at the cost of manual setup. The merits of each strategy are likely to be a deciding factor for developers selecting a platform. Stitching is a _library_ used to build a _framework_ like Federation.
 
-Stitching is less opinionated than Federation, and is simpler without the complexity added by `buildFederatedSchema`. However, when integrating with existing servers or in the process of a migration, nothing says you can't incorporate your existing federation resources into a stitched gateway.
+Stitching is less opinionated than Federation, and is made simpler without the complexity added by `buildFederatedSchema`. However, when integrating with existing servers or in the process of a migration, nothing says you can't incorporate your existing federation resources into a stitched gateway.
 
 **This example demonstrates:**
 
@@ -86,7 +86,7 @@ The stitched gateway has loaded all federation SDLs, [converted them into stitch
 
 Federation and Stitching use fundamentally similar patterns to combine underlying subservices (in fact, both tools have shared origins in [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/)). However, their specific implementations have an important differentiator:
 
-- **Apollo Federation uses a _centralized_ approach**, where all types have a single "origin" service (i.e.: where the unextended type definition is). Querying for a type starts from its origin and builds out to its remote extensions.
+- **Apollo Federation uses a _centralized_ approach**, where all types have a single "origin" service (i.e.: where the unextended type definition is). Querying for a type always builds from its origin service.
 - **Stitching uses a _decentralized_ approach**, where any service may equally originate any type. Regardless of where a typed object is first represented, that original object is filled in with missing details from other services.
 
 How each system handles origins informs how a federation service gets translated into a stitched subschema:
