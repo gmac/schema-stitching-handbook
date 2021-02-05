@@ -1,0 +1,10 @@
+type Product {
+  upc: ID!
+  msrp: Int!
+  name: String
+  weight: Int!
+}
+
+type Query {
+  productsByUpc(upcs: [ID!]!): [Product]!
+}
