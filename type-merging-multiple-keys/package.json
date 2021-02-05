@@ -1,25 +1,17 @@
 {
-  "name": "stitching-directives-sdl",
+  "name": "type-merging-multiple-keys",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-catalog": "nodemon -e js,graphql --watch services/catalog services/catalog/index.js",
-    "start-ecommerce": "nodemon -e js,graphql --watch services/ecommerce services/ecommerce/index.js",
-    "start-reviews": "nodemon -e js,graphql --watch services/reviews services/reviews/index.js",
-    "start-gateway": "nodemon -e js,graphql index.js",
-    "start": "concurrently \"yarn:start-*\""
+    "start": "nodemon -e js,graphql index.js"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.0.0",
     "@graphql-tools/stitch": "^7.2.1",
-    "@graphql-tools/stitching-directives": "^1.2.0",
-    "concurrently": "^5.3.0",
-    "cross-fetch": "^3.0.6",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.4.0",
-    "nodemon": "^2.0.6",
-    "wait-on": "^5.2.1"
+    "nodemon": "^2.0.6"
   }
 }

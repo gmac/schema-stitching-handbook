@@ -6,6 +6,5 @@ type Product {
 }
 
 type Query {
-  productsByUpc(upcs: [ID!]!): [Product]! @merge(keyField: "upc")
-  _sdl: String!
+  productsByUpc(upcs: [ID!]!): [Product]!
 }

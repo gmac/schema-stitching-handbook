@@ -1,0 +1,15 @@
+type Product {
+  id: ID!
+  upc: ID!
+  retailPrice: Int
+  unitsInStock: Int
+}
+
+input ProductKey {
+  id: ID
+  upc: ID
+}
+
+type Query {
+  productsByKey(keys: [ProductKey!]!): [Product]!
+}

@@ -1,41 +1,65 @@
-const waitOn = require('wait-on');
+const express = require('express');
+const { graphqlHTTP } = require('express-graphql');
 const { stitchSchemas } = require('@graphql-tools/stitch');
-const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
-const { buildSchema } = require('graphql');
-const makeServer = require('./lib/make_server');
-const makeRemoteExecutor = require('./lib/make_remote_executor');
+const catalogSchema = require('./services/catalog/schema');
+const vendorsSchema = require('./services/vendors/schema');
+const reviewsSchema = require('./services/reviews/schema');
 
-const { stitchingDirectivesTransformer } = stitchingDirectives();
-
-async function makeGatewaySchema() {
-  const catalogExec = makeRemoteExecutor('http://localhost:4001/graphql');
-  const ecommerceExec = makeRemoteExecutor('http://localhost:4002/graphql');
-  const reviewsExec = makeRemoteExecutor('http://localhost:4003/graphql');
-
+function makeGatewaySchema() {
   return stitchSchemas({
-    subschemaConfigTransforms: [stitchingDirectivesTransformer],
     subschemas: [
       {
-        schema: await fetchRemoteSchema(catalogExec),
-        executor: catalogExec,
+        schema: catalogSchema,
+        batch: true,
+        merge: {
+          Product: {
+            selectionSet: '{ upc }',
+            fieldName: 'productsByUpc',
+            key: ({ upc }) => upc,
+            argsFromKeys: (upcs) => ({ upcs }),
+          }
+        }
       },
       {
-        schema: await fetchRemoteSchema(ecommerceExec),
-        executor: ecommerceExec,
+        schema: vendorsSchema, // << Vendor schema by UPC
+        batch: true,
+        merge: {
+          Product: {
+            selectionSet: '{ upc }',
+            fieldName: 'productsByKey',
+            key: ({ upc }) => ({ upc }),
+            argsFromKeys: (keys) => ({ keys }),
+          }
+        }
       },
       {
-        schema: await fetchRemoteSchema(reviewsExec),
-        executor: reviewsExec,
+        schema: vendorsSchema, // << Vendor schema by ID
+        batch: true,
+        merge: {
+          Product: {
+            selectionSet: '{ id }',
+            fieldName: 'productsByKey',
+            key: ({ id }) => ({ id }),
+            argsFromKeys: (keys) => ({ keys }),
+          }
+        }
+      },
+      {
+        schema: reviewsSchema,
+        batch: true,
+        merge: {
+          Product: {
+            selectionSet: '{ id }',
+            fieldName: 'productsById',
+            key: ({ id }) => id,
+            argsFromKeys: (ids) => ({ ids }),
+          }
+        }
       }
     ]
   });
 }
 
-async function fetchRemoteSchema(executor) {
-  const { data } = await executor({ document: '{ _sdl }' });
-  return buildSchema(data._sdl);
-}
-
-waitOn({ resources: [4001, 4002, 4003].map(p => `tcp:${p}`) }, async () => {
-  makeServer(await makeGatewaySchema(), 'gateway', 4000);
-});
+const app = express();
+app.use('/graphql', graphqlHTTP({ schema: makeGatewaySchema(), graphiql: true }));
+app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));

@@ -1,14 +1,6 @@
 const { makeExecutableSchema } = require('@graphql-tools/schema');
-const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
 const NotFoundError = require('../../lib/not_found_error');
 const readFileSync = require('../../lib/read_file_sync');
-
-const { stitchingDirectivesTypeDefs, stitchingDirectivesValidator } = stitchingDirectives();
-
-const typeDefs = `
-  ${stitchingDirectivesTypeDefs}
-  ${readFileSync(__dirname, 'schema.graphql')}
-`;
 
 const reviews = [
   { id: '1', productId: '101', body: 'Love it!' },
@@ -18,8 +10,7 @@ const reviews = [
 ];
 
 module.exports = makeExecutableSchema({
-  schemaTransforms: [stitchingDirectivesValidator],
-  typeDefs,
+  typeDefs: readFileSync(__dirname, 'schema.graphql'),
   resolvers: {
     Review: {
       product: (review) => ({ id: review.productId }),
@@ -30,7 +21,6 @@ module.exports = makeExecutableSchema({
     Query: {
       review: (_root, { id }) => reviews.find(review => review.id === id) || new NotFoundError(),
       productsById: (_root, { ids }) => ids.map(id => ({ id })),
-      _sdl: () => typeDefs,
     },
   }
 });

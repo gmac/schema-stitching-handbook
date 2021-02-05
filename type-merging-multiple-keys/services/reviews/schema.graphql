@@ -11,6 +11,5 @@ type Product {
 
 type Query {
   review(id: ID!): Review
-  productsById(ids: [ID!]!): [Product]! @merge(keyField: "id")
-  _sdl: String!
+  productsById(ids: [ID!]!): [Product]!
 }
