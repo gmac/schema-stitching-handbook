@@ -40,6 +40,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
   - Distributing a GraphQL interface across services.
 
+- **[Merged types with multiple keys](./type-merging-multiple-keys)**
+
+  - Configuring multiple key access for a merged type.
+
 - **[Computed fields](./computed-fields)**
 
   - Configuring computed fields.

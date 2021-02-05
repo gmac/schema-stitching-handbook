@@ -16,7 +16,7 @@ Stitching is capable of handling this service pattern, although configuration wr
 
 **This example demonstrates:**
 
-- Configuring multiple keys for a stitched schema.
+- Configuring multiple key access for a subschema.
 
 ## Setup
 
