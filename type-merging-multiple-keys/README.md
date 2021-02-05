@@ -8,9 +8,9 @@ This example explores merging types with multiple key fields. This is a tricky s
 
 In the above graph, Catalog and Reviews schemas each have a _different_ key for the `Product` type, while the Vendors service holds both keys and may act as an intermediary join. Given this architecture, we still must be able to perform all possible traversals:
 
-- `Catalog > Ecomm > Reviews`
-- `Catalog < Ecomm > Reviews`
-- `Catalog < Ecomm < Reviews`
+- `Catalog > Vendors > Reviews`
+- `Catalog < Vendors > Reviews`
+- `Catalog < Vendors < Reviews`
 
 Stitching is capable of handling this service pattern, although configuration wrappings have not been written for it yet (working on it...). At present, this can only be achieved manually with static JavaScript merge config. There are plans to formally support this via `stitchSchemas` configuration and the SDL directives API.
 
