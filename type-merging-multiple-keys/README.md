@@ -12,7 +12,7 @@ In the above graph, Catalog and Reviews schemas each have a _different_ key for 
 - `Catalog < Vendors > Reviews`
 - `Catalog < Vendors < Reviews`
 
-Stitching is capable of handling this service pattern, although configuration wrappings have not been written for it yet (working on it...). At present, this can only be achieved manually with static JavaScript merge config. There are plans to formally support this via `stitchSchemas` configuration and the SDL directives API.
+Stitching is capable of handling this service pattern, although configuration wrappings have not been written for it yet. At present, this can only be achieved manually with static JavaScript merge config. There are plans to formally support this via `stitchSchemas` configuration and the SDL directives API.
 
 **This example demonstrates:**
 
