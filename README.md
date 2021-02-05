@@ -12,6 +12,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Adding a remote schema, fetched via introspection.
   - Adding a remote schema, fetched from a custom SDL service.
   - Avoiding schema conflicts using transforms.
+  - Authorization headers.
   - Basic error handling.
 
 - **[Mutations &amp; subscriptions](./mutations-and-subscriptions)**
@@ -98,6 +99,5 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 ### Appendices
 
-- [Handling user authentication](https://github.com/gmac/schema-stitching-handbook/issues/25#issuecomment-773769167)
 - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
 - [What is Query Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching)
