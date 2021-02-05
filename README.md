@@ -98,5 +98,6 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 ### Appendices
 
+- [Handling user authentication](https://github.com/gmac/schema-stitching-handbook/issues/25#issuecomment-773769167)
 - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
 - [What is Query Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-query-batching)
