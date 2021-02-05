@@ -6,11 +6,14 @@ const { print } = require('graphql');
 // Expects to recieve an object with "document" and "variable" params,
 // and asynchronously returns a JSON response from the remote.
 module.exports = function makeRemoteExecutor(url) {
-  return async ({ document, variables }) => {
+  return async ({ document, variables, context }) => {
     const query = typeof document === 'string' ? document : print(document);
     const fetchResult = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Authorization': context.authHeader,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ query, variables }),
     });
     return fetchResult.json();

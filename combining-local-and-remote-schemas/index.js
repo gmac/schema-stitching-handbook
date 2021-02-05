@@ -14,6 +14,7 @@ async function makeGatewaySchema() {
   const productsExec = makeRemoteExecutor('http://localhost:4001/graphql');
   const storefrontsExec = makeRemoteExecutor('http://localhost:4002/graphql');
   const rainforestApiExec = makeRemoteExecutor('http://localhost:4001/graphql');
+  const adminContext = { authHeader: 'Bearer my-app-to-app-token' };
 
   return stitchSchemas({
     subschemas: [
@@ -21,14 +22,14 @@ async function makeGatewaySchema() {
         // 1. Introspect a remote schema. Simple, but there are caveats:
         // - Remote server must enable introspection.
         // - Custom directives are not included in introspection.
-        schema: await introspectSchema(productsExec),
+        schema: await introspectSchema(productsExec, adminContext),
         executor: productsExec,
       },
       {
         // 2. Manually fetch a remote SDL string, then build it into a simple schema.
         // - Use any strategy to load the SDL: query it via GraphQL, load it from a repo, etc.
         // - Allows the remote schema to include custom directives.
-        schema: buildSchema(await fetchRemoteSDL(storefrontsExec)),
+        schema: buildSchema(await fetchRemoteSDL(storefrontsExec, adminContext)),
         executor: storefrontsExec,
       },
       {
@@ -38,7 +39,7 @@ async function makeGatewaySchema() {
         // and the naming in this third-party API conflicts with our schemas.
         // In this case, transforms may be used to integrate the third-party schema
         // with remapped names (and/or numerous other transformations).
-        schema: await introspectSchema(rainforestApiExec),
+        schema: await introspectSchema(rainforestApiExec, adminContext),
         executor: rainforestApiExec,
         transforms: [
           new RenameTypes((name) => `Rainforest${name}`),
@@ -69,13 +70,18 @@ async function makeGatewaySchema() {
 // Custom fetcher that queries a remote schema for an "sdl" field.
 // This is NOT a standard GraphQL convention – it's just a simple way
 // for a remote API to provide its own schema, complete with custom directives.
-async function fetchRemoteSDL(executor) {
-  const result = await executor({ document: '{ _sdl }' });
+async function fetchRemoteSDL(executor, context) {
+  const result = await executor({ document: '{ _sdl }', context });
   return result.data._sdl;
 }
 
 waitOn({ resources: ['tcp:4001', 'tcp:4002'] }, async () => {
+  const schema = await makeGatewaySchema();
   const app = express();
-  app.use('/graphql', graphqlHTTP({ schema: await makeGatewaySchema(), graphiql: true }));
+  app.use('/graphql', graphqlHTTP((req) => ({
+    schema,
+    context: { authHeader: req.headers.authorization },
+    graphiql: true
+  })));
   app.listen(4000, () => console.log('gateway running at http://localhost:4000/graphql'));
 });
