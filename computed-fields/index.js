@@ -16,9 +16,9 @@ function makeGatewaySchema() {
         merge: {
           Product: {
             // selectionSet: '{ upc }', << technically not necessary here!
-            computedFields: {
-              category: { selectionSet: '{ categoryId }' },
-              metadata: { selectionSet: '{ metadataIds }' },
+            fields: {
+              category: { selectionSet: '{ categoryId }', computed: true },
+              metadata: { selectionSet: '{ metadataIds }', computed: true },
             },
             fieldName: '_products',
             key: ({ categoryId, metadataIds }) => ({ categoryId, metadataIds }),
