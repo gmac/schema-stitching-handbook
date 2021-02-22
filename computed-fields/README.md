@@ -79,9 +79,9 @@ The `category` and `metadata` associations come from the Metadata service, and a
 ```js
 merge: {
   Product: {
-    computedFields: {
-      category: { selectionSet: '{ categoryId }' },
-      metadata: { selectionSet: '{ metadataIds }' },
+    fields: {
+      category: { selectionSet: '{ categoryId }', computed: true },
+      metadata: { selectionSet: '{ metadataIds }', computed: true },
     },
     fieldName: '_products',
     key: ({ categoryId, metadataIds }) => ({ categoryId, metadataIds }),
@@ -90,7 +90,7 @@ merge: {
 }
 ```
 
-In this pattern, the `category` and `metadata` fields each specify _field-level selection sets_ that will only be collected from other services when the computed field is request. The results of these selection sets are built into an object key and sent off to the Metadata service to be resolved into its version of the `Product` type.
+In this pattern, the `category` and `metadata` fields each specify _field-level selection sets_ that will only be collected from other services when their respective fields are requested. The additional `computed` setting isolates these fields into a standalone schema that assures the fields are always requested directly by the gateway with their dependencies provided. Together, the results of these selection sets are built into an object key and sent off to the Metadata service to be resolved into its version of the `Product` type.
 
 _metadata schema:_
 
