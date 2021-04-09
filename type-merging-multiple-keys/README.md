@@ -112,7 +112,7 @@ When using multiple entry points, it is highly recommended that you enable query
 
 ## With SDL directives
 
-At present, there is not yet an SDL directives pattern that configures multiple entry points (contributions are welcome!). However, SDL configuration and static JavaScript configuration patterns are _not_ mutually exclusive, therefore you can use SDL directives to configure the majority of your API and statically configure the cases where a merged type has multiple entry points. The general pattern looks like this:
+At present, there is not yet an SDL directives pattern that configures multiple entry points (contributions are welcome!). However, SDL configuration and static JavaScript configuration patterns are not mutually exclusive, therefore you can use SDL directives to configure the majority of your API and statically configure the cases where a merged type has multiple entry points. The general pattern looks like this:
 
 ```js
 const { stitchingDirectivesTransformer } = stitchingDirectives();
@@ -153,4 +153,4 @@ const gatewaySchema = stitchSchemas({
 });
 ```
 
-The static configuration you define is simply augmented by the stitching directives transformer. There's no harm in configuring some types statically and adding SDL configurations onto the top. Long-term plans anticipate adding multiple entry points setup into the SDL directives package.
+The static configuration you define is simply augmented by the stitching directives transformer. There's no harm in configuring some types statically and adding SDL configurations on top. Long-term plans anticipate adding multiple entry points setup into the SDL directives package.
