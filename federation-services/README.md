@@ -2,9 +2,11 @@
 
 This example demonstrates the integration of [Apollo Federation services](https://www.apollographql.com/docs/federation/implementing-services/) into a stitched schema.
 
+> ⚠️ DISCLAIMER: integration with Apollo Federation and its evolving roadmap is NOT a core concern of GraphQL Tools Schema Stitching. While the two systems have plenty of similarities and you can pull many strings to make them talk to each other, there is no formal contract that guarentees their interoperability. The following guide outlines commonalities between the two systems. Buyer beware that you're assuming your own testing and maintenance overhead if you choose to couple these systems in a production environment.
+
 As you get the hang of schema stitching, you may find that Federation services are fairly complex for what they do. The `buildFederatedSchema` method from the `@apollo/federation` package creates a nuanced GraphQL resource that does not guarentee itself to be independently consistent or valid, but plugs seamlessly into a greater automation package. By comparison, stitching encourages services to be independently valid and self-contained GraphQL resources, which makes them quite primitive and durable. While federation automates service bindings at the cost of tightly-coupled complexity, stitching embraces loosely-coupled bindings at the cost of manual setup. The merits of each strategy are likely to be a deciding factor for developers selecting a platform. Stitching is a _library_ used to build a _framework_ like Federation.
 
-Stitching is less opinionated than Federation, and is made simpler without the complexity added by `buildFederatedSchema`. However, when integrating with existing servers or in the process of a migration, nothing says you can't incorporate your existing federation resources into a stitched gateway.
+Stitching is less opinionated than Federation, and is made considerably simpler without the complexity added by `buildFederatedSchema`. However, when integrating with existing servers or in the process of a migration, nothing says you can't incorporate your existing federation resources into a stitched gateway.
 
 **This example demonstrates:**
 
