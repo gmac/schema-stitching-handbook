@@ -43,7 +43,7 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 - **[Merged types with multiple keys](./type-merging-multiple-keys)**
 
-  - Configuring multiple key access for a merged type.
+  - Configuring multiple key entry points for a merged type.
 
 - **[Computed fields](./computed-fields)**
 

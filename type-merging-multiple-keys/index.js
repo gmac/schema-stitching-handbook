@@ -10,7 +10,6 @@ function makeGatewaySchema() {
     subschemas: [
       {
         schema: catalogSchema,
-        batch: true,
         merge: {
           Product: {
             selectionSet: '{ upc }',
@@ -21,32 +20,26 @@ function makeGatewaySchema() {
         }
       },
       {
-        schema: vendorsSchema, // << Vendor schema by UPC
-        batch: true,
+        schema: vendorsSchema,
+        batch: true, // << enable batching to consolidate requests!
         merge: {
           Product: {
-            selectionSet: '{ upc }',
-            fieldName: 'productsByKey',
-            key: ({ upc }) => ({ upc }),
-            argsFromKeys: (keys) => ({ keys }),
-          }
-        }
-      },
-      {
-        schema: vendorsSchema, // << Vendor schema by ID
-        batch: true,
-        merge: {
-          Product: {
-            selectionSet: '{ id }',
-            fieldName: 'productsByKey',
-            key: ({ id }) => ({ id }),
-            argsFromKeys: (keys) => ({ keys }),
+            entryPoints: [{
+              selectionSet: '{ upc }',
+              fieldName: 'productsByKey',
+              key: ({ upc }) => ({ upc }),
+              argsFromKeys: (keys) => ({ keys }),
+            }, {
+              selectionSet: '{ id }',
+              fieldName: 'productsByKey',
+              key: ({ id }) => ({ id }),
+              argsFromKeys: (keys) => ({ keys }),
+            }],
           }
         }
       },
       {
         schema: reviewsSchema,
-        batch: true,
         merge: {
           Product: {
             selectionSet: '{ id }',
