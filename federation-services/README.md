@@ -145,8 +145,8 @@ const gatewaySchema = stitchSchemas({
     merge: {
       Product: {
         selectionSet: '{ id }',
-        computedFields: {
-          shippingEstimate: { selectionSet: '{ price weight }' }
+        fields: {
+          shippingEstimate: { selectionSet: '{ price weight }', computed: true }
         },
         fieldName: '_entities',
         key: (originObj) => ({ __typename: 'Product', ...pick(originObj, ['id', 'price', 'weight']) }),

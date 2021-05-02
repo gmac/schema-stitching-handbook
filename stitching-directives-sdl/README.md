@@ -153,8 +153,8 @@ This translates into the following configuration:
 merge: {
   Product: {
     selectionSet: '{ upc }',
-    computedFields: {
-      shippingEstimate: { selectionSet: '{ price weight }' },
+    fields: {
+      shippingEstimate: { selectionSet: '{ price weight }', computed: true },
     },
     fieldName: '_products',
     key: (obj) => ({ __typename: 'Product', ...pick(obj, ['upc', 'price', 'weight']) }),
