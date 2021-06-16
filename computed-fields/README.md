@@ -12,7 +12,7 @@ In general, computed fields are most appropraite when:
 However, computed fields have several distinct disadvantages:
 
 - A subservice with computed fields cannot independently resolve its full schema without input from other services. This means computed fields are defunct holes in a subschema unless accessed through the gateway with dependencies satisfied.
-- Computed fields rely on passing complex object keys between services rather than primitive scalar keys. Where a primitive key may be recognized as empty and therefore skip requesting data, complex object keys are always seen as truthy values even if their _contents_ are empty. Thus, the gateway is forced to always request data on their behalf, even for predictably empty results.
+- Computed fields rely on passing complex object keys between services rather than primitive scalar keys. Where a primitive key may be recognized as empty and therefore skip requesting data, complex object keys are always seen as truthy values even if their _contents_ are empty. Thus, the gateway is forced to always request data on their behalf, even for predictably empty results unless manual intervention is taken.
 
 **This example demonstrates:**
 
