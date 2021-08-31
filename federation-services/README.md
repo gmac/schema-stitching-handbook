@@ -82,7 +82,7 @@ query {
 }
 ```
 
-The stitched gateway has loaded all federation SDLs, [converted them into stitching SDLs](https://github.com/gmac/federation-to-stitching-sdl), and then integrates them like any other GraphQL service with types merged through their `_entities` query.
+The stitched gateway has loaded all federation SDLs, [converted them into stitching SDLs](https://www.graphql-tools.com/docs/schema-stitching/stitch-federation), and then integrates them like any other GraphQL service with types merged through their `_entities` query.
 
 ### Adapting Federation services
 
@@ -100,7 +100,7 @@ How each system handles origins informs how a federation service gets translated
 
 ### SDL integration
 
-The simplest way to make the above adaptions is to translate a Federation SDL string into a Stitching SDL string, which can be done using the [`federation-to-stitching-sdl`](https://github.com/gmac/federation-to-stitching-sdl) package. A federation service's SDL can be obtained through its `_service` API:
+The simplest way to make the above adaptions is to translate a Federation SDL string into a Stitching SDL string, which can be done using the `federationToStitchingSDL` utility function from [`@graphql-tools/stitching-directives`](https://www.graphql-tools.com/docs/schema-stitching/stitch-federation) package. A federation service's SDL can be obtained through its `_service` API:
 
 ```graphql
 query {
@@ -114,8 +114,7 @@ Once fetched, it can be translated into a Stitching SDL and then built into a st
 
 ```js
 const { buildSchema } = require('graphql');
-const { stitchingDirectives } = require('@graphql-tools/stitching-directives');
-const federationToStitchingSDL = require('federation-to-stitching-sdl');
+const { stitchingDirectives, federationToStitchingSDL } = require('@graphql-tools/stitching-directives');
 const makeRemoteExecutor = require('./lib/make_remote_executor');
 const stitchingConfig = stitchingDirectives();
 
