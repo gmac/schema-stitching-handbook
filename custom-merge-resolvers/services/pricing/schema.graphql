@@ -1,0 +1,12 @@
+type Product {
+  id: ID!
+  price: Int
+}
+
+type PricingEngine {
+  products(ids: [ID!]!): [Product]!
+}
+
+type Query {
+  pricing: PricingEngine
+}
