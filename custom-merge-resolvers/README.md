@@ -24,11 +24,14 @@ There are a few problems with merging the `Product` type using this service patt
 1. [Transform the schema](https://www.graphql-tools.com/docs/schema-stitching/stitch-combining-schemas#adding-transforms) (and its returned data) into a shape that stitching expects.
 2. Write a [custom merge resolver](https://www.graphql-tools.com/docs/schema-stitching/stitch-type-merging#type-resolvers) that acts as an adaptor for this service.
 
-Custom merge resolvers tend to be fundamentally simpler than transforms: rather than adding indirection into a schema to match a stitching default, we can instead customize stitching defaults for specific cases. This is also considerably more efficient. Transforms lean heavily into running visitor traversals on all requests and responses, and may multiply this tax when targeting multiple aspects of a schema. This creates overhead _in every request_, whether the transformation was necessary for the request's content or not. By comparison, custom merge resolvers may apply specific adjusts exactly when and where they are necessary.
+Custom merge resolvers tend to be fundamentally simpler than transforms: rather than adding indirection into a schema to match a stitching default, we can instead customize stitching defaults for specific cases. This is also considerably more efficient. Transforms lean heavily into visitor traversals run on all requests and responses, and may multiply this tax when targeting multiple aspects of a schema. This creates overhead _in every request_, regardless of whether the transformation was relevant to the request's content. By comparison, custom merge resolvers may apply specific adjustments exactly when and where they are necessary.
 
 **This example demonstrates:**
 
-- TKTK
+- Using `valuesFromResults` to normalize results data.
+- Adapting type merging to query through namespaced results.
+- Adapting type merging to query non-root fields.
+- Putting `batchDelegateToSchema` and `delegateToSchema` to use.
 
 ## Setup
 

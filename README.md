@@ -43,7 +43,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 - **[Custom merge resolvers](./custom-merge-resolvers)**
 
-  - TKTK
+  - Using `valuesFromResults` to normalize results data.
+  - Adapting type merging to query through namespaced results.
+  - Adapting type merging to query non-root fields.
+  - Putting `batchDelegateToSchema` and `delegateToSchema` to use.
 
 - **[Cross-service interfaces](./type-merging-interfaces)**
 
