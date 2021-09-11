@@ -1,6 +1,6 @@
-# Nullable merges
+# Custom merge resolvers
 
-This example demonstrates using nullable and not-null fields in merged data, as discussed in [null records documentation](https://www.graphql-tools.com/docs/stitch-type-merging#null-records).
+This example demonstrates customizing merged type resolvers, expanding upon the [type resolvers documentation](https://www.graphql-tools.com/docs/schema-stitching/stitch-type-merging#type-resolvers).
 
 **This example demonstrates:**
 
@@ -24,114 +24,30 @@ For simplicity, all subservices in this example are run locally by the gateway s
 
 ## Summary
 
-This example explores the subtleties of nullable fields and returns within a stitched schema. The primary focus of this example is the Reviews service, where the `User` and `Product` types take slightly different approaches to the nullability of their respective `reviews` association. For context, start the gateway and try running this query:
+Stitching implements sensible defaults for resolving merged types: it assumes that querying for a merged type will target a root field that _directly_ returns the type in question (or an abstraction of it). It also assumes that lists will provide a direct mapping of any records requested. These are good and intuitive principles to follow while designing your own stitching services.
 
-```graphql
-query {
-  users(ids: [2]) {
-    username
-    reviews {
-      body
-    }
-  }
-  products(upcs: [2]) {
-    name
-    reviews {
-      body
-    }
-  }
-}
-```
-
-This query fetches a user and a product, both without any associated reviews. You'll notice they handle this empty association in slightly different ways:
-
-```json
-{
-  "data": {
-    "users": [
-      {
-        "username": "bigvader23",
-        "reviews": []
-      }
-    ],
-    "products": [
-      {
-        "name": "Toothbrush",
-        "reviews": null
-      }
-    ]
-  }
-}
-```
-
-### Not-null associations
-
-First go into the Reviews service and compare its `User` type to the implementation of its `_users` query resolver:
-
-**schema:**
-
-```graphql
-type User {
-  id: ID!
-  reviews: [Review]!
-}
-```
-
-**query resolver:**
-
-```js
-_users: (root, { ids }) => ids.map(id => ({ id }))
-```
-
-In this implementation, _any_ ID submitted to the `_users` query will be treated as a valid record and may resolve a result, for example:
-
-```graphql
-query {
-  _users(ids: ["DOES_NOT_EXIST"]) {
-    id
-    reviews { body }
-  }
-}
-
-# --> [{ id: 'DOES_NOT_EXIST', reviews: [] }]
-```
-
-What's odd here is that the Reviews service is resolving a record for the `"DOES_NOT_EXIST"` ID on the blind assumption that it must exist somewhere else. In effect, the query is parroting all input into a legitimized result. Should it? That's entirely up to your own service architecture. One possible advantage of this pattern is that the not-null `reviews:[Review]!` association works because the service always guarentees a record with valid fields.
-
-### Nullable associations
-
-Now go into the Reviews service and compare its `Product` type to the implementation of its `_products` query resolver:
-
-**schema:**
+However, what happens when you need to target a service that does not follow these principles? Take an auto-generated [Contentful](https://www.contentful.com/) service, for example:
 
 ```graphql
 type Product {
-  upc: ID!
-  reviews: [Review]
+  id: String
+}
+
+type ProductCollection {
+  total: Int
+  items: [Product]!
+}
+
+type Query {
+  productCollection(whereIdIn: [ID!]!): ProductCollection
 }
 ```
 
-**query resolver:**
+There are a few oddities for merging the `Product` type using this service pattern. First, the `productCollection` field returns an intermediary collection type rather than a `Product` directly. Second, this accessor performs a _where_ query that will omit requested records that aren't found. To stitch around these factors, we have two general approaches:
 
-```js
-_products: (root, { upcs }) => upcs.map(upc => reviews.find(r => r.productUpc === upc) ? ({ upc }) : null)
-```
+1. [Transform the schema](https://www.graphql-tools.com/docs/schema-stitching/stitch-combining-schemas#adding-transforms) and its returned data into a shape that stitching expects.
+2. Write a custom merge resolver that acts as an adaptor for this service.
 
-In this implementation, only product UPCs that match a review in the database are treated as valid records. Unknown records simply return null without errors, for example:
+### The case for custom resolvers over transforms
 
-```graphql
-query {
-  _products(ids: ["DOES_NOT_EXIST"]) {
-    id
-    reviews { body }
-  }
-}
-
-# --> [null]
-```
-
-From a pure service-oriented architecture perspective, this result makes a lot more sense because the Reviews service abstains from opinion on unknown IDs; it neither legitimizes them with a result, nor delegitimizes them with an error. The only caveat for this to work is that the `reviews:[Review]` association must be nullable because a value may not always be returned. The `upc:ID!` field may still be not-null because it is part of the Product type `selectionSet` (in `index.js`), and therefore will always be collected from other services.
-
-### Which approach is correct?
-
-That depends. What are your requirements, and what makes the most sense? In general, erring on the side of returning null rather than a fabricated record is probably the more "pure" approach.
+Custom merge resolvers tend to be fundamentally simpler than transforms. Rather than transforming a schema with indirection to match stitching defaults, we can instead customize default behaviors for specific cases. This also tends to be considerably more efficient. Transforms lean heavily into visitor traversals that run on all requests and responses, and may compound when normalizing multiple aspects of a schema. This creates lots of unnecessary work performed in every request whether it was needed in the request or not. By comparison, custom merge resolvers will apply specific adjusts only when they are necessary.

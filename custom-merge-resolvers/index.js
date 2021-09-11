@@ -6,6 +6,7 @@ const infoSchema = require('./services/info/schema');
 const inventorySchema = require('./services/inventory/schema');
 const createInventoryResolver = require('./services/inventory/resolve');
 const pricingSchema = require('./services/pricing/schema');
+const createPricingResolver = require('./services/pricing/resolve');
 
 function makeGatewaySchema() {
   // For simplicity, all services run locally in this example.
@@ -41,17 +42,16 @@ function makeGatewaySchema() {
           },
         },
       },
-      // {
-      //   schema: pricingSchema,
-      //   merge: {
-      //     User: {
-      //       selectionSet: '{ id }',
-      //       fieldName: 'users',
-      //       key: ({ id }) => id,
-      //       argsFromKeys: (ids) => ({ ids }),
-      //     },
-      //   },
-      // },
+      {
+        schema: pricingSchema,
+        merge: {
+          Product: {
+            selectionSet: '{ id }',
+            key: ({ id }) => id,
+            resolve: createPricingResolver(),
+          },
+        },
+      },
     ]
   });
 }
