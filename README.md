@@ -32,18 +32,25 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
   - Handling array errors.
   - Nullability & error remapping.
 
+- **[Merged types with multiple keys](./type-merging-multiple-keys)**
+
+  - Configuring multiple key entry points for a merged type.
+
 - **[Nullable merges](./type-merging-nullables)**
 
   - Selecting nullability for merged fields.
   - Returning nullable and not-nullable results.
 
+- **[Custom merge resolvers](./custom-merge-resolvers)**
+
+  - Using `valuesFromResults` to normalize resulting query data.
+  - Adapting type merging to query through namespaced scopes.
+  - Adapting type merging to query through non-root fields.
+  - Using `batchDelegateToSchema` and `delegateToSchema`.
+
 - **[Cross-service interfaces](./type-merging-interfaces)**
 
   - Distributing a GraphQL interface across services.
-
-- **[Merged types with multiple keys](./type-merging-multiple-keys)**
-
-  - Configuring multiple key entry points for a merged type.
 
 - **[Computed fields](./computed-fields)**
 

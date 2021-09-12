@@ -1,0 +1,13 @@
+type Product {
+  id: ID!
+  totalInventory: Int
+}
+
+type ProductCollection {
+  total: Int
+  items: [Product]
+}
+
+type Query {
+  productsInventory(ids: [ID!]!): ProductCollection
+}
