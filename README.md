@@ -108,6 +108,10 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
     - Class-based definitions
     - Parsed definitions string
 
+- **[GraphQL Upload](./graphql-upload)**
+
+  - Adding GraphQL Upload to the gateway server
+
 ### Appendices
 
 - [What is Array Batching?](https://github.com/gmac/schema-stitching-demos/wiki/Batching-Arrays-and-Queries#what-is-array-batching)
