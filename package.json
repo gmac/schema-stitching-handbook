@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "workspaces": [
+    "combining-local-and-remote-schemas",
+    "computed-fields",
+    "continuous-integration-testing",
+    "custom-merge-resolvers",
+    "federation-services",
+    "graphql-upload",
+    "hot-schema-reloading",
+    "mutations-and-subscriptions",
+    "public-and-private-apis",
+    "stitching-directives-sdl",
+    "subservice-languages-javascript",
+    "subservice-languages-ruby",
+    "type-merging-arrays",
+    "type-merging-interfaces",
+    "type-merging-multiple-keys",
+    "type-merging-nullables",
+    "type-merging-single-records",
+    "versioning-schema-releases"
+  ]
+}

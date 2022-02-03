@@ -1,5 +1,5 @@
 {
-  "name": "type-merging-nullables",
+  "name": "custom-merge-resolvers",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
