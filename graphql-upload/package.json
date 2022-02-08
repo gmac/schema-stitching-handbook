@@ -1,5 +1,5 @@
 {
-  "name": "combining-local-and-remote-schemas",
+  "name": "graphql-upload",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

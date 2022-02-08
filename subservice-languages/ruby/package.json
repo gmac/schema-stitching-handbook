@@ -1,5 +1,5 @@
 {
-  "name": "ruby-language-schema",
+  "name": "subservice-languages-ruby",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

@@ -4,6 +4,14 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 
 ## Table of Contents
 
+### Installation
+
+From the root directory, run:
+
+```sh
+yarn install
+```
+
 ### Foundation
 
 - **[Combining local and remote schemas](./combining-local-and-remote-schemas)**
@@ -100,11 +108,13 @@ Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-
 - **[Subservice languages](./subservice-languages)**
 
   - **[JavaScript](./subservice-languages/javascript)** schemas created with:
+
     - `graphql-js`
     - `nexus`
     - `type-graphql`
 
   - **[Ruby](./subservice-languages/ruby)** schemas created with:
+
     - Class-based definitions
     - Parsed definitions string
 
