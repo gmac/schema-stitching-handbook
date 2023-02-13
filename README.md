@@ -1,6 +1,9 @@
 # ![Schema Stitching Handbook](./images/banner-1.jpg)
 
-Guided examples of [Schema Stitching](https://www.graphql-tools.com/docs/stitch-combining-schemas) doing awesome things. Focuses on the new (GraphQL Tools v6+) stitching using [type merging](https://www.graphql-tools.com/docs/stitch-type-merging), not legacy [Apollo Stitching](https://www.apollographql.com/docs/federation/migrating-from-stitching/).
+Guided examples of [GraphQL Stitching](https://the-guild.dev/graphql/stitching/docs) doing useful things. While this book focuses on [GraphQL Tools](https://github.com/ardatan/graphql-tools) (JavaScript) and its specific capabilities, many of these general schema stitching concepts apply to implementations across languages, see similar projects:
+
+- [Bramble](https://github.com/movio/bramble) (Golang)
+- [graphql-stitching-ruby](https://github.com/gmac/graphql-stitching-ruby) (Ruby)
 
 ## Table of Contents
 
